@@ -1,0 +1,639 @@
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法律咨询 - AI法律平台</title>
+    <link rel="stylesheet" href="../css/样式.css">
+    <style>
+        .consultation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .location-section {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .location-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-text {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        .location-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .location-btn:hover {
+            background-color: var(--secondary-purple);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(138, 79, 255, 0.2);
+        }
+
+        .service-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-link {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(138, 79, 255, 0.4);
+        }
+
+        .laws-section {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .laws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .law-item {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: var(--light-gray);
+        }
+
+        .law-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .law-item p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .search-section {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 新增搜索结果样式 */
+        .search-results {
+            max-width: 800px;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            display: none; /* 默认隐藏 */
+        }
+        .search-results.show {
+            display: block;
+        }
+        .search-results h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+        .result-item {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .result-item:hover {
+            background-color: #e8f4f8;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-item h5 {
+            margin: 0 0 0.3rem;
+            color: var(--primary-blue);
+        }
+        .result-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        /* 关键词高亮样式 */
+        .highlight {
+            background-color: #ffeb3b;
+            font-weight: bold;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-blue);
+            background-color: white;
+            color: var(--primary-blue);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .pagination-btn:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        .pagination-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: bold;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #eee;
+            border-color: #ddd;
+            color: #999;
+        }
+
+        .recommendations-title {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .law-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .category-item {
+            background: linear-gradient(to right, var(--primary-blue), #6b8cbc);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-item h4 {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .category-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .law-list {
+            margin-top: 1.5rem;
+        }
+
+        .law-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .law-list li {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .law-list li:hover {
+            background-color: #f0f4f8;
+        }
+
+        .law-list li:last-child {
+            border-bottom: none;
+        }
+        /* 新增CSS变量（避免样式失效） */
+        :root {
+            --white: #ffffff;
+            --primary-blue: #2c6ecb;
+            --secondary-purple: #8a4fff;
+            --text-dark: #333333;
+            --light-gray: #f5f7fa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="#">法律咨询</a></li>
+                <li><a href="#">案例分析</a></li>
+                <li><a href="#">法律文书</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="consultation-container">
+            <h2 style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem;">法律咨询服务</h2>
+            <!--搜索区域-->>
+            <section class="search-section">
+                <h3>国家法律数据库搜索</h3>
+                <p>在中国国家法律数据库中搜索相关法条</p>
+                <form class="search-form" id="legalSearchForm">
+                    <input type="text" class="search-input" id="searchQuery" placeholder="输入法律名称或关键词...">
+                    <button type="submit" class="search-btn">搜索</button>
+                </form>
+                <p style="margin-top: 1rem;"><small>搜索结果来自 <a href="https://flk.npc.gov.cn/index" target="_blank">中国国家法律数据库</a></small></p>
+                
+                <!-- 新增搜索结果展示容器 -->
+                <div class="search-results" id="searchResults">
+                    <h4>搜索结果：<span id="searchKeyword"></span></h4>
+                    <div id="resultsList"></div>
+                    <!-- 分页控件 -->
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </section>
+            <!-- 位置信息区域 -->
+            <section class="location-section">
+                <h3>获取您的位置信息</h3>
+                <div class="location-info">
+                    <span class="location-text" id="currentLocation">正在获取位置信息...</span>
+                    <button class="location-btn" id="getLocationBtn">重新获取</button>
+                </div>
+                <p>我们将根据您的位置推荐当地的相关法律法规和案例</p>
+            </section>
+            <section class="laws-section">
+                <h3 class="recommendations-title">根据您的位置推荐的法律法规</h3>
+                <div class="laws-grid" id="recommendedLaws">
+        <!-- 这里会通过JS动态生成推荐法规 -->
+                 </div>
+            </section>
+            <!-- 服务卡片区域 -->
+            <section class="services-grid">
+                <div class="service-card">
+                    <h3>国家法律库</h3>
+                    <p>访问中国国家法律数据库，查询最新的法律法规</p>
+                    <a href="https://flk.npc.gov.cn/index" target="_blank" class="service-link">访问法律库</a>
+                </div>
+                <div class="service-card">
+                    <h3>类案检索</h3>
+                    <p>查找类似案例，参考法院判例和裁判观点</p>
+                    <a href="#" class="service-link" id="caseSearchLink">检索案例</a>
+                </div>
+                <div class="service-card">
+                    <h3>文书模板</h3>
+                    <p>提供各类法律文书模板，满足您的不同需求</p>
+                    <a href="#" class="service-link" id="documentTemplateLink">获取模板</a>
+                </div>
+            </section>
+
+            <!-- 法律分类浏览 -->
+            <section class="laws-section">
+                <h3 class="recommendations-title">国家法律分类目录</h3>
+                <div class="law-categories" id="lawCategories">
+                    <div class="category-item" data-category="宪法">
+                        <h4>宪法</h4>
+                        <p>国家根本大法</p>
+                    </div>
+                    <div class="category-item" data-category="民法商法">
+                        <h4>民法商法</h4>
+                        <p>民事和商事法律</p>
+                    </div>
+                    <div class="category-item" data-category="行政法">
+                        <h4>行政法</h4>
+                        <p>行政管理和执法</p>
+                    </div>
+                    <div class="category-item" data-category="经济法">
+                        <h4>经济法</h4>
+                        <p>经济活动规范</p>
+                    </div>
+                    <div class="category-item" data-category="社会法">
+                        <h4>社会法</h4>
+                        <p>社会保障和劳动</p>
+                    </div>
+                    <div class="category-item" data-category="刑法">
+                        <h4>刑法</h4>
+                        <p>犯罪与刑罚</p>
+                    </div>
+                    <div class="category-item" data-category="诉讼与非诉讼程序法">
+                        <h4>诉讼程序法</h4>
+                        <p>司法程序规定</p>
+                    </div>
+                </div>
+                
+                <div class="law-list">
+                    <h4>常用法律法规</h4>
+                    <ul id="lawList">
+                        <li data-law="中华人民共和国民法典">中华人民共和国民法典</li>
+                        <li data-law="中华人民共和国刑法">中华人民共和国刑法</li>
+                        <li data-law="中华人民共和国宪法">中华人民共和国宪法</li>
+                        <li data-law="中华人民共和国行政处罚法">中华人民共和国行政处罚法</li>
+                        <li data-law="中华人民共和国行政诉讼法">中华人民共和国行政诉讼法</li>
+                        <li data-law="中华人民共和国劳动合同法">中华人民共和国劳动合同法</li>
+                        <li data-law="中华人民共和国物权法">中华人民共和国物权法</li>
+                        <li data-law="中华人民共和国合同法">中华人民共和国合同法</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AI法律平台. 版权所有</p>
+        <div class="footer-links">
+            <a href="#">隐私政策</a>
+            <a href="#">使用条款</a>
+            <a href="#">联系我们</a>
+            <a href="登录注册.html">用户登录</a>
+        </div>
+    </footer>
+
+    <script src="../js/逻辑.js"></script>
+    <script>
+    async function getBrowserLocation() {
+        if (!navigator.geolocation) return null;
+        return await new Promise(resolve => {
+            navigator.geolocation.getCurrentPosition(
+                pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+                () => resolve(null),
+                { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+            );
+        });
+    }
+
+    // ---------- 统一搜索函数 ----------
+    async function performSearch(keyword, page = 1) {
+        const geo = await getBrowserLocation();
+        const payload = { keyword, page };
+        if (geo) payload.location = geo;
+
+        const resp = await fetch('http://127.0.0.1:5500/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+            const err = await resp.text();
+            alert('搜索错误：' + err);
+            return;
+        }
+
+        const data = await resp.json();
+
+        // ----------------- 位置显示 -----------------
+        const locationEl = document.getElementById('currentLocation');
+        locationEl.innerHTML = `<strong>${data.location.province} ${data.location.city}</strong>`;
+
+        // ----------------- 推荐法规渲染 -----------------
+        const recContainer = document.getElementById('recommendedLaws');
+        recContainer.innerHTML = '';
+        data.recommended.forEach(law => {
+            const div = document.createElement('div');
+            div.className = 'law-item';
+            div.innerHTML = `<h4>${law.title}</h4><p>${law.desc}</p>`;
+            recContainer.appendChild(div);
+        });
+
+        // ----------------- 搜索结果渲染 -----------------
+        const resultsDiv = document.getElementById('searchResults');
+        const keywordSpan = document.getElementById('searchKeyword');
+        const listDiv = document.getElementById('resultsList');
+
+        keywordSpan.textContent = keyword;
+        resultsDiv.classList.add('show');
+
+        // 保存全局变量用于分页
+        window.__matchedResults = data.results;   // 前端全局变量（方便分页）
+        window.__currentKeyword = keyword;
+        window.__currentPage = page;
+
+        renderPage(page);
+        renderPagination(data.results.length);
+    }
+
+    // ---------- 渲染单页结果 ----------
+    function renderPage(page) {
+        const pageSize = 5;   // 每页显示 5 条（可自行修改）
+        const start = (page - 1) * pageSize;
+        const end   = start + pageSize;
+        const slice = window.__matchedResults.slice(start, end);
+        const listDiv = document.getElementById('resultsList');
+        listDiv.innerHTML = '';
+
+        if (slice.length === 0) {
+            listDiv.innerHTML = '<div class="result-item"><p>未找到匹配的法律法规</p></div>';
+            return;
+        }
+
+        slice.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'result-item';
+            // 高亮关键字
+            const highlighted = item.name.replace(
+                new RegExp(`(${window.__currentKeyword})`, 'gi'),
+                '<span class="highlight">$1</span>'
+            );
+            div.innerHTML = `<h5>${highlighted}</h5><p>${item.desc}</p>`;
+            div.addEventListener('click', () => window.open(item.url, '_blank'));
+            listDiv.appendChild(div);
+        });
+    }
+
+    // ---------- 分页控件 ----------
+    function renderPagination(totalResults) {
+        const pageSize = 5;
+        const totalPages = Math.ceil(totalResults / pageSize);
+        const paginationDiv = document.getElementById('pagination');
+        paginationDiv.innerHTML = '';
+
+        // 上一页
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'pagination-btn';
+        prevBtn.textContent = '上一页';
+        prevBtn.disabled = window.__currentPage <= 1;
+        prevBtn.onclick = () => {
+            if (window.__currentPage > 1) {
+                window.__currentPage--;
+                renderPage(window.__currentPage);
+                renderPagination(totalResults);
+            }
+        };
+        paginationDiv.appendChild(prevBtn);
+
+        // 页码
+        for (let i = 1; i <= totalPages; i++) {
+            const pg = document.createElement('button');
+            pg.className = `pagination-btn ${i===window.__currentPage?'active':''}`;
+            pg.textContent = i;
+            pg.onclick = () => {
+                window.__currentPage = i;
+                renderPage(i);
+                renderPagination(totalResults);
+            };
+            paginationDiv.appendChild(pg);
+        }
+
+        // 下一页
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'pagination-btn';
+        nextBtn.textContent = '下一页';
+        nextBtn.disabled = window.__currentPage >= totalPages;
+        nextBtn.onclick = () => {
+            if (window.__currentPage < totalPages) {
+                window.__currentPage++;
+                renderPage(window.__currentPage);
+                renderPagination(totalResults);
+            }
+        };
+        paginationDiv.appendChild(nextBtn);
+    }
+
+    // ---------- 表单提交 ----------
+    document.getElementById('legalSearchForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const kw = document.getElementById('searchQuery').value.trim();
+        if (!kw) { alert('请输入搜索关键词'); return; }
+        performSearch(kw, 1);
+    });
+
+    // ---------- 手动刷新定位 ----------
+    document.getElementById('getLocationBtn').addEventListener('click', async () => {
+        const locationEl = document.getElementById('currentLocation');
+        locationEl.textContent = '正在获取位置信息...';
+        const geo = await getBrowserLocation();
+        if (geo) {
+            locationEl.textContent = '已获取经纬度，搜索后生效';
+        } else {
+            locationEl.textContent = '定位失败，请检查浏览器权限';
+        }
+    });
+
+    // ---------- 页面加载时默认定位 ----------
+    // 直接调用一次定位（后端会用 IP 自动定位）
+    // 当页面首次打开时，后端的 /search 不会被调用，
+    // 这里仅用来展示默认位置（已在 HTML 中写死），如果想自动定位请自行调用后端一个专门的 /location 接口。
+</script>
+
+</body>
+</html>

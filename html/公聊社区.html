@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紫薇社区 - AI+物业管理论坛 | AI法律平台</title>
+    <link rel="stylesheet" href="../css/样式.css">
+    <style>
+        /* 覆盖原有样式，使用AI法律平台主题 */
+        :root {
+            --primary-blue: #4A6FA5;
+            --secondary-purple: #8A4FFF;
+            --light-purple: #B39DDB;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-blue: #2C3E50;
+            --text-dark: #333333;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            font-family: 'Arial', '微软雅黑', sans-serif;
+        }
+        
+        /* 顶部导航栏使用与主页一致的样式 */
+        .community-header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: var(--white);
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 主标题区域 */
+        .community-hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+            color: var(--white);
+            border-radius: 10px;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .community-hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            background: none;
+            -webkit-text-fill-color: var(--white);
+            color: var(--white);
+        }
+        
+        .community-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .community-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        
+        /* 论坛板块卡片 */
+        .community-section {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--secondary-purple);
+        }
+        
+        .forum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .forum-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #eaeaea;
+            border-top: 4px solid var(--secondary-purple);
+        }
+        
+        .forum-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(138, 79, 255, 0.15);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .latest-post {
+            font-size: 0.9rem;
+            color: #666;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .latest-post strong {
+            color: var(--secondary-purple);
+        }
+        
+        /* 搜索框 */
+        .community-search {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            border: 1px solid #eaeaea;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--secondary-purple);
+            box-shadow: 0 0 0 2px rgba(138, 79, 255, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        /* 热门话题 */
+        .topics-list {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #eaeaea;
+        }
+        
+        .topic-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .topic-item:hover {
+            background-color: rgba(138, 79, 255, 0.05);
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .topic-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .topic-tag.hot {
+            background-color: #ffeaea;
+            color: #ff6b6b;
+        }
+        
+        .topic-tag.new {
+            background-color: #e8f4ff;
+            color: var(--primary-blue);
+        }
+        
+        .topic-tag.ai {
+            background-color: #f0e7ff;
+            color: var(--secondary-purple);
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .topic-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .topic-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* 发帖按钮 */
+        .post-button-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+        }
+        
+        .post-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+            color: var(--white);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(138, 79, 255, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .post-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(138, 79, 255, 0.6);
+        }
+        
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: var(--white);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--secondary-purple);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: var(--text-dark);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(138, 79, 255, 0.3);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .forum-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .post-button-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 使用与主页一致的导航栏 -->
+    <header class="community-header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="法律咨询.html">法律咨询</a></li>
+                <li><a href="ai小助手.html">AI咨询</a></li>
+                <li><a href="公聊社区.html" class="active">社区</a></li>
+                <li><a href="私聊界面.html">私聊</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="community-hero">
+        <h1>和谐社区 - AI+法律交流论坛</h1>
+        <p>专业法律咨询·法案问题互助·AI智能助手·业主共建平台</p>
+    </div>
+
+    <div class="community-container">
+        <div class="main-content">
+            <!-- 左侧论坛板块 -->
+            <div class="forum-sections">
+                  <!-- 搜索框 -->
+                <div class="community-search">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="搜索帖子或话题...">
+                    </div>
+                </div>
+                <div class="community-section">
+                    <h2 class="section-title">社区论坛板块</h2>
+                    
+                    <div class="forum-grid">
+                        <!-- 普法功能 -->
+                        <div class="forum-card" data-section="law">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">普法功能</h3>
+                                    <p class="card-desc">法律法规查询与解读，针对性推荐省市法规</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>《物业管理条例》2024年最新修订要点解读
+                            </div>
+                        </div>
+                        
+                        <!-- 类案检索 -->
+                        <div class="forum-card" data-section="case">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">类案检索</h3>
+                                    <p class="card-desc">相似案例查询，裁判文书分析，诉讼策略参考</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>物业费纠纷类案裁判规律大数据分析
+                            </div>
+                        </div>
+                        
+                        <!-- 诉讼流程 -->
+                        <div class="forum-card" data-section="process">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">诉讼流程指导</h3>
+                                    <p class="card-desc">调解程序注意事项，诉讼流程图解，AI小助手答疑</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>物业诉讼调解程序全流程详解（附流程图）
+                            </div>
+                        </div>
+                        
+                        <!-- AI小助手 -->
+                        <div class="forum-card" data-section="ai">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">AI小助手</h3>
+                                    <p class="card-desc">情感化沟通技巧，热点事件解读，律师与AI协同解答</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>AI解读：小区公共收益分配的法律依据
+                            </div>
+                        </div>
+                        
+                        <!-- 论坛互助 -->
+                        <div class="forum-card" data-section="help">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-hands-helping"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">论坛互助</h3>
+                                    <p class="card-desc">提出问题，类案推荐，现身说法，案例释法+互动问答</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>业主互助：如何有效收集物业违规证据？
+                            </div>
+                        </div>
+                        
+                        <!-- 诉讼功能 -->
+                        <div class="forum-card" data-section="lawsuit">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-file-contract"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">诉讼功能</h3>
+                                    <p class="card-desc">规范撰写法律文书，合同起草与审查，应诉策略指导</p>
+                                </div>
+                            </div>
+                            <div class="latest-post">
+                                <strong>最新：</strong>AI辅助起草：物业服务合同审查要点
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+               
+            </div>
+            
+            <!-- 右侧热门话题 -->
+            <div class="hot-topics">
+                <div class="community-section">
+                    <h2 class="section-title">热门话题</h2>
+                    
+                    <div class="topics-list">
+                        <div class="topic-item">
+                            <span class="topic-tag hot">热</span>
+                            <span class="topic-tag ai">AI推荐</span>
+                            <div class="topic-title">物业费纠纷如何收集证据？2024最新取证指南</div>
+                            <div class="topic-meta">
+                                <span>2小时前</span>
+                                <div class="topic-stats">
+                                    <span class="stat-item">
+                                        <i class="far fa-eye"></i> 234
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="far fa-comment"></i> 89
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="topic-item">
+                            <span class="topic-tag hot">热</span>
+                            <span class="topic-tag ai">律师解读</span>
+                            <div class="topic-title">小区公共收益（广告、车位）分配的法律依据与实践</div>
+                            <div class="topic-meta">
+                                <span>5小时前</span>
+                                <div class="topic-stats">
+                                    <span class="stat-item">
+                                        <i class="far fa-eye"></i> 156
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="far fa-comment"></i> 67
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="topic-item">
+                            <span class="topic-tag new">新</span>
+                            <div class="topic-title">楼上漏水不维修，物业不作为，法律途径怎么走？</div>
+                            <div class="topic-meta">
+                                <span>1天前</span>
+                                <div class="topic-stats">
+                                    <span class="stat-item">
+                                        <i class="far fa-eye"></i> 98
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="far fa-comment"></i> 45
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="topic-item">
+                            <span class="topic-tag ai">AI生成</span>
+                            <div class="topic-title">业主委员会成立全流程与常见问题解答</div>
+                            <div class="topic-meta">
+                                <span>2天前</span>
+                                <div class="topic-stats">
+                                    <span class="stat-item">
+                                        <i class="far fa-eye"></i> 187
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="far fa-comment"></i> 52
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="topic-item">
+                            <div class="topic-title">停车位只售不租是否合法？业主该如何维权？</div>
+                            <div class="topic-meta">
+                                <span>3天前</span>
+                                <div class="topic-stats">
+                                    <span class="stat-item">
+                                        <i class="far fa-eye"></i> 312
+                                    </span>
+                                    <span class="stat-item">
+                                        <i class="far fa-comment"></i> 124
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发帖按钮 -->
+    <div class="post-button-container">
+        <button class="post-button" id="postButton">
+            <i class="fas fa-pen"></i>
+        </button>
+    </div>
+
+    <!-- 发帖模态框 -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">发布新帖子</h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm">
+                    <div class="form-group">
+                        <label class="form-label" for="postTitle">帖子标题</label>
+                        <input type="text" class="form-input" id="postTitle" placeholder="请输入帖子标题...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="postSection">选择板块</label>
+                        <select class="form-select" id="postSection">
+                            <option value="">请选择板块</option>
+                            <option value="law">普法功能</option>
+                            <option value="case">类案检索</option>
+                            <option value="process">诉讼流程指导</option>
+                            <option value="ai">AI小助手</option>
+                            <option value="help">论坛互助</option>
+                            <option value="lawsuit">诉讼功能</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="postContent">帖子内容</label>
+                        <textarea class="form-textarea" id="postContent" placeholder="请输入帖子内容..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelPost">取消</button>
+                        <button type="submit" class="btn btn-primary">发布帖子</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 使用与主页一致的页脚 -->
+    <footer>
+        <p>&copy; 2026 AI法律平台. 版权所有</p>
+        <div class="footer-links">
+            <a href="#">隐私政策</a>
+            <a href="#">使用条款</a>
+            <a href="#">联系我们</a>
+            <a href="登录注册.html">用户登录</a>
+        </div>
+    </footer>
+
+    <!-- 保持原有JavaScript功能 -->
+    <script src="../js/逻辑.js"></script>
+    <script>
+    // 页面专用命名空间，避免与逻辑.js冲突
+    (function () {
+        const PAGE_API_BASE = 'http://localhost:3000';
+        // DOM元素
+        const postButton = document.getElementById('postButton');
+        const postModal = document.getElementById('postModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelPost = document.getElementById('cancelPost');
+        const postForm = document.getElementById('postForm');
+        const postTitle = document.getElementById('postTitle');
+        const postContent = document.getElementById('postContent');
+        const forumCards = document.querySelectorAll('.forum-card');
+
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function renderLatestPosts(posts) {
+            const latestBySection = {};
+            posts.forEach(post => {
+                if (!post || !post.section) {
+                    return;
+                }
+                if (!latestBySection[post.section] || post.id > latestBySection[post.section].id) {
+                    latestBySection[post.section] = post;
+                }
+            });
+
+            forumCards.forEach(card => {
+                const section = card.dataset.section;
+                const latestPost = section ? latestBySection[section] : null;
+                const latestEl = card.querySelector('.latest-post');
+                if (!latestEl) {
+                    return;
+                }
+                if (latestPost && latestPost.title) {
+                    latestEl.innerHTML = `<strong>最新：</strong>${escapeHtml(latestPost.title)}`;
+                }
+            });
+        }
+
+        function loadLatestPosts() {
+            fetch(`${PAGE_API_BASE}/get_posts`)
+                .then(res => res.json().then(data => ({ ok: res.ok, data })))
+                .then(({ ok, data }) => {
+                    if (!ok || !Array.isArray(data)) {
+                        return;
+                    }
+                    renderLatestPosts(data);
+                })
+                .catch(() => {});
+        }
+
+        // 打开发帖模态框
+        postButton && postButton.addEventListener('click', () => {
+            postModal.classList.add('active');
+        });
+
+        // 关闭发帖模态框
+        closeModal && closeModal.addEventListener('click', () => {
+            postModal.classList.remove('active');
+        });
+
+        cancelPost && cancelPost.addEventListener('click', () => {
+            postModal.classList.remove('active');
+        });
+
+        // 点击模态框外部关闭
+        postModal && postModal.addEventListener('click', (e) => {
+            if (e.target === postModal) {
+                postModal.classList.remove('active');
+            }
+        });
+
+        // 提交表单
+        postForm && postForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = postTitle.value.trim();
+            const section = document.getElementById('postSection').value;
+            const content = postContent.value.trim();
+
+            if (!title) {
+                alert('请输入帖子标题');
+                return;
+            }
+
+            if (!section) {
+                alert('请选择帖子板块');
+                return;
+            }
+
+            if (!content) {
+                alert('请输入帖子内容');
+                return;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const author = currentUser ? currentUser.username : '匿名用户';
+
+            fetch(`${PAGE_API_BASE}/create_post`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ author, title, content, section })
+            })
+                .then(res => res.json().then(data => ({ ok: res.ok, data })))
+                .then(({ ok, data }) => {
+                    if (!ok) {
+                        alert(data.error || '发布失败');
+                        return;
+                    }
+                    postModal.classList.remove('active');
+                    postForm.reset();
+                    window.location.href = `帖子通用界面.html?post_id=${data.id}`;
+                })
+                .catch(() => {
+                    alert('发布请求失败');
+                });
+        });
+
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        searchInput && searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    alert(`搜索帖子: ${query}\n（实际开发中这里会执行搜索功能）`);
+                }
+            }
+        });
+
+        // 点击热门话题
+        const topicItems = document.querySelectorAll('.topic-item');
+        topicItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const title = item.querySelector('.topic-title').textContent;
+                alert(`查看话题: ${title}\n（实际开发中这里会跳转到帖子详情页）`);
+            });
+        });
+
+        // 点击论坛卡片
+        forumCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.card-title').textContent;
+                alert(`进入板块: ${title}\n（实际开发中这里会跳转到板块详情页）`);
+            });
+        });
+
+        loadLatestPosts();
+    })();
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</body>
+</html>

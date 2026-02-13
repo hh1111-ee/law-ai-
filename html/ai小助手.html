@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI法律助手 - 智能法律咨询</title>
+    <style>
+        /* 定义CSS变量（补全原有样式依赖的变量） */
+        :root {
+            --primary-blue: #2c6ecb;
+            --secondary-purple: #8a4fff;
+            --light-purple: #e8e0ff;
+            --text-dark: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            background-color: #f0f4f8;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 18px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-purple));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: white;
+            color: var(--text-dark);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .input-container {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: center; /* 输入框居中 */
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* 限制最大宽度 */
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 1rem 3.5rem 1rem 1rem; /* 左侧留空间，右侧留出按钮空间 */
+            border: 2px solid var(--light-purple);
+            border-radius: 50px; /* 圆阔外形 */
+            resize: none;
+            font-size: 1rem;
+            outline: none;
+            max-height: 150px;
+            overflow-y: auto;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--secondary-purple);
+        }
+
+        .input-icons {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 16px;
+            background: transparent;
+            padding: 0 4px;
+            align-items: center;
+        }
+
+        .icon-button {
+            background: linear-gradient(135deg, #e8e0ff 40%, #fff 100%);
+            border: 1.5px solid var(--light-purple);
+            cursor: pointer;
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(44,110,203,0.08);
+            transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+            outline: none;
+            margin: 0 2px;
+        }
+
+        .icon-button:hover {
+            background: linear-gradient(135deg, #d1c4e9 60%, #e8e0ff 100%);
+            box-shadow: 0 4px 16px rgba(138, 79, 255, 0.15);
+            transform: scale(1.08);
+        }
+
+        .send-button {
+            background: linear-gradient(90deg, var(--primary-blue) 60%, var(--secondary-purple) 100%);
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(44,110,203,0.12);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+            outline: none;
+        }
+
+        .send-button:hover {
+            background: linear-gradient(90deg, var(--secondary-purple) 60%, var(--primary-blue) 100%);
+            transform: scale(1.12);
+            box-shadow: 0 6px 24px rgba(138, 79, 255, 0.18);
+        }
+
+        .voice-input {
+            position: relative;
+            display: inline-block;
+        }
+
+        .scrollbar-custom {
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-purple) #f0f4f8;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: #f0f4f8;
+            border-radius: 4px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-purple);
+            border-radius: 4px;
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            color: #777;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: var(--primary-blue);
+            font-style: italic;
+            margin: 2rem 0;
+        }
+
+        /* 新增：加载中样式 */
+        .loading-message {
+            color: var(--primary-blue);
+            font-style: italic;
+            align-self: flex-start;
+            margin: 1rem 0;
+        }
+    </style>
+     <link rel="stylesheet" href="../css/样式.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+           <div class="nav-brand">
+                <h2>AI 法律助手</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">返回首页</a></li>
+                <li><a href="#">法律咨询</a></li>
+                <li><a href="#">案例分析</a></li>
+                <li><a href="#">法律文书</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="chat-container scrollbar-custom" id="chatContainer">
+        <div class="welcome-message">
+            您好！我是AI法律助手，可以帮您解答法律问题。
+            <br>请问有什么可以帮助您的吗？
+        </div>
+    </div>
+
+    <div class="input-container">
+        <div class="input-wrapper">
+            <textarea 
+                class="chat-input" 
+                id="messageInput" 
+                placeholder="输入您的法律问题..." 
+                rows="1"
+            ></textarea>
+            <div class="input-icons">
+                <button class="icon-button" id="voiceButton" title="语音输入">
+                    &#128264;
+                </button>
+                <button class="send-button" id="sendButton" title="发送">
+                    &#10148;
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ---------- 自动调节文本框高度 ----------
+    const messageInput = document.getElementById('messageInput');
+    messageInput.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight > 150 ? 150 : this.scrollHeight) + 'px';
+        scrollToBottom();
+    });
+
+    // ---------- 添加聊天气泡 ----------
+    function addMessage(text, sender) {
+        const chatContainer = document.getElementById('chatContainer');
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = text;
+
+        const timestamp = document.createElement('div');
+        timestamp.className = 'timestamp';
+        const now = new Date();
+        timestamp.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(timestamp);
+        chatContainer.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    // ---------- 滚动到底 ----------
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // ---------- 发送用户消息 ----------
+    async function sendMessage() {
+        const msg = messageInput.value.trim();
+        if (!msg) return;
+
+        // 1. 先在页面展示用户消息
+        addMessage(msg, 'user');
+        messageInput.value = '';
+        messageInput.style.height = 'auto';
+
+        // 2. 加载中提示（用户可见）
+        const chatContainer = document.getElementById('chatContainer');
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'loading-message';
+        loadingDiv.textContent = 'AI 正在思考，请稍候…';
+        chatContainer.appendChild(loadingDiv);
+        scrollToBottom();
+
+        try {
+            const resp = await fetch('http://127.0.0.1:5000/api/legal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: msg })
+            });
+
+            // 移除加载提示
+            chatContainer.removeChild(loadingDiv);
+
+            // 3. 检查 HTTP 状态码
+            if (!resp.ok) {
+                const errMsg = `⚠️ 后端返回错误：HTTP ${resp.status}`;
+                addMessage(errMsg, 'bot');
+                console.error(errMsg);
+                return;
+            }
+
+            // 4. 读取返回的文字，先打印到控制台，帮助调试
+            const rawText = await resp.text();
+            console.log('后端原始返回：', rawText);
+
+            // 5. 防止空返回导致 JSON.parse 报错
+            if (!rawText) {
+                addMessage('⚠️ 后端返回空内容，请检查后端日志', 'bot');
+                return;
+            }
+
+            // 6. 解析 JSON
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (e) {
+                addMessage(`⚠️ 后端返回非 JSON：${rawText.slice(0, 100)}`, 'bot');
+                console.error('JSON 解析错误', e);
+                return;
+            }
+
+            // 7. 显示答案或错误信息
+            if (data.error) {
+                addMessage(`⚠️ 错误：${data.error}`, 'bot');
+            } else {
+                addMessage(data.answer || '暂无回复', 'bot');
+            }
+        } catch (e) {
+            // 网络层面错误
+            chatContainer.removeChild(loadingDiv);
+            addMessage(`⚠️ 请求失败：${e.message}`, 'bot');
+            console.error('fetch 错误', e);
+        }
+    }
+
+    // ---------- 绑定按钮与快捷键 ----------
+    document.getElementById('sendButton').addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // ---------- 语音按钮（保持提示） ----------
+    document.getElementById('voiceButton').addEventListener('click', function () {
+        alert('语音输入功能正在开发中……');
+    });
+
+    // 页面首次加载自动滚到底
+    scrollToBottom();
+</script>
+
+<script src="../js/逻辑.js"></script>
+
+
+</body>
+</html>

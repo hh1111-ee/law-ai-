@@ -1,0 +1,129 @@
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录注册 - AI法律平台</title>
+    <link rel="stylesheet" href="../css/样式.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="#">法律咨询</a></li>
+                <li><a href="#">案例分析</a></li>
+                <li><a href="#">法律文书</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-form">
+                <h2>用户登录 / 注册</h2>
+                
+                <!-- 登录/注册选项卡 -->
+                <div class="auth-tabs">
+                    <button id="loginTab" class="tab-btn active" onclick="switchTab('login')">登录</button>
+                    <button id="registerTab" class="tab-btn" onclick="switchTab('register')">注册</button>
+                </div>
+                
+                <!-- 登录表单 -->
+                <form id="loginForm" class="auth-form-content">
+                    <div class="form-group">
+                        <label for="loginUsername">用户名</label>
+                        <input type="text" id="loginUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">密码</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">登录</button>
+                </form>
+                
+                <!-- 注册表单 -->
+                <form id="registerForm" class="auth-form-content" style="display:none;">
+                    <div class="form-group">
+                        <label for="regIdentity">身份类型</label>
+                        <select id="regIdentity" name="identity" required>
+                            <option value="">请选择身份</option>
+                            <option value="owner">业主方</option>
+                            <option value="property">物业方</option>
+                            <option value="lawyer">律师</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">用户名</label>
+                        <input type="text" id="regUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">密码</label>
+                        <input type="password" id="regPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">确认密码</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    
+                    <!-- 位置相关字段 -->
+                    <div class="form-group">
+                        <label>获取位置信息</label>
+                        <div class="location-section">
+                            <button type="button" id="getLocationBtn" class="location-btn" onclick="getIPLocation()">获取当前位置</button>
+                            <span id="locationStatus" class="location-status">未获取位置</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="manualLocation">或手动输入位置</label>
+                        <input type="text" id="manualLocation" name="location" placeholder="请输入详细地址">
+                        <!-- 隐藏自动定位结果输入框，供JS赋值用 -->
+                        <input type="hidden" id="autoLocation" name="autoLocation">
+                    </div>
+                    <button type="submit" class="submit-btn">注册</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AI法律平台. 版权所有</p>
+        <div class="footer-links">
+            <a href="#">隐私政策</a>
+            <a href="#">使用条款</a>
+            <a href="#">联系我们</a>
+        </div>
+    </footer>
+     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="../js/逻辑.js"></script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+2026-02-12 16:15:07 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:15:10 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:15:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:15:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 16:15:47 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:15:57 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:15:57 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:23:34 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:23:48 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:23:48 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 16:23:55 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:24:09 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:24:09 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 16:24:33 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 73 发送的原始数据：{"from":"73","to":"1","content":"你好","ts":"2026-02-12T08:24:33.075Z"}
+2026-02-12 16:24:33 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '73', 'receiver': '1', 'content': '你好', 'timestamp': '2026-02-12T08:24:33.075Z'}
+2026-02-12 16:24:35 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 16:24:35 - INFO - 信息中转服务器:send_to_user:77 - 向用户 1 发送消息：{'type': 'message', 'from': '73', 'to': '1', 'content': '你好', 'ts': '2026-02-12T08:24:33.075Z'}
+2026-02-12 16:24:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:24:35 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 16:24:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:24:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 16:24:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:24:35 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:24:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 16:24:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 16:25:12 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"年hi","ts":"2026-02-12T08:25:12.445Z"}
+2026-02-12 16:25:12 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '年hi', 'timestamp': '2026-02-12T08:25:12.445Z'}
+2026-02-12 16:25:14 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 16:25:14 - INFO - 信息中转服务器:send_to_user:77 - 向用户 73 发送消息：{'type': 'message', 'from': '1', 'to': '73', 'content': '年hi', 'ts': '2026-02-12T08:25:12.445Z'}
+2026-02-12 16:25:14 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:25:14 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 16:25:14 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:25:14 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 16:25:14 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:25:14 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 16:25:14 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 16:25:15 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 16:25:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:25:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 16:25:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 16:25:31 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 16:25:31 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:01:41 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:01:48 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"hi","ts":"2026-02-12T10:01:48.644Z"}
+2026-02-12 18:01:48 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'hi', 'timestamp': '2026-02-12T10:01:48.644Z'}
+2026-02-12 18:01:50 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:01:50 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'hi', 'ts': '2026-02-12T10:01:48.644Z'}
+2026-02-12 18:01:50 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:01:50 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:01:51 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:02:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:02:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:02:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:02:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:02:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:02:46 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:02:46 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:02:46 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:05:24 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:05:33 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"huidnc","ts":"2026-02-12T10:05:33.696Z"}
+2026-02-12 18:05:33 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'huidnc', 'timestamp': '2026-02-12T10:05:33.696Z'}
+2026-02-12 18:05:35 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:05:35 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'huidnc', 'ts': '2026-02-12T10:05:33.696Z'}
+2026-02-12 18:05:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:05:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:05:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:05:53 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:05:53 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:05:53 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:05:53 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:05:53 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:05:54 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:05:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:05:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:05:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:06:12 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:06:12 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:06:12 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:06:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:06:30 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:06:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:06:40 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"你好","ts":"2026-02-12T10:06:40.971Z"}
+2026-02-12 18:06:40 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '你好', 'timestamp': '2026-02-12T10:06:40.971Z'}
+2026-02-12 18:06:43 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:06:43 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '你好', 'ts': '2026-02-12T10:06:40.971Z'}
+2026-02-12 18:06:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:06:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:06:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:10:29 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:10:29 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:10:30 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:11:38 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:11:38 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:11:39 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:11:39 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:11:39 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:11:39 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:12:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:12:30 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:12:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:12:30 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:12:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:12:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:12:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:13:19 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:13:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:13:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:13:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:11 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:11 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:15:11 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:11 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:11 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:15:12 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:14 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:14 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:15:15 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:15 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:15 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:15 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:15:37 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:38 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:15:38 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:15:38 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:19:02 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:19:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:19:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:19:28 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:19:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:19:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:19:29 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:19:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:19:42 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:19:42 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:19:51 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:19:51 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:19:55 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:20:37 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:20:37 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:20:38 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:20:38 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:20:38 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:20:38 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:20:59 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:05 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:05 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:05 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:05 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:05 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:06 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:06 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:06 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:07 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:07 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:07 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:07 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:07 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:07 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:07 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:07 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:08 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:18 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:18 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:18 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:22 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:22 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:23 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:23 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:23 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:23 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:26 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:31 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:31 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:32 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:32 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:32 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:32 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:44 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:21:57 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:21:57 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:21:57 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:01 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:01 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:22:02 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:02 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:02 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:02 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:22:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:30 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:22:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:22:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:22:44 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:22:58 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"你好","ts":"2026-02-12T10:22:58.312Z"}
+2026-02-12 18:22:58 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '你好', 'timestamp': '2026-02-12T10:22:58.312Z'}
+2026-02-12 18:23:00 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:23:00 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '你好', 'ts': '2026-02-12T10:22:58.312Z'}
+2026-02-12 18:23:00 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:23:00 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:23:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:25:16 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:25:16 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:25:16 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:25:26 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:25:26 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:25:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:25:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:25:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:25:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:25:33 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:25:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:25:49 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"你好","ts":"2026-02-12T10:25:49.916Z"}
+2026-02-12 18:25:49 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '你好', 'timestamp': '2026-02-12T10:25:49.916Z'}
+2026-02-12 18:25:51 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:25:51 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '你好', 'ts': '2026-02-12T10:25:49.916Z'}
+2026-02-12 18:25:52 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:25:52 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:25:52 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:29:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:29:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:29:29 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:29:29 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:29:29 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:29:30 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:54 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:54 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:54 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:54 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:54 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:55 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:57 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:57 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:57 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:57 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:57 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:36:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:36:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:36:59 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:00 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:00 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:01 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:01 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:01 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:03 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:03 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:04 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:11 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:11 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:11 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:11 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:11 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:11 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:15 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:15 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:15 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:15 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:16 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:16 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:16 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:17 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:17 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:17 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:17 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:26 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:28 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:28 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:31 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:31 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:37:31 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:31 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:37:33 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:37:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:43:11 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:43:11 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:43:12 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:43:12 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:43:12 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:43:12 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:43:20 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:43:21 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:43:21 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:43:21 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:43:22 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:49 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:49 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:50 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:52 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:52 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:52 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:52 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:52 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:53 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:55 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:55 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:56 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:57 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:57 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:44:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:44:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:44:59 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:45:03 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:45:03 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:45:04 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:45:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:45:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:45:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:45:40 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:45:40 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:45:40 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:39 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:39 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:40 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:40 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:40 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:41 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:41 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:41 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:42 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:42 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:42 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:44 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:45 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:45 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:45 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:51 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:51 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:51 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:51 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:51 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:52 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:53 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:53 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:54 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:54 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:54 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:54 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:46:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:59 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:46:59 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:46:59 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:47:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:47:26 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:47:26 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:47:26 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:47:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:47:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:47:44 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:47:44 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:47:44 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:47:44 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:47:46 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:47:46 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:47:59 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:47:59 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:48:00 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:48:00 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:00 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:48:05 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:48:05 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:05 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:48:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:48:30 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:31 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:48:31 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:48:31 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:32 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:48:36 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:48:36 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:48:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:49:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:49:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:49:35 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:49:35 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:49:35 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:49:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:49:55 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:49:55 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:49:55 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:49:55 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:49:55 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:49:56 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:50:01 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:50:01 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:50:02 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:51:35 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 18:51:56 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 73 发送的原始数据：{"from":"73","to":"1","content":"你好","ts":"2026-02-12T10:51:56.292Z"}
+2026-02-12 18:51:56 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '73', 'receiver': '1', 'content': '你好', 'timestamp': '2026-02-12T10:51:56.292Z'}
+2026-02-12 18:51:58 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:51:58 - INFO - 信息中转服务器:send_to_user:77 - 向用户 1 发送消息：{'type': 'message', 'from': '73', 'to': '1', 'content': '你好', 'ts': '2026-02-12T10:51:56.292Z'}
+2026-02-12 18:51:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 18:51:58 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 18:51:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:51:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:51:58 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:51:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 18:52:25 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 73 发送的原始数据：{"from":"73","to":"1","content":"后来了","ts":"2026-02-12T10:52:25.056Z"}
+2026-02-12 18:52:25 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '73', 'receiver': '1', 'content': '后来了', 'timestamp': '2026-02-12T10:52:25.056Z'}
+2026-02-12 18:52:27 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 18:52:27 - INFO - 信息中转服务器:send_to_user:77 - 向用户 1 发送消息：{'type': 'message', 'from': '73', 'to': '1', 'content': '后来了', 'ts': '2026-02-12T10:52:25.056Z'}
+2026-02-12 18:52:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 18:52:27 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 18:52:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:52:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:52:27 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 18:52:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 18:52:51 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 18:52:51 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 18:55:37 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 18:55:37 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 18:55:38 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:00:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:00:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:00:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:00:49 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:00:49 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:00:49 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:04 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 19:01:10 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 73 发送的原始数据：{"from":"73","to":"1","content":"你好","ts":"2026-02-12T11:01:10.896Z"}
+2026-02-12 19:01:10 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '73', 'receiver': '1', 'content': '你好', 'timestamp': '2026-02-12T11:01:10.896Z'}
+2026-02-12 19:01:12 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:01:12 - INFO - 信息中转服务器:send_to_user:77 - 向用户 1 发送消息：{'type': 'message', 'from': '73', 'to': '1', 'content': '你好', 'ts': '2026-02-12T11:01:10.896Z'}
+2026-02-12 19:01:13 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 19:01:13 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:13 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:01:13 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:01:13 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:13 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 19:01:31 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 19:01:31 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:32 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 19:01:33 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:01:33 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 19:01:39 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"无语了","ts":"2026-02-12T11:01:39.865Z"}
+2026-02-12 19:01:39 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '无语了', 'timestamp': '2026-02-12T11:01:39.865Z'}
+2026-02-12 19:01:41 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:01:41 - INFO - 信息中转服务器:send_to_user:77 - 向用户 73 发送消息：{'type': 'message', 'from': '1', 'to': '73', 'content': '无语了', 'ts': '2026-02-12T11:01:39.865Z'}
+2026-02-12 19:01:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 19:01:42 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:01:42 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:01:42 - INFO - 信息中转服务器:connect:61 - 用户 73 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:01:42 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：2
+2026-02-12 19:03:07 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:03:07 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：1
+2026-02-12 19:03:08 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 73 主动断开WebSocket连接
+2026-02-12 19:03:08 - INFO - 信息中转服务器:disconnect:67 - 用户 73 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:12:41 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:12:46 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"草","ts":"2026-02-12T11:12:46.872Z"}
+2026-02-12 19:12:46 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '草', 'timestamp': '2026-02-12T11:12:46.872Z'}
+2026-02-12 19:12:48 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:12:48 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '草', 'ts': '2026-02-12T11:12:46.872Z'}
+2026-02-12 19:12:49 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:12:49 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:12:49 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:13:06 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"啊","ts":"2026-02-12T11:13:06.033Z"}
+2026-02-12 19:13:06 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '啊', 'timestamp': '2026-02-12T11:13:06.033Z'}
+2026-02-12 19:13:08 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:13:08 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '啊', 'ts': '2026-02-12T11:13:06.033Z'}
+2026-02-12 19:13:08 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:13:08 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:13:08 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:13:14 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"请求","ts":"2026-02-12T11:13:14.199Z"}
+2026-02-12 19:13:14 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '请求', 'timestamp': '2026-02-12T11:13:14.199Z'}
+2026-02-12 19:13:16 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:13:16 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '请求', 'ts': '2026-02-12T11:13:14.199Z'}
+2026-02-12 19:13:16 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:13:16 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:13:16 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:15:36 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:15:36 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:15:36 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:15:37 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:15:37 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:15:37 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:15:40 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:15:40 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:15:41 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:15:42 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:15:42 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:15:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:15:45 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:15:45 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:15:45 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:35:03 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:35:03 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:35:03 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:35:08 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"很尴尬","ts":"2026-02-12T11:35:08.089Z"}
+2026-02-12 19:35:08 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '很尴尬', 'timestamp': '2026-02-12T11:35:08.089Z'}
+2026-02-12 19:35:10 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:35:10 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '很尴尬', 'ts': '2026-02-12T11:35:08.089Z'}
+2026-02-12 19:35:10 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:35:10 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:35:10 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:38:48 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:38:48 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:38:49 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:38:49 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:38:49 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:38:49 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:38:52 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:38:52 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:38:52 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:38:52 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:38:53 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:39:07 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:39:07 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:39:08 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:39:08 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:39:08 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:39:08 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:39:36 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:39:37 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:39:53 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"11","ts":"2026-02-12T11:39:53.368Z"}
+2026-02-12 19:39:53 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '11', 'timestamp': '2026-02-12T11:39:53.368Z'}
+2026-02-12 19:39:55 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:39:55 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '11', 'ts': '2026-02-12T11:39:53.368Z'}
+2026-02-12 19:39:55 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:39:55 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:39:55 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:41:49 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:41:49 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:41:49 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:42:28 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"哈","ts":"2026-02-12T11:42:28.741Z"}
+2026-02-12 19:42:28 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '哈', 'timestamp': '2026-02-12T11:42:28.741Z'}
+2026-02-12 19:42:30 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:42:30 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '哈', 'ts': '2026-02-12T11:42:28.741Z'}
+2026-02-12 19:42:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:42:30 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:42:31 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:44:14 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"vgvyvtgv","ts":"2026-02-12T11:44:14.142Z"}
+2026-02-12 19:44:14 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'vgvyvtgv', 'timestamp': '2026-02-12T11:44:14.142Z'}
+2026-02-12 19:44:16 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 19:44:16 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'vgvyvtgv', 'ts': '2026-02-12T11:44:14.142Z'}
+2026-02-12 19:44:16 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 19:44:16 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 19:44:16 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 19:46:17 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:00:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:00:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:00:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:00:30 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:00:30 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:00:30 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:00:34 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:00:34 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:00:34 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:00:36 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:00:36 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:00:37 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:03 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:03 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:03 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:05 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:05 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:05 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:08 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:08 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:08 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:10 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:10 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:10 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:19 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:19 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:19 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:25 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"111","ts":"2026-02-12T12:01:25.250Z"}
+2026-02-12 20:01:25 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': '111', 'timestamp': '2026-02-12T12:01:25.250Z'}
+2026-02-12 20:01:27 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 20:01:27 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': '111', 'ts': '2026-02-12T12:01:25.250Z'}
+2026-02-12 20:01:27 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:27 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:27 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:41 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"dvgd","ts":"2026-02-12T12:01:41.478Z"}
+2026-02-12 20:01:41 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'dvgd', 'timestamp': '2026-02-12T12:01:41.478Z'}
+2026-02-12 20:01:43 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 20:01:43 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'dvgd', 'ts': '2026-02-12T12:01:41.478Z'}
+2026-02-12 20:01:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:01:58 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:01:58 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:01:58 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:05 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:05 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:06 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:06 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:06 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:07 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:13 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:13 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:13 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:15 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:15 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:16 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:22 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:22 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:22 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:02:26 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"rtg","ts":"2026-02-12T12:02:26.404Z"}
+2026-02-12 20:02:26 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'rtg', 'timestamp': '2026-02-12T12:02:26.404Z'}
+2026-02-12 20:02:28 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 20:02:28 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'rtg', 'ts': '2026-02-12T12:02:26.404Z'}
+2026-02-12 20:02:28 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:02:28 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:02:28 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:03:50 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:03:50 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:03:51 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:20:41 - INFO - 信息中转服务器:websocket_private_chat:106 - 收到用户 1 发送的原始数据：{"from":"1","to":"73","content":"l","ts":"2026-02-12T12:20:41.201Z"}
+2026-02-12 20:20:41 - INFO - 信息中转服务器:websocket_private_chat:148 - 调用外部API：http://localhost:3000/send_personal_message，参数：{'sender': '1', 'receiver': '73', 'content': 'l', 'timestamp': '2026-02-12T12:20:41.201Z'}
+2026-02-12 20:20:43 - INFO - 信息中转服务器:websocket_private_chat:155 - 外部API调用成功，响应状态码：200
+2026-02-12 20:20:43 - WARNING - 信息中转服务器:send_to_user:73 - 用户 73 无活跃WebSocket连接，消息发送失败：{'type': 'message', 'from': '1', 'to': '73', 'content': 'l', 'ts': '2026-02-12T12:20:41.201Z'}
+2026-02-12 20:20:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:20:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:20:43 - INFO - 信息中转服务器:connect:61 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-12 20:35:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接
+2026-02-12 20:35:43 - INFO - 信息中转服务器:disconnect:67 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-12 20:35:43 - INFO - 信息中转服务器:websocket_private_chat:172 - 用户 1 主动断开WebSocket连接

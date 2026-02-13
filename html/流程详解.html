@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>要素式起诉状生成器 - AI法律平台</title>
+    <link rel="stylesheet" href="../css/样式.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="诉讼流程.html">诉讼流程</a></li>
+                <li><a href="流程详解.html" class="active">起诉状生成</a></li>
+                <li><a href="登录注册.html">登录/注册</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="个人中心.html">个人中心</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 起诉状生成器 -->
+    <main class="generator-main">
+        <div class="container">
+            <h1 class="page-title">要素式起诉状生成器</h1>
+            
+            <!-- 进度指示 -->
+            <div class="progress-steps">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-name">基本信息</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-name">诉讼请求</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-name">事实理由</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">4</div>
+                    <div class="step-name">生成结果</div>
+                </div>
+            </div>
+            
+            <!-- 生成器表单 -->
+            <form id="indictmentForm" class="generator-form">
+                <!-- 步骤1：基本信息 -->
+                <div class="form-step active" id="step1">
+                    <h3 class="step-title">第一步：填写基本信息</h3>
+                    
+                    <div class="form-section">
+                        <h4>🏛️ 法院信息</h4>
+                        <div class="form-group">
+                            <label for="courtName">受理法院名称</label>
+                            <input type="text" id="courtName" placeholder="例如：北京市朝阳区人民法院" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="caseType">案件类型</label>
+                            <select id="caseType" required>
+                                <option value="">请选择案件类型</option>
+                                <option value="civil">民事纠纷</option>
+                                <option value="contract">合同纠纷</option>
+                                <option value="labor">劳动争议</option>
+                                <option value="property">财产纠纷</option>
+                                <option value="debt">债务纠纷</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>👤 原告信息</h4>
+                        <div class="form-group">
+                            <label for="plaintiffName">原告姓名/名称</label>
+                            <input type="text" id="plaintiffName" placeholder="填写原告姓名或单位名称" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plaintiffGender">性别</label>
+                            <select id="plaintiffGender">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plaintiffBirthDate">出生日期/成立日期</label>
+                            <input type="date" id="plaintiffBirthDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="plaintiffID">身份证号/统一社会信用代码</label>
+                            <input type="text" id="plaintiffID" placeholder="身份证号或组织机构代码">
+                        </div>
+                        <div class="form-group">
+                            <label for="plaintiffAddress">住址/地址</label>
+                            <input type="text" id="plaintiffAddress" placeholder="详细地址" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plaintiffPhone">联系电话</label>
+                            <input type="tel" id="plaintiffPhone" placeholder="手机号码">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>👤 被告信息</h4>
+                        <div class="form-group">
+                            <label for="defendantName">被告姓名/名称</label>
+                            <input type="text" id="defendantName" placeholder="填写被告姓名或单位名称" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="defendantGender">性别</label>
+                            <select id="defendantGender">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="defendantBirthDate">出生日期/成立日期</label>
+                            <input type="date" id="defendantBirthDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="defendantID">身份证号/统一社会信用代码</label>
+                            <input type="text" id="defendantID" placeholder="身份证号或组织机构代码">
+                        </div>
+                        <div class="form-group">
+                            <label for="defendantAddress">住址/地址</label>
+                            <input type="text" id="defendantAddress" placeholder="详细地址" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="defendantPhone">联系电话</label>
+                            <input type="tel" id="defendantPhone" placeholder="手机号码">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-next" onclick="nextStep(2)">下一步：诉讼请求</button>
+                    </div>
+                </div>
+                
+                <!-- 步骤2：诉讼请求 -->
+                <div class="form-step" id="step2">
+                    <h3 class="step-title">第二步：填写诉讼请求</h3>
+                    
+                    <div class="form-section">
+                        <h4>💼 主要诉讼请求</h4>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="payment">
+                                <span>要求支付欠款/货款</span>
+                            </label>
+                            <div class="sub-input" style="display: none;">
+                                <input type="number" placeholder="金额（元）" style="width: 200px; margin-left: 20px;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="compensation">
+                                <span>要求赔偿损失</span>
+                            </label>
+                            <div class="sub-input" style="display: none;">
+                                <input type="number" placeholder="赔偿金额（元）" style="width: 200px; margin-left: 20px;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="performance">
+                                <span>要求继续履行合同</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="termination">
+                                <span>要求解除合同</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="apology">
+                                <span>要求赔礼道歉</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="claims" value="other">
+                                <span>其他诉讼请求</span>
+                            </label>
+                            <div class="sub-input" style="display: none;">
+                                <textarea placeholder="请详细描述其他诉讼请求" rows="3" style="width: 100%; margin-left: 20px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>💰 诉讼费用</h4>
+                        <div class="form-group">
+                            <label>本案诉讼费用由谁承担？</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="costBearer" value="defendant" checked>
+                                    <span>被告承担</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="costBearer" value="both">
+                                    <span>双方按比例承担</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-prev" onclick="prevStep(1)">上一步</button>
+                        <button type="button" class="btn-next" onclick="nextStep(3)">下一步：事实与理由</button>
+                    </div>
+                </div>
+                
+                <!-- 步骤3：事实与理由 -->
+                <div class="form-step" id="step3">
+                    <h3 class="step-title">第三步：填写事实与理由</h3>
+                    
+                    <div class="form-section">
+                        <h4>📅 基本事实</h4>
+                        <div class="form-group">
+                            <label for="incidentDate">纠纷发生日期</label>
+                            <input type="date" id="incidentDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="disputeNature">纠纷性质</label>
+                            <select id="disputeNature" required>
+                                <option value="">请选择纠纷性质</option>
+                                <option value="contract_breach">合同违约</option>
+                                <option value="debt">债务纠纷</option>
+                                <option value="compensation">损害赔偿</option>
+                                <option value="property">财产纠纷</option>
+                                <option value="labor">劳动争议</option>
+                                <option value="neighborhood">邻里纠纷</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="factDescription">事实经过描述</label>
+                            <textarea id="factDescription" rows="6" placeholder="请详细描述纠纷发生的时间、地点、经过、涉及金额等具体情况" required></textarea>
+                            <div class="text-count">已输入 <span id="factCount">0</span> 字</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>⚖️ 法律依据</h4>
+                        <div class="form-group">
+                            <label>相关法律规定（可多选）</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="laws" value="contract_law">
+                                    <span>《中华人民共和国民法典》合同编</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="laws" value="tort_law">
+                                    <span>《中华人民共和国民法典》侵权责任编</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="laws" value="civil_procedure">
+                                    <span>《中华人民共和国民事诉讼法》</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="laws" value="other_law">
+                                    <span>其他法律规定</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="legalBasis">其他法律依据说明</label>
+                            <textarea id="legalBasis" rows="4" placeholder="如有其他法律依据，请在此说明"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-prev" onclick="prevStep(2)">上一步</button>
+                        <button type="button" class="btn-next" onclick="generateIndictment()">生成起诉状</button>
+                    </div>
+                </div>
+                
+                <!-- 步骤4：生成结果 -->
+                <div class="form-step" id="step4" style="display: none;">
+                    <h3 class="step-title">第四步：生成起诉状</h3>
+                    
+                    <div class="generator-result">
+                        <div class="result-header">
+                            <h4>✅ 起诉状生成成功！</h4>
+                            <p>您的起诉状已根据填写的信息自动生成，请核对并下载。</p>
+                        </div>
+                        
+                        <div class="result-actions">
+                            <button type="button" class="btn-action" onclick="downloadIndictment()">
+                                📥 下载Word文档
+                            </button>
+                            <button type="button" class="btn-action" onclick="copyToClipboard()">
+                                📋 复制文本内容
+                            </button>
+                            <button type="button" class="btn-action" onclick="printIndictment()">
+                                🖨️ 打印起诉状
+                            </button>
+                        </div>
+                        
+                        <div class="result-preview">
+                            <div class="preview-header">
+                                <h5>起诉状预览</h5>
+                                <button type="button" class="btn-edit" onclick="editForm()">修改信息</button>
+                            </div>
+                            <div class="preview-content" id="indictmentPreview">
+                                <!-- 起诉状内容将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <div class="result-tips">
+                            <h5>📝 使用建议：</h5>
+                            <p>1. 仔细核对所有信息，确保准确无误</p>
+                            <p>2. 根据不同法院要求，可能需要调整格式</p>
+                            <p>3. 建议咨询专业律师后提交</p>
+                            <p>4. 准备3份起诉状副本（法院、被告、自留各1份）</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>© 2025 AI法律平台 版权所有 | 本平台仅提供法律文书模板，不构成法律意见</p>
+        </div>
+    </footer>
+
+    <script src="../js/逻辑.js"></script>
+</body>
+</html>

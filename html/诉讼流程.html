@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诉讼流程指引 - AI法律平台</title>
+    <link rel="stylesheet" href="../css/样式.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="诉讼流程.html" class="active">诉讼流程</a></li>
+                <li><a href="流程详解.html">起诉状生成</a></li>
+                <li><a href="登录注册.html">登录/注册</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="个人中心.html">个人中心</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 诉讼流程内容 -->
+    <main class="process-main">
+        <div class="container">
+            <h1 class="page-title">诉讼流程指引</h1>
+            
+            <!-- 快速导航 -->
+            <div class="quick-nav">
+                <a href="#indictment-generator" class="quick-nav-btn">
+                    <span>⚖️</span>
+                    <span>立即生成起诉状</span>
+                </a>
+            </div>
+            
+            <!-- 诉讼流程步骤 -->
+            <div class="process-steps">
+                <a href="lawsuit-steps/step1.html" class="step-item">
+                    <div class="step-icon">📝</div>
+                    <h3 class="step-title">第一步：起诉准备</h3>
+                    <p class="step-desc">
+                        收集证据、起草起诉状、确定管辖法院、准备身份材料
+                        <span class="step-link">查看详细指南 →</span>
+                    </p>
+                </a>
+                
+                <a href="lawsuit-steps/step2.html" class="step-item">
+                    <div class="step-icon">📄</div>
+                    <h3 class="step-title">第二步：提交立案</h3>
+                    <p class="step-desc">
+                        提交材料、缴纳诉讼费、等待法院审核立案
+                        <span class="step-link">查看详细指南 →</span>
+                    </p>
+                </a>
+                
+                <a href="lawsuit-steps/step3.html" class="step-item">
+                    <div class="step-icon">🤝</div>
+                    <h3 class="step-title">第三步：庭前调解/准备</h3>
+                    <p class="step-desc">
+                        庭前调解、证据交换、确定庭审时间
+                        <span class="step-link">查看详细指南 →</span>
+                    </p>
+                </a>
+                
+                <a href="lawsuit-steps/step4.html" class="step-item">
+                    <div class="step-icon">⚖️</div>
+                    <h3 class="step-title">第四步：开庭审理</h3>
+                    <p class="step-desc">
+                        法庭调查、举证质证、法庭辩论、最后陈述
+                        <span class="step-link">查看详细指南 →</span>
+                    </p>
+                </a>
+                
+                <a href="lawsuit-steps/step5.html" class="step-item">
+                    <div class="step-icon">📋</div>
+                    <h3 class="step-title">第五步：判决与执行</h3>
+                    <p class="step-desc">
+                        领取判决、上诉期限、申请强制执行
+                        <span class="step-link">查看详细指南 →</span>
+                    </p>
+                </a>
+            </div>
+
+            <!-- 要素式起诉状生成器 -->
+            <div id="indictment-generator" class="indictment-generator-section">
+                <div class="section-header">
+                    <h2>要素式起诉状生成器</h2>
+                    <p>通过填写以下信息，快速生成专业起诉状</p>
+                </div>
+                
+                <div class="generator-card">
+                    <div class="generator-info">
+                        <h3>💡 如何使用</h3>
+                        <p>1. 点击下方按钮进入生成器</p>
+                        <p>2. 根据实际情况填写相关信息</p>
+                        <p>3. 系统自动生成标准起诉状模板</p>
+                        <p>4. 下载或复制生成的起诉状</p>
+                    </div>
+                    
+                    <div class="generator-cta">
+                        <a href="流程详解.html" class="cta-button-large">
+                            🚀 开始生成起诉状
+                        </a>
+                        <p class="generator-tips">支持民事、合同、劳动纠纷等多种类型</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 温馨提示 -->
+            <div class="tips-box">
+                <h4>📌 重要提示</h4>
+                <p>
+                    1. 本平台提供的起诉状模板仅供参考，具体内容需根据实际情况调整<br>
+                    2. 建议在提交前咨询专业律师或法律工作者<br>
+                    3. 不同地区法院可能有不同的格式要求，请以当地法院为准<br>
+                    4. 务必核对所有信息准确性，避免因信息错误导致诉讼无效
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>© 2025 AI法律平台 版权所有 | 本平台仅提供法律指引，不构成法律意见</p>
+            <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">
+                如需具体法律建议，请咨询专业律师
+            </p>
+        </div>
+    </footer>
+
+    <script src="../js/逻辑.js"></script>
+</body>
+</html>

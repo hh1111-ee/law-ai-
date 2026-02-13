@@ -1,0 +1,82 @@
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SweetAlert2 示例页面</title>
+    <!-- 引入 SweetAlert2 的 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- 简单的页面样式，让按钮更美观 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .success-btn {
+            background-color: #28a745;
+        }
+        .success-btn:hover {
+            background-color: #218838;
+        }
+        .error-btn {
+            background-color: #dc3545;
+        }
+        .error-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="btn-group">
+        <!-- 触发成功提示的按钮 -->
+        <button class="success-btn" onclick="showSuccessAlert()">点击显示成功提示</button>
+        <!-- 触发错误提示的按钮 -->
+        <button class="error-btn" onclick="showErrorAlert()">点击显示错误提示</button>
+    </div>
+
+    <!-- 引入 SweetAlert2 的 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script>
+        // 成功提示函数（替代alert('注册成功')）
+        function showSuccessAlert() {
+            Swal.fire({
+                icon: 'success', // 图标类型：success/error/warning/info/question
+                title: '注册成功',
+                text: '已自动登录，即将跳转到首页',
+                timer: 2000, // 2秒后自动关闭
+                showConfirmButton: false, // 不显示确认按钮
+                position: 'top' // 显示位置：top/center/bottom
+            });
+        }
+
+        // 错误提示函数（替代alert('密码不一致')）
+        function showErrorAlert() {
+            Swal.fire({
+                icon: 'error',
+                title: '操作失败',
+                text: '两次输入的密码不一致',
+                timer: 2000, // 2秒后自动关闭
+                showConfirmButton: false
+            });
+        }
+    </script>
+</body>
+</html>
