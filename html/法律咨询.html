@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>法律咨询 - AI法律平台</title>
-    <link rel="stylesheet" href="../css/样式.css">
+    <link rel="stylesheet" href="css\bigstyle.css">
     <style>
         .consultation-container {
             max-width: 1200px;
@@ -468,8 +468,10 @@
         </div>
     </footer>
 
-    <script src="../js/逻辑.js"></script>
+    <script src="js\luoji.js"></script>
     <script>
+    const DEFAULT_PAGE_SIZE = 5;
+
     async function getBrowserLocation() {
         if (!navigator.geolocation) return null;
         return await new Promise(resolve => {
@@ -481,13 +483,38 @@
         });
     }
 
+    async function fetchLocation(geo) {
+        const payload = geo ? { location: geo } : {};
+        const resp = await fetch('http://localhost:8000/location', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+            return null;
+        }
+
+        const data = await resp.json();
+        return data.location || null;
+    }
+
+    function updateLocationDisplay(location) {
+        const locationEl = document.getElementById('currentLocation');
+        if (!location) {
+            locationEl.textContent = '定位失败，请检查浏览器权限';
+            return;
+        }
+        locationEl.innerHTML = `<strong>${location.province} ${location.city}</strong>`;
+    }
+
     // ---------- 统一搜索函数 ----------
     async function performSearch(keyword, page = 1) {
         const geo = await getBrowserLocation();
-        const payload = { keyword, page };
+        const payload = { keyword, page, page_size: DEFAULT_PAGE_SIZE };
         if (geo) payload.location = geo;
 
-        const resp = await fetch('http://127.0.0.1:5500/search', {
+        const resp = await fetch('http://localhost:8000/search', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -502,8 +529,7 @@
         const data = await resp.json();
 
         // ----------------- 位置显示 -----------------
-        const locationEl = document.getElementById('currentLocation');
-        locationEl.innerHTML = `<strong>${data.location.province} ${data.location.city}</strong>`;
+        updateLocationDisplay(data.location);
 
         // ----------------- 推荐法规渲染 -----------------
         const recContainer = document.getElementById('recommendedLaws');
@@ -524,29 +550,27 @@
         resultsDiv.classList.add('show');
 
         // 保存全局变量用于分页
-        window.__matchedResults = data.results;   // 前端全局变量（方便分页）
+        window.__matchedResults = data.results;   // 当前页结果
         window.__currentKeyword = keyword;
-        window.__currentPage = page;
+        window.__currentPage = data.page;
+        window.__pageSize = data.page_size;
+        window.__totalResults = data.total;
 
-        renderPage(page);
-        renderPagination(data.results.length);
+        renderPage(data.results);
+        renderPagination(data.total, data.page_size, data.page);
     }
 
     // ---------- 渲染单页结果 ----------
-    function renderPage(page) {
-        const pageSize = 5;   // 每页显示 5 条（可自行修改）
-        const start = (page - 1) * pageSize;
-        const end   = start + pageSize;
-        const slice = window.__matchedResults.slice(start, end);
+    function renderPage(items) {
         const listDiv = document.getElementById('resultsList');
         listDiv.innerHTML = '';
 
-        if (slice.length === 0) {
+        if (!items || items.length === 0) {
             listDiv.innerHTML = '<div class="result-item"><p>未找到匹配的法律法规</p></div>';
             return;
         }
 
-        slice.forEach(item => {
+        items.forEach(item => {
             const div = document.createElement('div');
             div.className = 'result-item';
             // 高亮关键字
@@ -561,49 +585,95 @@
     }
 
     // ---------- 分页控件 ----------
-    function renderPagination(totalResults) {
-        const pageSize = 5;
+   // ---------- 分页控件（限制页码显示个数） ----------
+function renderPagination(totalResults, pageSize, currentPage) {
         const totalPages = Math.ceil(totalResults / pageSize);
         const paginationDiv = document.getElementById('pagination');
         paginationDiv.innerHTML = '';
 
+        if (totalPages <= 1) {
+            return;
+        }
+
+         
+        const maxVisiblePages = 5; // 最多显示5页
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = startPage + maxVisiblePages - 1;
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
         // 上一页
         const prevBtn = document.createElement('button');
         prevBtn.className = 'pagination-btn';
         prevBtn.textContent = '上一页';
-        prevBtn.disabled = window.__currentPage <= 1;
+        prevBtn.disabled = currentPage <= 1;
         prevBtn.onclick = () => {
-            if (window.__currentPage > 1) {
-                window.__currentPage--;
-                renderPage(window.__currentPage);
-                renderPagination(totalResults);
+            if (currentPage > 1) {
+                performSearch(window.__currentKeyword, currentPage - 1);
             }
         };
         paginationDiv.appendChild(prevBtn);
-
+        //首页按钮
+        if(startPage>1){
+            const  firstPageBtn=document.createElement('button');
+            firstPageBtn.className='pagination-btn';
+            firstPageBtn.textContent='1';
+            firstPageBtn.onclick=()=>
+            {
+                performSearch(window.__currentKeyword,1);
+            };
+            paginationDiv.appendChild(firstPageBtn);
+            if(startPage>2){
+                const ellipsis=document.createElement('span');
+                ellipsis.textContent='...';
+                ellipsis.style.margin='0 0.5rem';
+                paginationDiv.appendChild(ellipsis); 
+            }
         // 页码
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = startPage; i <= endPage; i++) {
             const pg = document.createElement('button');
-            pg.className = `pagination-btn ${i===window.__currentPage?'active':''}`;
+            pg.className = `pagination-btn ${i===currentPage?'active':''}`;
             pg.textContent = i;
             pg.onclick = () => {
-                window.__currentPage = i;
-                renderPage(i);
-                renderPagination(totalResults);
+                performSearch(window.__currentKeyword, i);
             };
             paginationDiv.appendChild(pg);
         }
-
+        //尾页
+        if(endPage<totalPages){
+            if(endPage<totalPages-1){
+                const ellipsis=document.createElement('span');
+                ellipsis.textContent='...';
+                ellipsis.style.margin='0 0.5rem';
+                paginationDiv.appendChild(ellipsis); 
+            }
+            const lastBtn=document.createElement('button');
+            lastBtn.className='pagination-btn';
+            lastBtn.textContent=totalPages;
+            lastBtn.onclick=()=>
+            {
+                performSearch(window.__currentKeyword,totalPages);
+            };
+            paginationDiv.appendChild(lastBtn);
+        }
+        const lastPageBtn=document.createElement('button');
+        lastPageBtn.className='pagination-btn';
+        lastPageBtn.textContent=totalPages;
+        lastPageBtn.onclick=()=>
+        {
+            performSearch(window.__currentKeyword,totalPages);
+        };
+        paginationDiv.appendChild(lastPageBtn);
+        }   
         // 下一页
         const nextBtn = document.createElement('button');
         nextBtn.className = 'pagination-btn';
         nextBtn.textContent = '下一页';
-        nextBtn.disabled = window.__currentPage >= totalPages;
+        nextBtn.disabled = currentPage >= totalPages;
         nextBtn.onclick = () => {
-            if (window.__currentPage < totalPages) {
-                window.__currentPage++;
-                renderPage(window.__currentPage);
-                renderPagination(totalResults);
+            if (currentPage < totalPages) {
+                performSearch(window.__currentKeyword, currentPage + 1);
             }
         };
         paginationDiv.appendChild(nextBtn);
@@ -622,17 +692,22 @@
         const locationEl = document.getElementById('currentLocation');
         locationEl.textContent = '正在获取位置信息...';
         const geo = await getBrowserLocation();
-        if (geo) {
-            locationEl.textContent = '已获取经纬度，搜索后生效';
-        } else {
+        const location = await fetchLocation(geo);
+        if (!location) {
             locationEl.textContent = '定位失败，请检查浏览器权限';
+            return;
         }
+        updateLocationDisplay(location);
     });
 
     // ---------- 页面加载时默认定位 ----------
-    // 直接调用一次定位（后端会用 IP 自动定位）
-    // 当页面首次打开时，后端的 /search 不会被调用，
-    // 这里仅用来展示默认位置（已在 HTML 中写死），如果想自动定位请自行调用后端一个专门的 /location 接口。
+    (async () => {
+        const locationEl = document.getElementById('currentLocation');
+        locationEl.textContent = '正在获取位置信息...';
+        const geo = await getBrowserLocation();
+        const location = await fetchLocation(geo);
+        updateLocationDisplay(location);
+    })();
 </script>
 
 </body>

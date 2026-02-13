@@ -1,0 +1,136 @@
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：1，状态：online，好友数：1
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：法师，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：5，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：7，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：r，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：q，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：y，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：k，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：666，状态：offline，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：777，状态：online，好友数：0
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:118 - 加载用户：73，状态：offline，好友数：1
+2026-02-13 14:35:20 - INFO - combined_server:load_all_data_on_start:124 - 所有数据加载成功
+2026-02-13 18:27:31 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:39:54 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:39:55 - INFO - combined_server:load_all_data_on_start:124 - 所有数据加载成功
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:39:58 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:39:58 - INFO - combined_server:load_all_data_on_start:124 - 所有数据加载成功
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 18:55:17 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 19:03:05 - INFO - combined_server:load_all_data_on_start:124 - 所有数据加载成功
+2026-02-13 19:11:03 - ERROR - combined_server:return_error:91 - 接口错误：登录失败：用户名「1」不存在，请求参数：{}
+2026-02-13 19:11:38 - INFO - combined_server:user_register:394 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-13 19:11:38 - INFO - combined_server:user_register:397 - 注册后用户数据已保存：D:\项目：ai法律平台\users.pkl
+2026-02-13 19:11:38 - INFO - combined_server:return_success:101 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'office'}}
+2026-02-13 19:11:38 - INFO - combined_server:return_success:101 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-13 19:11:39 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 19:14:21 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:14:21 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 19:20:09 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:22:57 - INFO - combined_server:legal_chat:825 - → 向 Ollama 发送请求：物业供暖有问题，我要怎么维权...
+2026-02-13 19:23:11 - INFO - combined_server:legal_chat:829 - ✅ 得到答案（前50字符）: **一、法律依据**  
+
+| 法律 / 行政法规 | 相关条文 | 要点概括 |
+|-------
+2026-02-13 19:23:53 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:36:05 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 19:36:05 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:36:06 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 19:36:50 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 19:43:35 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 19:43:36 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 19:52:47 - INFO - combined_server:load_all_data_on_start:124 - 所有数据加载成功
+2026-02-13 19:54:56 - INFO - combined_server:user_register:394 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-13 19:54:56 - INFO - combined_server:user_register:397 - 注册后用户数据已保存：D:\项目：ai法律平台\users.pkl
+2026-02-13 19:54:56 - INFO - combined_server:return_success:101 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'office'}}
+2026-02-13 19:54:56 - INFO - combined_server:return_success:101 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-13 19:54:56 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 19:54:58 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 19:54:58 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 20:00:25 - ERROR - combined_server:return_error:91 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-13 20:00:25 - INFO - combined_server:return_success:101 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:133 - 开始保存所有数据（退出钩子）
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:135 - 个人消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:137 - 群消息保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:139 - 用户数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
+2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功

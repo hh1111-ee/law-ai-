@@ -204,7 +204,7 @@
             margin: 1rem 0;
         }
     </style>
-     <link rel="stylesheet" href="../css/样式.css">
+     <link rel="stylesheet" href="css\bigstyle.css">
 </head>
 <body>
     <header>
@@ -326,7 +326,7 @@
         scrollToBottom();
 
         try {
-            const resp = await fetch('http://127.0.0.1:5000/api/legal', {
+            const resp = await fetch('http://localhost:8000/api/legal', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: msg })
@@ -395,7 +395,7 @@
     scrollToBottom();
 </script>
 
-<script src="../js/逻辑.js"></script>
+<script src="js\luoji.js"></script>
 
 
 </body>

@@ -4,7 +4,7 @@
 
 const DEFAULT_AVATAR = 'https://gd-hbimg.huaban.com/a0dcd065b11ba0951ae66436130cc6800671632a8bc0-9IxOal_fw236';
 const API_HOST = window.location.hostname || 'localhost';
-const API_BASE = `http://${API_HOST}:3000`;
+const API_BASE = `http://localhost:8000`;
 const LOGIN_REDIRECT_URL = '主页.html';
 
 // 切换登录/注册表单
@@ -24,7 +24,7 @@ function switchTab(tabName) {
         loginTab.classList.add('active');
         registerTab.classList.remove('active');
     } else {
-        loginForm.style.display = 'none';
+        loginForm.style.display = 'none'; 
         registerForm.style.display = 'block';
         loginTab.classList.remove('active');
         registerTab.classList.add('active');

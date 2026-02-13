@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>私聊功能 - AI+物业管理 | AI法律平台</title>
-    <link rel="stylesheet" href="../css/样式.css">
+    <link rel="stylesheet" href="css\bigstyle.css">
     <style>
         /* 私聊界面主题 */
         :root {
@@ -603,13 +603,13 @@
                 </div>
             </div>
     <!-- 保持原有JavaScript功能 -->
-    <script src="../js/逻辑.js"></script>
+    <script src="js\luoji.js"></script>
     <script>
     // 页面专用命名空间，避免与逻辑.js冲突
     (function () {
-        const PAGE_API_BASE = 'http://localhost:3000';
-        // 强制指定 WebSocket 服务端口为 8001，避免端口不一致导致无法连接
-        const WS_BASE = 'ws://localhost:8001/ws/private';
+        const PAGE_API_BASE = 'http://localhost:8000';
+        // WebSocket 与 API 统一到合并后的端口
+        const WS_BASE = 'ws://localhost:8000/ws/private';
         const sampleUsers = [
             { id: 1, name: "李律师", role: "律师", avatar: "李", colorClass: "user2", status: "在线", lastMessage: "关于您的物业纠纷案，我建议...", time: "10:30", unread: 2 },
             { id: 2, name: "张物业经理", role: "物业", avatar: "张", colorClass: "user3", status: "在线", lastMessage: "您反映的漏水问题我们已经派人处理", time: "昨天", unread: 0 },
