@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 案例分析 · 纯前端版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #f5f7fa;
+            margin: 0;
+            min-height: 100vh;
+            /* display: flex;
+            justify-content: center; */
+            padding: 20px;
+        }
+        .case-container {
+            margin:40px auto 0 auto;
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h1:before {
+            content: "⚖️";
+            font-size: 1.8rem;
+        }
+        .sub {
+            color: #64748b;
+            margin-top: -5px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 15px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px;
+            font-size: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 40px;
+            outline: none;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+        .search-box input:focus {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .keywords-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+        .keyword-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid transparent;
+        }
+        .keyword-btn:hover {
+            background: #e2e8f0;
+        }
+        .keyword-btn.active {
+            background: #3b82f6;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(59,130,246,0.3);
+        }
+        .clear-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            margin-left: 5px;
+        }
+        .clear-btn:hover {
+            background: #fecaca;
+        }
+        .loading, .error, .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            color: #64748b;
+            font-size: 1rem;
+        }
+        .error {
+            color: #b91c1c;
+            background: #fee2e2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: #f8fafc;
+        }
+        .keyword-tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 30px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+        }
+        .case-number {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-weight: 500;
+            color: #0f172a;
+        }
+        .summary {
+            max-width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #475569;
+        }
+        .footer-note {
+            margin-top: 25px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: right;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 15px;
+        }
+    </style>
+    <link rel="stylesheet" href="css\bigstyle.css">
+</head>
+<body>
+      <!-- 头部导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">返回首页</a></li>
+                <li><a href="公聊社区.html">论坛群组</a></li>
+                <li><a href="ai小助手.html">ai咨询</a></li>
+                <li><a href="法律咨询.html">法律咨询</a></li>
+                <li><a href="案例分析.html">案例分析</a></li>
+                <li><a href="诉讼流程.html">诉讼程序法</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+    <div class="case-container">
+        <h1>案例库 · 智能筛选</h1>
+        <div class="sub">根据案号、摘要或关键词快速定位相关案例</div>
+
+        <!-- 搜索框 -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 搜索案号或摘要..." autocomplete="off">
+        </div>
+
+        <!-- 关键词按钮区域 -->
+        <div id="keywordsContainer" class="keywords-bar">
+            <!-- 动态生成按钮 -->
+        </div>
+
+        <!-- 案例表格区域 -->
+        <div id="tableArea">
+            <!-- 动态填充表格或提示信息 -->
+        </div>
+
+        <div class="footer-note">
+            ⚡ 数据实时获取自后端API · 点击关键词或输入文字即时筛选
+        </div>
+    </div>
+    </main>
+    <script src="js/luoji.js"></script>
+    <script src="js/case_analysis.js"></script>
+</body>
+</html>

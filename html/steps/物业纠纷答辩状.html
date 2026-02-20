@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>要素式答辩状生成器 · 物业合同纠纷</title>
+
+    <!-- 全局样式 (bigstyle.css) 提供导航栏、用户下拉等基础样式 -->
+    <link rel="stylesheet" href="../css/bigstyle.css">
+     
+    <style>
+        /* 保留原页面独特的毛玻璃、圆角设计，覆盖可能与 bigstyle 冲突的部分。
+           以下样式基本继承自原答辩状内联，仅移除与导航栏重复的定义。 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #f3eaff;  /* 保留原淡紫背景，覆盖 bigstyle 的渐变 */
+            color: #2a1b3d;
+            line-height: 1.5;
+        }
+
+        /* 容器与标题 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .page-title {
+            font-size: 2.3rem;
+            font-weight: 600;
+            color: #321e5c;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #af8beb, #603a9c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 进度指示 (原答辩状样式，确保覆盖 bigstyle 中的同名类) */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2.5rem 0 3rem;
+            position: relative;
+        }
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #dcc6ff;
+            z-index: 1;
+            border-radius: 4px;
+        }
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background: #f3eaff;
+            padding: 0 1rem;
+            text-align: center;
+            flex: 1;
+        }
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border: 3px solid #b18ae6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #3f2870;
+            margin: 0 auto 0.5rem;
+            background: #faf3ff;
+        }
+        .progress-step.active .step-number {
+            background: #7b54b5;
+            border-color: #512e8e;
+            color: white;
+        }
+        .step-name {
+            font-weight: 600;
+            color: #1c1035;
+        }
+
+        /* 表单卡片 (毛玻璃深圆角) */
+        .generator-form {
+            background: #ffffffdb;
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 2.8rem 2.8rem;
+            box-shadow: 0 30px 50px -20px #b294dc;
+            border: 2px solid #f0e2ff;
+            margin-top: 2rem;
+        }
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .step-title {
+            font-size: 2rem;
+            font-weight: 500;
+            color: #4d2f7c;
+            margin-bottom: 2.5rem;
+            border-left: 12px solid #a77ad9;
+            padding-left: 1.5rem;
+        }
+        .form-section {
+            background: #faf2ff;
+            border-radius: 32px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #dec8fd;
+            box-shadow: inset 0 2px 4px #ffffff, 0 8px 12px -10px #b28be0;
+        }
+        .form-section h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: #3a2260;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #3b2862;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #dac0fe;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: white;
+            transition: 0.15s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #966ad0;
+            box-shadow: 0 0 0 5px #eeddff;
+        }
+        textarea {
+            border-radius: 28px;
+            resize: vertical;
+        }
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            background: #f2e4ff;
+            padding: 1rem 1.5rem;
+            border-radius: 48px;
+        }
+        .checkbox-label, .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .checkbox-label input, .radio-label input {
+            width: 22px;
+            height: 22px;
+            accent-color: #8d62c0;
+        }
+        .sub-input {
+            margin-top: 0.7rem;
+            padding-left: 2rem;
+        }
+        .text-count {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #5d4a78;
+            margin-top: 0.3rem;
+        }
+
+        /* 按钮组 */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+        }
+        .btn-next, .btn-prev, .btn-action {
+            background: #8c63c9;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.9rem 2.8rem;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #b591f0;
+            box-shadow: 0 4px 0 #563d82;
+            transition: 0.1s;
+        }
+        .btn-prev {
+            background: #cbb2f0;
+            color: #2e184e;
+            box-shadow: 0 4px 0 #9b82c5;
+        }
+        .btn-next:hover, .btn-action:hover {
+            background: #9e7ad9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #563d82;
+        }
+        .btn-prev:hover {
+            background: #dbc2ff;
+            transform: translateY(-2px);
+        }
+        .btn-action {
+            background: #ac88e0;
+            box-shadow: 0 4px 0 #6e4f99;
+        }
+
+        /* 结果预览 */
+        .generator-result {
+            background: #fcf5ff;
+            border-radius: 48px;
+            padding: 2rem;
+        }
+        .result-header h4 {
+            font-size: 1.8rem;
+            color: #311d55;
+        }
+        .result-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .result-preview {
+            background: #ffffff;
+            border-radius: 32px;
+            border: 3px solid #dec2fe;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #c3a2ea;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .preview-header h5 {
+            font-size: 1.6rem;
+            color: #37275a;
+        }
+        .btn-edit {
+            background: #eedaff;
+            border: none;
+            padding: 0.5rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #3d1b6b;
+            cursor: pointer;
+        }
+        .preview-content {
+            background: #f9f2ff;
+            padding: 1.8rem;
+            border-radius: 24px;
+            font-family: 'Times New Roman', serif;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            color: #202020;
+            border: 1px solid #e4d0ff;
+        }
+        .result-tips {
+            background: #ffeec7;
+            border-radius: 32px;
+            padding: 1.8rem;
+        }
+
+        /* 页脚：覆盖 bigstyle 的深色渐变，保持原淡紫色调 */
+        footer.page-footer {
+            background: #f2e3ff;
+            text-align: center;
+            padding: 1.2rem;
+            border-radius: 60px;
+            margin-top: 3rem;
+            color: #2a1b3d;
+            border: 1px solid #dec2fe;
+        }
+        .footer-note p {
+            margin: 0;
+        }
+
+        /* 确保导航栏菜单文字在渐变背景上可见 (bigstyle 已定义，此处保障) */
+        .navbar .nav-menu a {
+            color: white !important;
+        }
+        .navbar .nav-menu a.active {
+            background: rgba(255,255,255,0.25);
+            color: #e0ccff !important;
+        }
+          .next-guide {
+            margin: 2.5rem auto 0 auto;
+            max-width: 700px;
+            background: linear-gradient(90deg, #f3eaff 60%, #e9d6ff 100%);
+            border-radius: 32px;
+            box-shadow: 0 4px 18px #b294dc33;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .guide-content {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-size: 1.15rem;
+            color: #4d2f7c;
+        }
+        .guide-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .next-btn {
+            margin-left: 1.5rem;
+            background: linear-gradient(90deg, #8c63c9 60%, #a77ad9 100%);
+            color: #fff;
+            font-weight: 600;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px #b294dc33;
+            transition: background 0.2s, transform 0.2s;
+            border: none;
+            display: inline-block;
+        }
+        .next-btn:hover {
+            background: linear-gradient(90deg, #a77ad9 60%, #8c63c9 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 替换后的导航栏 (完全采用 bigstyle 结构) ================= -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../主页.html">首页</a></li>
+                <li><a href="../公聊社区.html">论坛群组</a></li>
+                <li><a href="../ai小助手.html">ai咨询</a></li>
+                <li><a href="../法律咨询.html">法律咨询</a></li>
+                <li><a href="../案例分析.html">案例分析</a></li>
+                <!-- 将当前页面对应的“诉讼程序法”设为 active，因为答辩状生成属于诉讼流程 -->
+                <li><a href="../诉讼流程.html" class="active">诉讼程序法</a></li>
+            </ul>
+            <!-- 用户区域 (完全复用 bigstyle 结构，用于 luoji.js 渲染) -->
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="../登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                                <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主内容区 (完全保留原答辩状生成器) -->
+    <main class="generator-main">
+        <div class="container">
+            <h1 class="page-title">要素式答辩状生成器 · 物业合同纠纷</h1>
+
+            <!-- 进度步骤 (原样) -->
+            <div class="progress-steps">
+                <div class="progress-step active" id="step-indicator-1"><div class="step-number">1</div><div class="step-name">案号/当事人</div></div>
+                <div class="progress-step" id="step-indicator-2"><div class="step-number">2</div><div class="step-name">答辩事项异议</div></div>
+                <div class="progress-step" id="step-indicator-3"><div class="step-number">3</div><div class="step-name">事实理由/依据</div></div>
+                <div class="progress-step" id="step-indicator-4"><div class="step-number">4</div><div class="step-name">生成答辩状</div></div>
+            </div>
+
+            <!-- 主表单 (id="answerForm") -->
+            <form id="answerForm" class="generator-form">
+                <!-- 步骤1：案号 + 当事人信息 -->
+                <div class="form-step active" id="step1">
+                    <h3 class="step-title">第一步 · 案号及当事人信息</h3>
+                    <div class="form-section">
+                        <h4>📌 案号/案由</h4>
+                        <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                            <div style="flex:2"><label>案号</label><input type="text" id="caseNumber" value="(2024)京××××民初××号"></div>
+                            <div style="flex:1"><label>案由</label><input type="text" id="cause" value="物业服务合同纠纷" readonly style="background:#ede4ff"></div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>👤 答辩人 (自然人)</h4>
+                        <div class="form-group"><label>姓名</label><input type="text" id="defendantName" value="杨××"></div>
+                        <div style="display:flex; gap:1rem;">
+                            <div style="flex:1"><label>性别</label><select><option selected>男</option><option>女</option></select></div>
+                            <div style="flex:2"><label>出生日期</label><input type="text" value="19××年××月××日"></div>
+                        </div>
+                        <div class="form-group"><label>民族</label><input type="text" value="汉族"></div>
+                        <div class="form-group"><label>工作单位/职务</label><input type="text" value="无"></div>
+                        <div class="form-group"><label>联系电话</label><input type="text" value="13812345678"></div>
+                        <div class="form-group"><label>住所地 (户籍)</label><input type="text" id="defendantAddr" value="北京市西城区××街道××社区×号"></div>
+                        <div class="form-group"><label>经常居住地</label><input type="text" value="同上"></div>
+                        <div class="form-group"><label>证件类型/号码</label><input type="text" value="身份证 11010119××××××××"></div>
+                    </div>
+                    <div class="form-section">
+                        <h4>🤵 委托诉讼代理人</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="radio" name="agent" checked> 无☑</label>
+                            <label class="checkbox-label"><input type="radio" name="agent"> 有□ (填写信息)</label>
+                        </div>
+                        <div class="sub-input" style="opacity:0.6"><input placeholder="姓名  单位  职务  联系电话" value=""></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-next" onclick="goToStep(2)">下一步：答辩事项异议</button>
+                    </div>
+                </div>
+
+                <!-- 步骤2：答辩事项 -->
+                <div class="form-step" id="step2">
+                    <h3 class="step-title">第二步 · 对诉讼请求的异议</h3>
+                    <div class="form-section">
+                        <h4>⚖️ 答辩事项 (逐项确认异议)</h4>
+                        <div class="form-group"><label>总体答辩意见</label><input type="text" id="generalOpinion" value="北京市×××物业管理有限公司提供的物业服务严重不达标，其诉讼请求应予驳回"></div>
+                        
+                        <!-- 1. 物业费异议 -->
+                        <div style="background:#f0e2ff; border-radius:28px; padding:1.2rem; margin:1rem 0;">
+                            <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                                <span style="font-weight:700; min-width:150px;">1. 对物业费有无异议</span>
+                                <label class="radio-label"><input type="radio" name="feeObj" checked> 有☑</label>
+                                <label class="radio-label"><input type="radio" name="feeObj"> 无□</label>
+                            </div>
+                            <div class="form-group" style="margin-top:0.5rem;"><label>异议内容</label><input type="text" id="feeObjText" value="原告提供的物业服务不达标，物业费应打折收取。"></div>
+                        </div>
+
+                        <!-- 2. 违约金异议 -->
+                        <div style="background:#f0e2ff; border-radius:28px; padding:1.2rem; margin:1rem 0;">
+                            <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                                <span style="font-weight:700; min-width:150px;">2. 对违约金有无异议</span>
+                                <label class="radio-label"><input type="radio" name="penaltyObj" checked> 有☑</label>
+                                <label class="radio-label"><input type="radio" name="penaltyObj"> 无□</label>
+                            </div>
+                            <div class="form-group"><label>异议内容</label><input type="text" id="penaltyObjText" value="不是恶意拖欠物业服务费，而是希望通过这种方式促进物业公司改进服务。"></div>
+                        </div>
+
+                        <!-- 3. 诉讼费负担异议 -->
+                        <div style="background:#f0e2ff; border-radius:28px; padding:1.2rem; margin:1rem 0;">
+                            <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                                <span style="font-weight:700; min-width:150px;">3. 对诉讼费的负担</span>
+                                <label class="radio-label"><input type="radio" name="costObj" checked> 有☑</label>
+                                <label class="radio-label"><input type="radio" name="costObj"> 无□</label>
+                            </div>
+                            <div class="form-group"><label>异议内容</label><input type="text" id="costObjText" value="诉讼费应当原告负担或者双方分担。"></div>
+                        </div>
+
+                        <!-- 4. 对其他请求异议 -->
+                        <div style="background:#f0e2ff; border-radius:28px; padding:1.2rem; margin:1rem 0;">
+                            <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                                <span style="font-weight:700; min-width:150px;">4. 对其他请求</span>
+                                <label class="radio-label"><input type="radio" name="otherObj" > 有□</label>
+                                <label class="radio-label"><input type="radio" name="otherObj" checked> 无☑</label>
+                            </div>
+                            <div class="form-group"><label>异议内容</label><input type="text" value="" placeholder="无"></div>
+                        </div>
+
+                        <!-- 5. 对标的总额异议 -->
+                        <div style="background:#f0e2ff; border-radius:28px; padding:1.2rem; margin:1rem 0;">
+                            <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                                <span style="font-weight:700; min-width:150px;">5. 对标的总额异议</span>
+                                <label class="radio-label"><input type="radio" name="totalObj" checked> 有☑</label>
+                                <label class="radio-label"><input type="radio" name="totalObj"> 无□</label>
+                            </div>
+                            <div class="form-group"><label>异议内容</label><input type="text" id="totalObjText" value="因为原告的服务'打折'了，物业费也应当打折收取；不应交违约金。"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-prev" onclick="goToStep(1)">上一步</button>
+                        <button type="button" class="btn-next" onclick="goToStep(3)">下一步：事实与理由</button>
+                    </div>
+                </div>
+
+                <!-- 步骤3：事实与理由异议 -->
+                <div class="form-step" id="step3">
+                    <h3 class="step-title">第三步 · 事实与理由 (异议明细)</h3>
+                    <div class="form-section" style="max-height:500px; overflow-y:auto">
+                        <h4>📋 对案件事实的确认/异议</h4>
+                        <p class="inline-hint">以下大部分默认"无异议"，重点填写第8、9项及其他异议</p>
+                        
+                        <!-- 逐项简化但保留核心 -->
+                        <div class="form-group"><label>1. 对物业服务合同签订情况</label> <input value="无☑ (有□ 可填)" placeholder="默认无异议"></div>
+                        <div class="form-group"><label>2. 对签订主体</label> <input value="无☑"></div>
+                        <div class="form-group"><label>3. 对物业项目情况</label> <input value="无☑"></div>
+                        <div class="form-group"><label>4. 对物业费标准</label> <input value="无☑"></div>
+                        <div class="form-group"><label>5. 对物业服务期限</label> <input value="无☑"></div>
+                        <div class="form-group"><label>6. 对物业费支付方式</label> <input value="无☑"></div>
+                        <div class="form-group"><label>7. 对逾期支付违约金标准</label> <input value="无☑"></div>
+                        
+                        <!-- 第8项 关键 -->
+                        <div style="background:#ffeefb; border-radius:24px; padding:1rem;">
+                            <label style="font-weight:700;">8. 对欠付物业费数额及计算方式 <span style="color:#b243b2;">有☑ (详细理由)</span></label>
+                            <textarea id="factReason8" rows="3" style="margin-top:0.5rem;">未交纳物业费是因为原告提供的物业服务严重不达标：
+1. 小区内有业主养大型宠物犬不拴绳，多次反映，物业公司均未管理；
+2. 计入公摊的大堂被不当占用；
+3. 垃圾清理不及时；
+4. 催收物业费的方式过于粗暴。</textarea>
+                        </div>
+
+                        <!-- 第9项 关键 -->
+                        <div style="background:#ffeefb; border-radius:24px; padding:1rem; margin-top:1rem;">
+                            <label style="font-weight:700;">9. 对应付违约金数额及计算方式 <span style="color:#b243b2;">有☑</span></label>
+                            <textarea id="factReason9" rows="2">不是恶意拖欠物业服务费，而是希望通过这种方式促进物业公司改进服务，是在行使抗辩权，不是违约，所以不应支付违约金。</textarea>
+                        </div>
+
+                        <div class="form-group"><label>10. 对催缴情况</label><input value="无☑"></div>
+                        <div class="form-group"><label>11. 其他需要说明的内容</label><input value="无☑"></div>
+                        <div class="form-group"><label>12. 答辩依据 (合同约定/法律规定)</label><input id="legalBasis" value="合同约定：《北京市前期物业服务合同》第五条；法律规定：《中华人民共和国民法典》第九百四十二条"></div>
+                        <div class="form-group"><label>13. 证据清单</label><input id="evidenceList" value="附页 (照片、反映记录、催收通知等)"></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-prev" onclick="goToStep(2)">上一步</button>
+                        <button type="button" class="btn-next" onclick="generateAnswer()">▶ 生成答辩状</button>
+                    </div>
+                </div>
+
+                <!-- 步骤4：生成结果预览 -->
+                <div class="form-step" id="step4">
+                    <h3 class="step-title">第四步 · 答辩状生成</h3>
+                    <div class="generator-result">
+                        <div class="result-header">
+                            <h4>✅ 答辩状已根据要素生成</h4>
+                            <p style="color:#2d1952">请仔细核对每一项异议内容，可点击下方按钮导出。</p>
+                        </div>
+                        <div class="result-actions">
+                            <button type="button" class="btn-action" onclick="downloadAsDoc()">📥 下载Word文档</button>
+                            <button type="button" class="btn-action" onclick="copyPreview()">📋 复制文本</button>
+                            <button type="button" class="btn-action" onclick="window.print()">🖨️ 打印预览</button>
+                        </div>
+                        <div class="result-preview">
+                            <div class="preview-header">
+                                <h5>民事答辩状 预览</h5>
+                                <button class="btn-edit" onclick="goToStep(1)">✎ 修改信息</button>
+                            </div>
+                            <div class="preview-content" id="previewContent">
+                                加载预览...
+                            </div>
+                        </div>
+                        <div class="result-tips">
+                            <h5>📌 使用提示：</h5>
+                            <p>• 本答辩状严格遵循《民事答辩状(物业服务合同纠纷)》要素表格式。</p>
+                            <p>• 请确认当事人信息、异议内容无误，并根据法院要求准备副本。</p>
+                            <p>• 平台仅提供文书参考，建议咨询律师后提交。</p>
+                        </div>
+                        <!-- 新引导区块：去生成答辩状 -->
+                        <div class="next-guide">
+                            <div class="guide-content">
+                                <span class="guide-icon">💡</span>
+                                <span>接下来我们将返回，进行第二步</span>
+                                <a href="../诉讼流程.html" class="next-btn">返回 &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <div class="container footer-note">
+            <p>© 2025 AI法律平台 · 要素式答辩状生成器 (物业服务合同纠纷版) | 不构成法律意见</p>
+        </div>
+    </footer>
+
+    <!-- 引入主逻辑 js (luoji.js) 必须在DOM之后 -->
+    <script src="../js/luoji.js"></script>
+
+    <!-- 原答辩状内联 js (已调整，避免与 luoji.js 的 onload 冲突) -->
+    <script>
+        // 步骤切换
+        function goToStep(step) {
+            document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            document.querySelectorAll('.progress-step').forEach((el, idx) => {
+                if (idx+1 === step) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+            if (step === 4) renderPreview();
+        }
+
+        // 渲染答辩状预览
+        function renderPreview() {
+            const caseNum = document.getElementById('caseNumber')?.value || '(2024)京××××民初××号';
+            const defendant = document.getElementById('defendantName')?.value || '杨××';
+            const defAddr = document.getElementById('defendantAddr')?.value || '北京市西城区××街道××社区×号';
+            const general = document.getElementById('generalOpinion')?.value || '物业服务严重不达标，请求驳回';
+
+            const feeText = document.getElementById('feeObjText')?.value || '物业费应打折';
+            const penaltyObj = document.getElementById('penaltyObjText')?.value || '不是恶意拖欠';
+            const costText = document.getElementById('costObjText')?.value || '诉讼费应由原告承担';
+            const totalText = document.getElementById('totalObjText')?.value || '标的总额异议';
+            const reason8 = document.getElementById('factReason8')?.value || '服务不达标：犬只管理、大堂占用、垃圾清理、催收粗暴';
+            const reason9 = document.getElementById('factReason9')?.value || '行使抗辩权，不应支付违约金';
+            const legal = document.getElementById('legalBasis')?.value || '《民法典》第九百四十二条';
+            const evidence = document.getElementById('evidenceList')?.value || '附页';
+
+            let preview = `民事答辩状（物业服务合同纠纷）\n\n`;
+            preview += `案号：${caseNum}\n案由：物业服务合同纠纷\n\n`;
+            preview += `当事人信息\n`;
+            preview += `答辩人：${defendant}，男，19××年××月××日出生，汉族\n`;
+            preview += `住址：${defAddr}\n经常居住地：同上  证件号码：11010119××××××××\n\n`;
+            preview += `委托诉讼代理人：无\n\n`;
+            preview += `答辩事项（对原告诉讼请求的确认或者异议）\n`;
+            preview += `总体意见：${general}\n`;
+            preview += `1. 对物业费异议：有☑ 异议内容：${feeText}\n`;
+            preview += `2. 对违约金异议：有☑ 异议内容：${penaltyObj}\n`;
+            preview += `3. 对诉讼费负担异议：有☑ 异议内容：${costText}\n`;
+            preview += `4. 对其他请求异议：无☑\n`;
+            preview += `5. 对标的总额异议：有☑ 异议内容：${totalText}\n\n`;
+            preview += `事实与理由（对案件事实的确认或者异议）\n`;
+            preview += `1-7项：均无异议。\n`;
+            preview += `8. 对欠付物业费数额及计算方式有异议：${reason8}\n`;
+            preview += `9. 对应付违约金数额及计算方式有异议：${reason9}\n`;
+            preview += `10. 对催缴情况无异议\n11. 其他需要说明：无\n`;
+            preview += `12. 答辩依据：${legal}\n`;
+            preview += `13. 证据清单：${evidence}\n\n`;
+            preview += `对纠纷解决方式的意愿：了解先行调解好处 ☑  是否考虑先行调解：否☑\n\n`;
+            preview += `答辩人（签字、盖章）：${defendant}\n日期：   年   月   日\n`;
+
+            document.getElementById('previewContent').innerText = preview;
+        }
+
+        function generateAnswer() {
+            goToStep(4);
+            renderPreview();
+        }
+
+        function copyPreview() {
+            const text = document.getElementById('previewContent').innerText;
+            navigator.clipboard?.writeText(text).then(() => alert('答辩状已复制到剪贴板'));
+        }
+
+        function downloadAsDoc() {
+            const content = document.getElementById('previewContent').innerText;
+            const blob = new Blob([content], { type: 'application/msword' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '民事答辩状(物业纠纷).doc';
+            link.click();
+        }
+
+        window.editForm = ()=>goToStep(1);
+
+        // 使用 DOMContentLoaded 初始化，避免与 luoji.js 的 onload 冲突
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保第一步可见 (但如果luoji.js也操作了步骤，注意不冲突)
+            document.getElementById('step1')?.classList.add('active');
+        });
+    </script>
+</body>
+</html>

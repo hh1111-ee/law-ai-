@@ -10,11 +10,11 @@ import os
 import pickle
 # ------------------- 数据文件路径 -------------------
 # 与交流服务器保持一致的绝对路径
-USER_FILE = r'D:\项目：ai法律平台\users.pkl'
-GROUP_FILE = r'D:\项目：ai法律平台\groups.pkl'
-POST_FILE = r'D:\项目：ai法律平台\posts.pkl'
-PERSONAL_MSG_FILE = r'D:\项目：ai法律平台\personal_messages.pkl'
-GROUP_MSG_FILE = r'D:\项目：ai法律平台\group_messages.pkl'
+USER_FILE = r'D:\项目：ai法律平台\数据库\users.pkl'
+GROUP_FILE = r'D:\项目：ai法律平台\数据库\groups.pkl'
+POST_FILE = r'D:\项目：ai法律平台\数据库\posts.pkl'
+PERSONAL_MSG_FILE = r'D:\项目：ai法律平台\数据库\personal_messages.pkl'
+GROUP_MSG_FILE = r'D:\项目：ai法律平台\数据库\group_messages.pkl'
 
 
 # ------------------- 文件准备工具 -------------------

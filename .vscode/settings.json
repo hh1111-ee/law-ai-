@@ -4,5 +4,12 @@
     "claudeCodeChatUI.language.enabled": true,
     "claudeCodeChatUI.language.selected": "zh",
     "claudeCodeChatUI.thinking.enabled": true,
-    "claudeCodeChatUI.thinking.intensity": "think"
+    "claudeCodeChatUI.thinking.intensity": "think",
+    "liveServer.settings.ignoreFiles": [
+        "**/*.pkl",
+        "**/*.log",
+        "**/数据/**",
+        "**/logs/**",
+        "**/__pycache__/**"
+    ]
 }

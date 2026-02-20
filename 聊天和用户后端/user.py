@@ -7,7 +7,7 @@ class user:
         self.location = location
         self.role = role if role else identity
         self.friends = []
-        self.state="office"
+        self.state="offline"
     def add_friend(self, friend):
         if friend not in self.friends:
             self.friends.append(friend)

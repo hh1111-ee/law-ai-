@@ -1,4 +1,6 @@
 import atexit
+import threading
+import asyncio
 import json
 import logging
 import os
@@ -11,9 +13,12 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from openpyxl import load_workbook
+import pandas as pd
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-CHAT_BACKEND_DIR = os.path.join(BASE_DIR, "聊天和用户后端")
+
+# 让BASE_DIR指向上一级目录（主目录）
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+CHAT_BACKEND_DIR = os.path.dirname(__file__)
 
 if CHAT_BACKEND_DIR not in sys.path:
     sys.path.append(CHAT_BACKEND_DIR)
@@ -46,20 +51,32 @@ logging.basicConfig(level=logging.INFO, handlers=[file_handler, console_handler]
 logger = logging.getLogger(__name__)
 
 # ===================== 数据路径 =====================
-USER_FILE = os.path.join(BASE_DIR, "users.pkl")
-GROUP_FILE = os.path.join(BASE_DIR, "groups.pkl")
-POST_FILE = os.path.join(BASE_DIR, "posts.pkl")
-PERSONAL_MSG_FILE = os.path.join(BASE_DIR, "personal_messages.pkl")
-GROUP_MSG_FILE = os.path.join(BASE_DIR, "group_messages.pkl")
+# 数据文件全部指向主目录
+BASE_FLODER="数据库"
+USER_FILE = os.path.join(BASE_DIR, BASE_FLODER, "users.pkl")
+GROUP_FILE = os.path.join(BASE_DIR, BASE_FLODER, "groups.pkl")
+POST_FILE = os.path.join(BASE_DIR, BASE_FLODER, "posts.pkl")
+PERSONAL_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "personal_messages.pkl")
+GROUP_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "group_messages.pkl")
 
 DATA_PATH = os.path.join(BASE_DIR, "数据", "地区.xlsx")
+CASES_FILE = os.path.join(BASE_DIR, "数据", "案号.xlsx")
 
+# 日志目录也指向主目录
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
 # ===================== 业务对象 =====================
 app = FastAPI()
+
 msg_manager = MsgMgr()
 user_manager = UserMgr()
 group_manager = GroupMgr()
 post_manager = PostManage()
+cases_df = pd.DataFrame() # 全局存储案例数据
+
+# 全局写入锁，防止并发写文件
+write_lock = threading.Lock()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -70,9 +87,12 @@ app.add_middleware(
 )
 
 # ===================== 工具函数 =====================
+
 _DATA_CACHE: List[Dict[str, str]] = []
 _DATA_MTIME: float = -1.0
 _save_exit_called = False
+# 用于保护数据缓存的异步锁
+_data_cache_lock = asyncio.Lock()
 
 
 def ensure_file_exists(filename: str) -> None:
@@ -110,6 +130,20 @@ def load_all_data_on_start() -> None:
     ensure_file_exists(POST_FILE)
 
     msg_manager.load_personal_messages(PERSONAL_MSG_FILE)
+    
+    # 加载案例数据
+    global cases_df
+    try:
+        if os.path.exists(CASES_FILE):
+            cases_df = pd.read_excel(CASES_FILE, dtype=str).fillna('')
+            logger.info(f"✅ 成功加载 {len(cases_df)} 条案例")
+        else:
+            logger.warning(f"❌ 案号文件不存在: {CASES_FILE}")
+            cases_df = pd.DataFrame()
+    except Exception as e:
+        logger.error(f"❌ 加载 Excel 失败: {e}", exc_info=True)
+        cases_df = pd.DataFrame()
+
     msg_manager.load_group_messages(GROUP_MSG_FILE)
     user_manager.load_users(USER_FILE)
     group_manager.load_groups(GROUP_FILE)
@@ -131,16 +165,17 @@ def save_all_data_on_exit() -> None:
         return
     _save_exit_called = True
     logger.info("开始保存所有数据（退出钩子）")
-    msg_manager.save_personal_messages(PERSONAL_MSG_FILE)
-    logger.info("个人消息保存完成")
-    msg_manager.save_group_messages(GROUP_MSG_FILE)
-    logger.info("群消息保存完成")
-    user_manager.save_users(USER_FILE)
-    logger.info("用户数据保存完成")
-    group_manager.save_groups(GROUP_FILE)
-    logger.info("群组数据保存完成")
-    post_manager.save_posts(POST_FILE)
-    logger.info("帖子数据保存完成")
+    with write_lock:
+        msg_manager.save_personal_messages(PERSONAL_MSG_FILE)
+        logger.info("个人消息保存完成")
+        msg_manager.save_group_messages(GROUP_MSG_FILE)
+        logger.info("群消息保存完成")
+        user_manager.save_users(USER_FILE)
+        logger.info("用户数据保存完成")
+        group_manager.save_groups(GROUP_FILE)
+        logger.info("群组数据保存完成")
+        post_manager.save_posts(POST_FILE)
+        logger.info("帖子数据保存完成")
     logger.info("所有数据保存成功")
 
 
@@ -170,19 +205,19 @@ def _load_excel_rows() -> List[Dict[str, str]]:
     return rows
 
 
-def get_data_rows() -> List[Dict[str, str]]:
+async def get_data_rows() -> List[Dict[str, str]]:
     global _DATA_CACHE, _DATA_MTIME
-    try:
-        mtime = os.path.getmtime(DATA_PATH)
-    except OSError:
-        mtime = -1.0
+    async with _data_cache_lock:
+        try:
+            mtime = os.path.getmtime(DATA_PATH)
+        except OSError:
+            mtime = -1.0
 
-    if mtime != _DATA_MTIME:
-        _DATA_CACHE = _load_excel_rows()
-        _DATA_MTIME = mtime
-        logger.info("已加载数据: %s 条", len(_DATA_CACHE))
-
-    return _DATA_CACHE
+        if mtime != _DATA_MTIME:
+            _DATA_CACHE = _load_excel_rows()
+            _DATA_MTIME = mtime
+            logger.info("已加载数据: %s 条", len(_DATA_CACHE))
+        return _DATA_CACHE
 
 
 def resolve_location(payload: Dict) -> Dict[str, str]:
@@ -232,7 +267,7 @@ def paginate_results(results: List[Dict[str, str]], page: int, page_size: int) -
     }
 
 
-def build_recommended(rows: List[Dict[str, str]], location: Dict[str, str]) -> List[Dict[str, str]]:
+def build_recommended(rows: List[Dict[str, str]], location: Dict[str, str]) -> List[Dict[str, str]]: 
     province = location.get("province", "")
     city = location.get("city", "")
 
@@ -326,7 +361,68 @@ if not _atexit_registered:
     _atexit_registered = True
 
 
+# 全局异常处理器，统一返回友好错误信息
 @app.exception_handler(Exception)
+async def handle_global_exception(request: Request, exc: Exception):
+    error_msg = f"服务器内部错误：{exc}"
+    logger.error(error_msg, exc_info=True)
+    try:
+        payload = await _get_payload(request) or dict(request.query_params)
+    except Exception:
+        payload = {}
+    return JSONResponse(
+        status_code=500,
+        content={"code": 500, "error": error_msg, "request_data": payload},
+    )
+# ------------------- API: 获取所有关键词（去重）-------------------
+@app.get('/api/keywords')
+async def get_keywords():
+    if cases_df.empty:
+        return []
+    # 将三个关键词列合并为一列，去重，并排除空字符串
+    # 注意：pandas series 操作
+    try:
+        keywords = pd.concat([cases_df['关键词1'], cases_df['关键词2'], cases_df['关键词3']])
+        unique_keywords = keywords[keywords != ''].unique().tolist()
+        return unique_keywords
+    except Exception as e:
+        logger.error(f"Error getting keywords: {e}")
+        return []
+
+# ------------------- API: 获取案例（支持筛选）-------------------
+@app.get('/api/cases')
+async def get_cases(search: str = "", keyword: str = ""):
+    if cases_df.empty:
+        return []
+
+    # 拷贝 DataFrame 避免修改原数据
+    data = cases_df.copy()
+
+    try:
+        # 1. 按关键词筛选（精确匹配任意一个关键词列）
+        if keyword:
+            mask = (
+                (data['关键词1'] == keyword) |
+                (data['关键词2'] == keyword) |
+                (data['关键词3'] == keyword)
+            )
+            data = data[mask]
+
+        # 2. 按搜索词筛选（在案号或摘要中模糊匹配，大小写不敏感）
+        if search:
+            mask = (
+                data['案号'].str.contains(search, case=False, na=False) |
+                data['摘要'].str.contains(search, case=False, na=False)
+            )
+            data = data[mask]
+
+        # 转换为字典列表返回
+        result = data.to_dict(orient='records')
+        return result
+    except Exception as e:
+        logger.error(f"Error getting cases: {e}")
+        return []
+
 async def handle_global_exception(request: Request, exc: Exception):
     error_msg = f"服务器内部错误：{exc}"
     logger.error(error_msg, exc_info=True)
@@ -393,7 +489,8 @@ async def user_register(request: Request):
         user_manager.add_user(new_user)
         logger.info("用户注册成功：%s，身份：%s，位置：%s", username, identity, location)
         try:
-            user_manager.save_users(USER_FILE)
+            with write_lock:
+                user_manager.save_users(USER_FILE)
             logger.info("注册后用户数据已保存：%s", USER_FILE)
         except Exception as exc:
             logger.error("注册后保存用户数据失败：%s", exc, exc_info=True)
@@ -531,9 +628,7 @@ async def send_group_message(request: Request):
     if error_msg:
         return return_error(f"发送群消息失败：{'; '.join(error_msg)}", 404)
 
-    try:
-        from ChatMessage import groupChatMessage
-
+    try:  
         message = groupChatMessage(sender, group, content, timestamp)
         msg_manager.add_group_message(message)
         return return_success(message=f"群消息发送成功：「{sender_name}」发送到群组「{group_name}」")
@@ -625,7 +720,8 @@ async def create_post(request: Request):
     try:
         post = post_manager.add_post(author, title, content, section)
         try:
-            post_manager.save_posts(POST_FILE)
+            with write_lock:
+                post_manager.save_posts(POST_FILE)
             logger.info("创建帖子后帖子数据已保存：%s", POST_FILE)
         except Exception as exc:
             logger.error("创建帖子后保存帖子数据失败：%s", exc, exc_info=True)
@@ -687,7 +783,12 @@ async def add_comment(request: Request):
     comment = post_manager.add_comment(post_id, author, content)
     if not comment:
         return return_error(f"添加评论失败：未找到ID为{post_id}的帖子", 404)
-
+    try:
+        with write_lock:
+            post_manager.save_posts(POST_FILE)
+        logger.info("添加评论后帖子数据已保存：%s", POST_FILE)
+    except Exception as exc:
+        logger.error("添加评论后保存帖子数据失败：%s", exc, exc_info=True)
     return return_success(
         data={"comment": comment.to_dict()},
         message=f"成功为ID{post_id}的帖子添加评论（评论作者：{author}）",
@@ -759,7 +860,7 @@ async def api_search(request: Request):
     if not keyword:
         return return_error("请提供搜索关键字", 400)
 
-    rows = get_data_rows()
+    rows = await get_data_rows()
     location = resolve_location(payload)
     all_results = build_results(rows, keyword)
     recommended = build_recommended(rows, location)
@@ -902,4 +1003,4 @@ async def websocket_private_chat(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("combined_server:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=True)

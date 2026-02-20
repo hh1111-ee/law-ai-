@@ -134,3 +134,248 @@
 2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:141 - 群组数据保存完成
 2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:143 - 帖子数据保存完成
 2026-02-13 20:00:32 - INFO - combined_server:save_all_data_on_exit:144 - 所有数据保存成功
+2026-02-19 13:30:59 - INFO - combined_server:load_all_data_on_start:124 - ✅ 成功加载 89 条案例
+2026-02-19 13:30:59 - INFO - combined_server:load_all_data_on_start:143 - 所有数据加载成功
+2026-02-19 13:32:36 - ERROR - combined_server:return_error:96 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:152 - 开始保存所有数据（退出钩子）
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:154 - 个人消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:156 - 群消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:158 - 用户数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:160 - 群组数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:162 - 帖子数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:163 - 所有数据保存成功
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:152 - 开始保存所有数据（退出钩子）
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:154 - 个人消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:156 - 群消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:158 - 用户数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:160 - 群组数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:162 - 帖子数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:163 - 所有数据保存成功
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:152 - 开始保存所有数据（退出钩子）
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:154 - 个人消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:156 - 群消息保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:158 - 用户数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:160 - 群组数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:162 - 帖子数据保存完成
+2026-02-19 13:33:41 - INFO - combined_server:save_all_data_on_exit:163 - 所有数据保存成功
+2026-02-19 13:35:35 - INFO - combined_server:load_all_data_on_start:124 - ✅ 成功加载 89 条案例
+2026-02-19 13:35:35 - INFO - combined_server:load_all_data_on_start:137 - 加载用户：1，状态：office，好友数：0
+2026-02-19 13:35:35 - INFO - combined_server:load_all_data_on_start:143 - 所有数据加载成功
+2026-02-19 13:35:43 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:35:48 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:35:52 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:35:55 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:35:57 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:35:58 - ERROR - combined_server:return_error:96 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-19 13:35:59 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:37:35 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:37:35 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的好友列表，返回数据：{'friends': []}
+2026-02-19 13:37:35 - INFO - combined_server:connect:311 - 用户 1 建立WebSocket连接，当前活跃连接数：1
+2026-02-19 13:37:51 - ERROR - combined_server:return_error:96 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-19 13:37:51 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:37:51 - INFO - combined_server:websocket_private_chat:962 - 用户 1 主动断开WebSocket连接
+2026-02-19 13:37:51 - INFO - combined_server:disconnect:316 - 用户 1 断开WebSocket连接，当前活跃连接数：0
+2026-02-19 13:38:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 13:38:18 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:01:53 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:01:55 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:02:05 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:02:14 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:02:28 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:02:43 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:04:07 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:05:17 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:05:21 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 14:46:29 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 15:54:47 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 15:59:25 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 15:59:32 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 15:59:52 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 15:59:55 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:12 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:19 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:21 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:30 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:00:42 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:04 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:17 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:19 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:22 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:23 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:28 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:42 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:10:50 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:11:33 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:24:33 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:24:36 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 16:25:03 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:54:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:57:39 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:58:51 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:02 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:10 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:36 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 18:59:53 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:00:18 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:01:04 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:01:10 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:01:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:01:33 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:01:38 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:09:26 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:17:40 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:19:49 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:20:03 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:20:11 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:20:15 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:20:38 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:20:45 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:23:00 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:23:29 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:23:39 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:23:47 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:23:49 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:00 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:04 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:07 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:12 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:14 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:26 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:28 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:31 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:24:41 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:25:21 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:25:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:25:35 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:28:08 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:06 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:11 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:13 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:14 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:19 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:21 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:22 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:24 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:46 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:52:58 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:00 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:03 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:12 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:15 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:25 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:38 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:53:55 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:55:09 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:55:56 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 19:56:17 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:04:43 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:29:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:29:37 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:29:42 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:29:44 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:29:59 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:16 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:19 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:21 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:24 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:28 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:38 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:44 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:46 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:47 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:50 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:56 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:30:59 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:01 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:04 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:27 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:33 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:35 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:38 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:40 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:43 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:31:46 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:34:55 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:34:57 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:35:44 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:35:46 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:36:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:36:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:36:34 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-19 20:36:35 - INFO - combined_server:return_success:106 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': '律师', 'role': '律师', 'location': '贵州', 'state': 'office'}]}
+2026-02-20 15:17:23 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 15:17:23 - INFO - Combined_server:load_all_data_on_start:152 - 加载用户：1，状态：office，好友数：0
+2026-02-20 15:17:23 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:43 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:44 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 15:18:44 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:47 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:48 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 15:18:48 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:18:49 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:18:50 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 15:18:50 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 15:20:39 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 15:20:39 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
