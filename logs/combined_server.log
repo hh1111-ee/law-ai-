@@ -379,3 +379,961 @@
 2026-02-20 15:20:38 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
 2026-02-20 15:20:39 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
 2026-02-20 15:20:39 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 15:26:21 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-20 15:26:29 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-20 15:26:29 - ERROR - Combined_server:return_error:111 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-20 15:26:31 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 15:26:41 - INFO - Combined_server:get_data_rows:219 - 已加载数据: 193 条
+2026-02-20 15:27:26 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 19:32:12 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 19:32:12 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 19:32:27 - INFO - Combined_server:user_register:490 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-20 19:32:27 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-20 19:32:27 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-20 19:32:27 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-20 19:32:27 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:34:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:35:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:35:00 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」已成功登出，状态更新为离线，返回数据：None
+2026-02-20 19:35:14 - INFO - Combined_server:user_register:490 - 用户注册成功：2，身份：lawyer，位置：贵州
+2026-02-20 19:35:14 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-20 19:35:14 - INFO - Combined_server:return_success:121 - 接口成功：用户「2」注册成功，返回数据：{'user': {'username': '2', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-20 19:35:14 - INFO - Combined_server:return_success:121 - 接口成功：用户「2」登录成功，返回数据：{'user': {'username': '2', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-20 19:35:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「2」的状态信息，返回数据：{'users': [{'username': '2', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:35:21 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「2」的状态信息，返回数据：{'users': [{'username': '2', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:35:21 - INFO - Combined_server:return_success:121 - 接口成功：用户「2」已成功登出，状态更新为离线，返回数据：None
+2026-02-20 19:35:24 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-20 19:35:25 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:38:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:39:04 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你好。...
+2026-02-20 19:39:05 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 您好！请问有什么法律问题我可以为您解答？
+2026-02-20 19:39:26 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：工人在中国的地位？...
+2026-02-20 19:39:39 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: **1. 宪法层面的保障**  
+
+- 《中华人民共和国宪法》第33条规定：“所有公民在法律面前一律
+2026-02-20 19:42:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:43:53 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：简单说一下宪法的最高准则...
+2026-02-20 19:43:58 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 《中华人民共和国宪法》第1条规定：“中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的
+2026-02-20 19:46:02 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:46:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:46:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:53:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:53:47 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你好...
+2026-02-20 19:53:49 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 您好！有什么法律问题我可以为您解答？
+2026-02-20 19:54:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:54:44 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：nb...
+2026-02-20 19:54:45 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-20 19:55:01 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 19:55:18 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：我是测试，测试一下...
+2026-02-20 19:55:20 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-20 19:58:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 20:20:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 20:27:19 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你好...
+2026-02-20 20:27:20 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 您好！有任何法律方面的问题，欢迎随时向我咨询。
+2026-02-20 20:35:01 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你好...
+2026-02-20 20:35:08 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-20 20:35:42 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：偷盗2000元判刑多少年...
+2026-02-20 20:35:53 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 根据《中华人民共和国刑法》第264条的规定：
+
+> 盗窃公私财物，数额较大或者多次盗窃的，处三年以下
+2026-02-20 20:37:51 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：我的停车位被占用了，怎么办...
+2026-02-20 20:38:13 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: **一、法律依据简要说明**
+
+1. **《中华人民共和国民法典》**  
+   - **第166条
+2026-02-20 20:43:13 - INFO - Combined_server:user_register:490 - 用户注册成功：1234，身份：owner，位置：Jinrongjie, Beijing, China
+2026-02-20 20:43:13 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-20 20:43:13 - INFO - Combined_server:return_success:121 - 接口成功：用户「1234」注册成功，返回数据：{'user': {'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'offline'}}
+2026-02-20 20:43:13 - INFO - Combined_server:return_success:121 - 接口成功：用户「1234」登录成功，返回数据：{'user': {'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}}
+2026-02-20 20:43:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:43:34 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:43:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:44:35 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:44:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:45:40 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：晚上好...
+2026-02-20 20:45:43 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 您好，暂无相关法条。
+2026-02-20 20:46:05 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：我有一些问题可以帮我解答吗...
+2026-02-20 20:46:08 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 请您具体说明需要咨询的法律事项或问题，我将在答复中依据相关法律条文予以引用与解释。
+2026-02-20 20:47:11 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:47:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:47:32 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：我跟物业公司在合同上产生了冲突，他们违约涨钱...
+2026-02-20 20:47:46 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 根据《中华人民共和国民法典》及有关法规，您可以从以下几个法条入手维护自己的合法权益：
+
+1. **合
+2026-02-20 20:48:18 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：我邻居一直有噪音，我跟物业沟通无果，我该怎么办...
+2026-02-20 20:48:31 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 您可以依法采取以下步骤维护自己的合法权益，相关法律依据主要包括《民法典》以及《噪声污染防治法》等：
+
+2026-02-20 20:48:31 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：房屋漏水怎么办...
+2026-02-20 20:48:41 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-20 20:48:46 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:49:04 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：噪音问题让我很烦躁...
+2026-02-20 20:49:15 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 噪声侵扰属于侵权行为，您可以依法维护自己的合法权益。依据以下法律条文，建议您采取相应措施：
+
+1. 
+2026-02-20 20:49:22 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:49:28 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：电梯坏了物业不修怎么办...
+2026-02-20 20:49:45 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: **一、适用的法律依据**  
+
+1. **《物业管理条例》**  
+   - 第十六条：物业服务企
+2026-02-20 20:49:45 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:49:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:49:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:50:01 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:50:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:51:32 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：帮我起草一份起诉状...
+2026-02-20 20:51:50 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: **《民事诉讼法》**、**《中华人民共和国民法典》**有关规定如下，供您在起草起诉状时参考。以下模
+2026-02-20 20:53:08 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:53:11 - INFO - Combined_server:get_data_rows:219 - 已加载数据: 193 条
+2026-02-20 20:53:11 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:53:16 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:53:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:41 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:43 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:44 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:54 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 20:55:54 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子失败：缺少板块名称(section)参数，请求参数：{}
+2026-02-20 20:55:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1234」的状态信息，返回数据：{'users': [{'username': '1234', 'identity': 'owner', 'role': 'owner', 'location': 'Jinrongjie, Beijing, China', 'state': 'online'}]}
+2026-02-20 21:06:09 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你觉得物业管理条例是善法吗...
+2026-02-20 21:06:13 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 暂无相关法条。
+2026-02-20 21:06:28 - INFO - Combined_server:legal_chat:926 - → 向 Ollama 发送请求：你觉得现在的物业法律体系完善吗...
+2026-02-20 21:06:37 - INFO - Combined_server:legal_chat:930 - ✅ 得到答案（前50字符）: 从法律规范层面来看，我国已经形成了较为系统的物业法律体系，主要包括《民法典》物权编、国务院《物业管理
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 22:32:08 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-20 22:32:09 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-20 22:54:49 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-20 22:54:49 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-20 22:54:59 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-20 22:55:02 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:02 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:02 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:03 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:03 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:03 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 22:55:03 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-20 23:22:00 - ERROR - Combined_server:return_error:111 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-20 23:22:00 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-20 23:22:10 - INFO - Combined_server:user_register:490 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-20 23:22:10 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-20 23:22:10 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-20 23:22:10 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-20 23:22:12 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-20 23:22:19 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 23:22:42 - INFO - Combined_server:create_post:725 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-20 23:22:42 - INFO - Combined_server:return_success:121 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '我是sb', 'section': 'law', 'time': '2026-02-20 23:22:42', 'comments': []}}
+2026-02-20 23:22:42 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '我是sb', 'section': 'law', 'time': '2026-02-20 23:22:42', 'comments': []}}
+2026-02-20 23:27:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '我是sb', 'section': 'law', 'time': '2026-02-20 23:22:42', 'comments': []}}
+2026-02-20 23:27:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-20 23:27:33 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '我是sb', 'section': 'law', 'time': '2026-02-20 23:22:42', 'comments': []}}
+2026-02-20 23:27:33 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:45:16 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:45:28 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:52:21 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:52:21 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:53:46 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:54:07 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:54:07 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:54:28 - INFO - Combined_server:return_success:121 - 接口成功：查询到「测试」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:54:47 - INFO - Combined_server:user_register:490 - 用户注册成功：test_user_ci2，身份：????，位置：???
+2026-02-21 00:54:47 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 00:54:47 - INFO - Combined_server:return_success:121 - 接口成功：用户「test_user_ci2」注册成功，返回数据：{'user': {'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'offline'}}
+2026-02-21 00:54:47 - INFO - Combined_server:create_post:725 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 00:54:47 - INFO - Combined_server:return_success:121 - 接口成功：帖子「????2」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': 'test_user_ci2', 'title': '????2', 'content': '????????2', 'section': '??', 'time': '2026-02-21 00:54:47', 'comments': []}}
+2026-02-21 00:54:47 - INFO - Combined_server:add_comment:789 - 添加评论后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 00:54:47 - INFO - Combined_server:return_success:121 - 接口成功：成功为ID1的帖子添加评论（评论作者：test_user_ci2），返回数据：{'comment': {'id': 1, 'post_id': 1, 'author': 'test_user_ci2', 'content': '??????????2', 'time': '2026-02-21 00:54:47'}}
+2026-02-21 00:54:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': 'test_user_ci2', 'title': '????2', 'content': '????????2', 'section': '??', 'time': '2026-02-21 00:54:47', 'comments': [{'id': 1, 'post_id': 1, 'author': 'test_user_ci2', 'content': '??????????2', 'time': '2026-02-21 00:54:47'}]}}
+2026-02-21 00:55:24 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:55:24 - INFO - Combined_server:load_all_data_on_start:152 - 加载用户：test_user_ci2，状态：offline，好友数：0
+2026-02-21 00:55:24 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:55:46 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 00:55:48 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 00:55:48 - ERROR - Combined_server:return_error:111 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-21 00:55:55 - INFO - Combined_server:return_success:121 - 接口成功：用户「test_user_ci2」登录成功，返回数据：{'user': {'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}}
+2026-02-21 00:55:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「test_user_ci2」的状态信息，返回数据：{'users': [{'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}]}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 00:56:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「test_user_ci2」的状态信息，返回数据：{'users': [{'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}]}
+2026-02-21 00:56:29 - INFO - Combined_server:create_post:725 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 00:56:29 - INFO - Combined_server:return_success:121 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：2），返回数据：{'post': {'id': 2, 'author': 'test_user_ci2', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 00:56:29', 'comments': []}}
+2026-02-21 00:56:29 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「test_user_ci2」的状态信息，返回数据：{'users': [{'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}]}
+2026-02-21 00:56:29 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为2的帖子详情，返回数据：{'post': {'id': 2, 'author': 'test_user_ci2', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 00:56:29', 'comments': []}}
+2026-02-21 00:56:33 - INFO - Combined_server:add_comment:789 - 添加评论后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 00:56:33 - INFO - Combined_server:return_success:121 - 接口成功：成功为ID2的帖子添加评论（评论作者：test_user_ci2），返回数据：{'comment': {'id': 2, 'post_id': 2, 'author': 'test_user_ci2', 'content': '卧槽', 'time': '2026-02-21 00:56:33'}}
+2026-02-21 00:57:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为2的帖子详情，返回数据：{'post': {'id': 2, 'author': 'test_user_ci2', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 00:56:29', 'comments': [{'id': 2, 'post_id': 2, 'author': 'test_user_ci2', 'content': '卧槽', 'time': '2026-02-21 00:56:33'}]}}
+2026-02-21 00:57:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「test_user_ci2」的状态信息，返回数据：{'users': [{'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}]}
+2026-02-21 00:57:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为2的帖子详情，返回数据：{'post': {'id': 2, 'author': 'test_user_ci2', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 00:56:29', 'comments': [{'id': 2, 'post_id': 2, 'author': 'test_user_ci2', 'content': '卧槽', 'time': '2026-02-21 00:56:33'}]}}
+2026-02-21 00:57:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「test_user_ci2」的状态信息，返回数据：{'users': [{'username': 'test_user_ci2', 'identity': '????', 'role': '????', 'location': '???', 'state': 'online'}]}
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:57:06 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:57:07 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:57:08 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:57:08 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:57:08 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 00:57:08 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 00:57:09 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 00:57:09 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:57:09 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:57:10 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 00:57:10 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 00:57:12 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 00:57:12 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 00:57:14 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 00:57:14 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 00:59:39 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 00:59:39 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:00:02 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 01:00:02 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:00:08 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:00:08 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 01:00:45 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 01:00:45 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:04:05 - ERROR - Combined_server:return_error:111 - 接口错误：查询帖子详情失败：未找到ID为2的帖子，请求参数：{}
+2026-02-21 01:04:05 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:04:25 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:04:27 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「test_user_ci2」的用户信息，请求参数：{}
+2026-02-21 01:04:27 - ERROR - Combined_server:return_error:111 - 接口错误：登出失败：用户名「test_user_ci2」不存在，请求参数：{}
+2026-02-21 01:04:36 - INFO - Combined_server:user_register:490 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-21 01:04:36 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 01:04:36 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-21 01:04:36 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 01:04:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:04:40 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:04:49 - INFO - Combined_server:create_post:725 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 01:04:49 - INFO - Combined_server:return_success:121 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}}
+2026-02-21 01:04:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:04:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}}
+2026-02-21 01:07:28 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:07:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:10:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:32 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:12:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:13:01 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:13:01 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」已成功登出，状态更新为离线，返回数据：None
+2026-02-21 01:13:11 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 01:13:12 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:13:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:14:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:16:06 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:00 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:17:20 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:19:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 01:22:23 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:20:34 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 12:20:34 - INFO - Combined_server:load_all_data_on_start:152 - 加载用户：1，状态：offline，好友数：0
+2026-02-21 12:20:34 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 12:23:03 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:23:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 12:23:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:23:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:23:04 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:23:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:23:05 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': 'sb', 'section': 'law', 'time': '2026-02-21 01:04:49', 'comments': []}]}
+2026-02-21 12:26:16 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:17 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:17 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:17 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:26:17 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 12:58:25 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 13:07:13 - INFO - Combined_server:load_all_data_on_start:139 - ✅ 成功加载 89 条案例
+2026-02-21 13:07:13 - INFO - Combined_server:load_all_data_on_start:158 - 所有数据加载成功
+2026-02-21 13:07:22 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 13:07:37 - ERROR - Combined_server:return_error:111 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 13:07:37 - ERROR - Combined_server:return_error:111 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:07:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:07 - INFO - Combined_server:user_register:490 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-21 13:08:07 - INFO - Combined_server:user_register:494 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 13:08:07 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-21 13:08:07 - INFO - Combined_server:return_success:121 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 13:08:09 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:18 - INFO - Combined_server:create_post:725 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 13:08:18 - INFO - Combined_server:return_success:121 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}}
+2026-02-21 13:08:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}}
+2026-02-21 13:08:18 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:45 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:53 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:55 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:56 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:57 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:58 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:08:59 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:10:51 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:36 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:46 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:47 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:48 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:49 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:11:50 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:14 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:12:15 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:37 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:14:38 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:21:10 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「help」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「law」板块下共1条帖子，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'law', 'time': '2026-02-21 13:08:18', 'comments': []}]}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:25:13 - INFO - Combined_server:return_success:121 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 13:25:14 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 13:25:15 - INFO - Combined_server:load_all_data_on_start:140 - ✅ 成功加载 89 条案例
+2026-02-21 13:25:15 - INFO - Combined_server:load_all_data_on_start:159 - 所有数据加载成功
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 13:25:23 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:167 - 开始保存所有数据（退出钩子）
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:170 - 个人消息保存完成
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:172 - 群消息保存完成
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:174 - 用户数据保存完成
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:176 - 群组数据保存完成
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:178 - 帖子数据保存完成
+2026-02-21 13:25:24 - INFO - Combined_server:save_all_data_on_exit:179 - 所有数据保存成功
+2026-02-21 13:38:11 - INFO - Combined_server:load_all_data_on_start:140 - ✅ 成功加载 89 条案例
+2026-02-21 13:38:11 - INFO - Combined_server:load_all_data_on_start:159 - 所有数据加载成功
+2026-02-21 13:38:16 - ERROR - Combined_server:return_error:112 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 13:38:18 - ERROR - Combined_server:return_error:112 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 13:38:18 - ERROR - Combined_server:return_error:112 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-21 13:38:32 - INFO - Combined_server:user_register:491 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-21 13:38:32 - INFO - Combined_server:user_register:495 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 13:38:32 - INFO - Combined_server:return_success:122 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-21 13:38:32 - INFO - Combined_server:return_success:122 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 13:38:34 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:38:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:38:43 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 0，返回数据：{'posts': []}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:44 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:54 - INFO - Combined_server:create_post:757 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'help', 'time': '2026-02-21 13:38:54', 'comments': []}}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 1，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'help', 'time': '2026-02-21 13:38:54', 'comments': []}]}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:54 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:38:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'help', 'time': '2026-02-21 13:38:54', 'comments': []}}
+2026-02-21 13:38:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 1，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '1111', 'section': 'help', 'time': '2026-02-21 13:38:54', 'comments': []}]}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:39:01 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 13:39:14 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 13:42:25 - INFO - Combined_server:load_all_data_on_start:140 - ✅ 成功加载 89 条案例
+2026-02-21 13:42:25 - INFO - Combined_server:load_all_data_on_start:159 - 所有数据加载成功
+2026-02-21 13:42:30 - ERROR - Combined_server:return_error:112 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 13:42:30 - ERROR - Combined_server:return_error:112 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-21 13:42:38 - INFO - Combined_server:user_register:491 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-21 13:42:38 - INFO - Combined_server:user_register:495 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 13:42:38 - INFO - Combined_server:return_success:122 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-21 13:42:38 - INFO - Combined_server:return_success:122 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 13:42:40 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 0，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:42 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:42:58 - INFO - Combined_server:create_post:757 - 创建帖子后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：帖子「求助：哈哈哈」创建成功（ID：1），返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 1，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}]}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:58 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:42:59 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:42:59 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:43:22 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:43:22 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:43:27 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:43:27 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:43:30 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:43:30 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:45:38 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:45:38 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:23 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:23 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:55 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:56 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:47:57 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:52:18 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:52:18 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:52:49 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到热帖 top 1，返回数据：{'posts': [{'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}]}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到「ai」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到「lawsuit」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到「law」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到「case」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:52:51 - INFO - Combined_server:return_success:122 - 接口成功：查询到「process」板块下共0条帖子，返回数据：{'posts': []}
+2026-02-21 13:52:53 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:52:53 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:54:28 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:54:28 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:55:33 - INFO - Combined_server:return_success:122 - 接口成功：查询到ID为1的帖子详情，返回数据：{'post': {'id': 1, 'author': '1', 'title': '求助：哈哈哈', 'content': '11111', 'section': 'help', 'time': '2026-02-21 13:42:58', 'comments': []}}
+2026-02-21 13:55:33 - INFO - Combined_server:return_success:122 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 13:56:35 - INFO - Combined_server:add_comment:821 - 添加评论后帖子数据已保存：D:\项目：ai法律平台\数据库\posts.pkl
+2026-02-21 13:56:35 - INFO - Combined_server:return_success:122 - 接口成功：成功为ID1的帖子添加评论（评论作者：1），返回数据：{'comment': {'id': 1, 'post_id': 1, 'author': '1', 'content': '哈哈', 'time': '2026-02-21 13:56:35'}}
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 14:07:30 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 14:07:31 - INFO - Combined_server:load_all_data_on_start:144 - ✅ 成功加载 89 条案例
+2026-02-21 14:07:31 - INFO - Combined_server:load_all_data_on_start:163 - 所有数据加载成功
+2026-02-21 14:07:31 - ERROR - Combined_server:return_error:116 - 接口错误：查询帖子详情失败：未找到ID为1的帖子，请求参数：{}
+2026-02-21 14:07:31 - ERROR - Combined_server:return_error:116 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:172 - 开始保存所有数据（退出钩子）
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:175 - 个人消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:177 - 群消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:179 - 用户数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:181 - 群组数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:183 - 帖子数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:184 - 所有数据保存成功
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:172 - 开始保存所有数据（退出钩子）
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:175 - 个人消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:177 - 群消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:179 - 用户数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:181 - 群组数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:183 - 帖子数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:184 - 所有数据保存成功
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:168 - 开始保存所有数据（退出钩子）
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:171 - 个人消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:173 - 群消息保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:175 - 用户数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:177 - 群组数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:179 - 帖子数据保存完成
+2026-02-21 14:07:37 - INFO - Combined_server:save_all_data_on_exit:180 - 所有数据保存成功
+2026-02-21 14:09:38 - INFO - Combined_server:load_all_data_on_start:144 - ✅ 成功加载 89 条案例
+2026-02-21 14:09:38 - INFO - Combined_server:load_all_data_on_start:163 - 所有数据加载成功
+2026-02-21 14:10:04 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:04 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:04 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:06 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-21 14:10:06 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-21 14:10:07 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 测试成功。
+2026-02-21 14:10:08 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:08 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:09 - INFO - Combined_server:legal_chat:979 - → 请求 Ollama（受并发限制）: 并发测试：请返回一句短答。...
+2026-02-21 14:10:10 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-21 14:10:11 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 暂无相关法条
+2026-02-21 14:10:11 - INFO - Combined_server:legal_chat:995 - ✅ 得到答案（前50字符）: 好的。
+2026-02-21 18:24:05 - INFO - Combined_server:load_all_data_on_start:144 - ✅ 成功加载 89 条案例
+2026-02-21 18:24:05 - INFO - Combined_server:load_all_data_on_start:163 - 所有数据加载成功
+2026-02-21 18:24:08 - ERROR - Combined_server:return_error:116 - 接口错误：查询失败：未找到用户名「1」的用户信息，请求参数：{}
+2026-02-21 18:24:08 - ERROR - Combined_server:return_error:116 - 接口错误：登出失败：用户名「1」不存在，请求参数：{}
+2026-02-21 18:27:07 - INFO - Combined_server:user_register:501 - 用户注册成功：1，身份：lawyer，位置：贵州
+2026-02-21 18:27:07 - INFO - Combined_server:user_register:505 - 注册后用户数据已保存：D:\项目：ai法律平台\数据库\users.pkl
+2026-02-21 18:27:07 - INFO - Combined_server:return_success:126 - 接口成功：用户「1」注册成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'offline'}}
+2026-02-21 18:27:07 - INFO - Combined_server:return_success:126 - 接口成功：用户「1」登录成功，返回数据：{'user': {'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}}
+2026-02-21 18:27:09 - INFO - Combined_server:return_success:126 - 接口成功：查询到用户「1」的状态信息，返回数据：{'users': [{'username': '1', 'identity': 'lawyer', 'role': 'lawyer', 'location': '贵州', 'state': 'online'}]}
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:172 - 开始保存所有数据（退出钩子）
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:175 - 个人消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:177 - 群消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:179 - 用户数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:181 - 群组数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:183 - 帖子数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:184 - 所有数据保存成功
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:172 - 开始保存所有数据（退出钩子）
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:175 - 个人消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:177 - 群消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:179 - 用户数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:181 - 群组数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:183 - 帖子数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:184 - 所有数据保存成功
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:172 - 开始保存所有数据（退出钩子）
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:175 - 个人消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:177 - 群消息保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:179 - 用户数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:181 - 群组数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:183 - 帖子数据保存完成
+2026-02-21 19:20:57 - INFO - Combined_server:save_all_data_on_exit:184 - 所有数据保存成功

@@ -592,86 +592,9 @@
                 <div class="community-section">
                     <h2 class="section-title">热门话题</h2>
                     
-                    <div class="topics-list">
+                    <div class="topics-list" data-loading="true">
                         <div class="topic-item">
-                            <span class="topic-tag hot">热</span>
-                            <span class="topic-tag ai">AI推荐</span>
-                            <div class="topic-title">物业费纠纷如何收集证据？2024最新取证指南</div>
-                            <div class="topic-meta">
-                                <span>2小时前</span>
-                                <div class="topic-stats">
-                                    <span class="stat-item">
-                                        <i class="far fa-eye"></i> 234
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="far fa-comment"></i> 89
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="topic-item">
-                            <span class="topic-tag hot">热</span>
-                            <span class="topic-tag ai">律师解读</span>
-                            <div class="topic-title">小区公共收益（广告、车位）分配的法律依据与实践</div>
-                            <div class="topic-meta">
-                                <span>5小时前</span>
-                                <div class="topic-stats">
-                                    <span class="stat-item">
-                                        <i class="far fa-eye"></i> 156
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="far fa-comment"></i> 67
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="topic-item">
-                            <span class="topic-tag new">新</span>
-                            <div class="topic-title">楼上漏水不维修，物业不作为，法律途径怎么走？</div>
-                            <div class="topic-meta">
-                                <span>1天前</span>
-                                <div class="topic-stats">
-                                    <span class="stat-item">
-                                        <i class="far fa-eye"></i> 98
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="far fa-comment"></i> 45
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="topic-item">
-                            <span class="topic-tag ai">AI生成</span>
-                            <div class="topic-title">业主委员会成立全流程与常见问题解答</div>
-                            <div class="topic-meta">
-                                <span>2天前</span>
-                                <div class="topic-stats">
-                                    <span class="stat-item">
-                                        <i class="far fa-eye"></i> 187
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="far fa-comment"></i> 52
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="topic-item">
-                            <div class="topic-title">停车位只售不租是否合法？业主该如何维权？</div>
-                            <div class="topic-meta">
-                                <span>3天前</span>
-                                <div class="topic-stats">
-                                    <span class="stat-item">
-                                        <i class="far fa-eye"></i> 312
-                                    </span>
-                                    <span class="stat-item">
-                                        <i class="far fa-comment"></i> 124
-                                    </span>
-                                </div>
-                            </div>
+                            <div class="topic-title">加载中...</div>
                         </div>
                     </div>
                 </div>
@@ -741,11 +664,11 @@
     </footer>
 
     <!-- 保持原有JavaScript功能 -->
-    <script src="js\luoji.js"></script>
+    <script src="js/luoji.js"></script>
     <script>
     // 页面专用命名空间，避免与逻辑.js冲突
     (function () {
-        const PAGE_API_BASE = 'http://localhost:8000';
+        const PAGE_API_BASE = window.API_BASE || 'http://localhost:8000';
         // DOM元素
         const postButton = document.getElementById('postButton');
         const postModal = document.getElementById('postModal');
@@ -790,15 +713,24 @@
         }
 
         function loadLatestPosts() {
-            fetch(`${PAGE_API_BASE}/get_posts`)
-                .then(res => res.json().then(data => ({ ok: res.ok, data })))
-                .then(({ ok, data }) => {
-                    if (!ok || !Array.isArray(data)) {
-                        return;
-                    }
-                    renderLatestPosts(data);
-                })
-                .catch(() => {});
+            // 不包含 help 板块（热门话题在右侧单独加载）
+            const sections = Array.from(new Set(Array.from(forumCards).map(c => c.dataset.section).filter(Boolean))).filter(s => s !== 'help');
+            if (sections.length === 0) return;
+
+            const promises = sections.map(section =>
+                fetch(`${PAGE_API_BASE}/get_posts?section=${encodeURIComponent(section)}`)
+                    .then(res => res.json().then(body => ({ ok: res.ok, body })))
+                    .then(({ ok, body }) => {
+                        if (!ok || !body || body.code !== 200) return [];
+                        return body.data.posts || [];
+                    })
+                    .catch(() => [])
+            );
+
+            Promise.all(promises).then(results => {
+                const allPosts = results.flat();
+                renderLatestPosts(allPosts);
+            }).catch(() => {});
         }
 
         // 打开发帖模态框
@@ -846,22 +778,36 @@
             }
 
             const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-            const author = currentUser ? currentUser.username : '匿名用户';
+            if (!currentUser || !currentUser.username) {
+                alert('请先登录后发帖');
+                window.location.href = '登录注册.html';
+                return;
+            }
+            const author = currentUser.username;
 
             fetch(`${PAGE_API_BASE}/create_post`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ author, title, content, section })
             })
-                .then(res => res.json().then(data => ({ ok: res.ok, data })))
-                .then(({ ok, data }) => {
-                    if (!ok) {
-                        alert(data.error || '发布失败');
+                .then(res => res.json().then(body => ({ ok: res.ok, body })))
+                .then(({ ok, body }) => {
+                    if (!ok || !body || body.code !== 200 || !body.data || !body.data.post) {
+                        const errMsg = (body && body.error) || '发布失败';
+                        if (window.Utils && typeof window.Utils.showMessage === 'function') window.Utils.showMessage(errMsg, 'error');
+                        else alert(errMsg);
                         return;
                     }
+                    // 关闭模态并清空表单
                     postModal.classList.remove('active');
                     postForm.reset();
-                    window.location.href = `帖子通用界面.html?post_id=${data.id}`;
+                    // 成功提示
+                    const successMsg = '帖子发布成功，正在刷新列表...';
+                    if (window.Utils && typeof window.Utils.showMessage === 'function') window.Utils.showMessage(successMsg, 'success');
+                    else console.log(successMsg);
+                    // 自动刷新右侧热门和左侧最新列表
+                    if (typeof loadHotTopics === 'function') loadHotTopics();
+                    if (typeof loadLatestPosts === 'function') loadLatestPosts();
                 })
                 .catch(() => {
                     alert('发布请求失败');
@@ -873,20 +819,98 @@
         searchInput && searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
-                if (query) {
-                    alert(`搜索帖子: ${query}\n（实际开发中这里会执行搜索功能）`);
-                }
+                if (!query) return;
+                fetch(`${PAGE_API_BASE}/search_posts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword: query })
+                })
+                .then(res => res.json().then(body => ({ ok: res.ok, body })))
+                .then(({ ok, body }) => {
+                    if (!ok || !body || body.code !== 200) return;
+                    const posts = body.data.posts || [];
+                    renderLatestPosts(posts);
+                })
+                .catch(() => {});
             }
         });
 
-        // 点击热门话题
-        const topicItems = document.querySelectorAll('.topic-item');
-        topicItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const title = item.querySelector('.topic-title').textContent;
-                alert(`查看话题: ${title}\n（实际开发中这里会跳转到帖子详情页）`);
+        // 动态加载热门话题并渲染
+        function renderHotTopics(posts) {
+            const container = document.querySelector('.topics-list');
+            if (!container) return;
+            container.removeAttribute('data-loading');
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<div class="topic-item"><div class="topic-title">暂无热门帖子</div></div>';
+                return;
+            }
+
+            // 按评论数降序（热度）排序后取前8条
+            posts = (posts || []).slice().sort((a, b) => {
+                const ca = (a.comments && a.comments.length) ? a.comments.length : (a.comment_count || 0) || 0;
+                const cb = (b.comments && b.comments.length) ? b.comments.length : (b.comment_count || 0) || 0;
+                return cb - ca;
             });
-        });
+
+            const html = posts.slice(0, 8).map(p => {
+                const title = escapeHtml(p.title || '无标题');
+                const time = escapeHtml(p.time || p.create_time || '');
+                const comments = (p.comments && p.comments.length) ? p.comments.length : (p.comment_count || 0) || 0;
+                const views = p.views || (p.view_count || 0) || 0;
+                return `
+                    <div class="topic-item" data-post-id="${p.id}">
+                        <div class="topic-title">${title}</div>
+                        <div class="topic-meta">
+                            <span>${time}</span>
+                            <div class="topic-stats">
+                                <span class="stat-item"><i class="far fa-eye"></i> ${views}</span>
+                                <span class="stat-item"><i class="far fa-comment"></i> ${comments}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+
+            container.innerHTML = html;
+
+            // 点击跳转到帖子详情
+            container.querySelectorAll('.topic-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const postId = item.dataset.postId;
+                    if (postId) {
+                        window.location.href = `帖子通用界面.html?post_id=${postId}`;
+                    }
+                });
+            });
+        }
+
+        function loadHotTopics() {
+            const container = document.querySelector('.topics-list');
+            if (container) container.setAttribute('data-loading', 'true');
+            // 优先请求后端推荐接口；若后端不可用则回退到内置演示数据
+            fetch(`${PAGE_API_BASE}/get_hot_posts?limit=8`)
+                .then(res => res.json().then(body => ({ ok: res.ok, body })))
+                .then(({ ok, body }) => {
+                    if (!ok || !body) {
+                        // 回退到演示数据
+                        renderHotTopics([{
+                            id: 'demo-1', title: '示例：演示热帖', time: new Date().toLocaleString(), comments: [], view_count: 42
+                        }]);
+                        return;
+                    }
+                    if (body.code !== 200) {
+                        const err = body.error || '加载失败';
+                        if (container) container.innerHTML = `<div class="topic-item"><div class="topic-title">${escapeHtml(err)}</div></div>`;
+                        return;
+                    }
+                    renderHotTopics(body.data.posts || []);
+                })
+                .catch(() => {
+                    // 后端不可用：使用本地演示数据以保证 demo 可见性
+                    renderHotTopics([{
+                        id: 'demo-1', title: '示例：演示热帖', time: new Date().toLocaleString(), comments: [], view_count: 42
+                    }]);
+                });
+        }
 
         // 点击论坛卡片
         forumCards.forEach(card => {
@@ -896,6 +920,8 @@
             });
         });
 
+        // 先加载右侧热门话题，再加载左侧各板块最新项（左侧不包含 help）
+        if (typeof loadHotTopics === 'function') loadHotTopics();
         loadLatestPosts();
     })();
     </script>

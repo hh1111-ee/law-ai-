@@ -1,6 +1,5 @@
 import atexit
 import threading
-import asyncio
 import json
 import logging
 import os
@@ -9,17 +8,14 @@ from logging.handlers import RotatingFileHandler
 from typing import Dict, List, Optional, Tuple
 
 import requests
-import datetime
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from openpyxl import load_workbook
 import pandas as pd
 
-
-# 让BASE_DIR指向上一级目录（主目录）
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-CHAT_BACKEND_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+CHAT_BACKEND_DIR = os.path.join(BASE_DIR, "聊天和用户后端")
 
 if CHAT_BACKEND_DIR not in sys.path:
     sys.path.append(CHAT_BACKEND_DIR)
@@ -52,20 +48,16 @@ logging.basicConfig(level=logging.INFO, handlers=[file_handler, console_handler]
 logger = logging.getLogger(__name__)
 
 # ===================== 数据路径 =====================
-# 数据文件全部指向主目录
-BASE_FLODER="数据库"
-USER_FILE = os.path.join(BASE_DIR, BASE_FLODER, "users.pkl")
-GROUP_FILE = os.path.join(BASE_DIR, BASE_FLODER, "groups.pkl")
-POST_FILE = os.path.join(BASE_DIR, BASE_FLODER, "posts.pkl")
-PERSONAL_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "personal_messages.pkl")
-GROUP_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "group_messages.pkl")
+USER_FILE = os.path.join(BASE_DIR, "users.pkl")
+GROUP_FILE = os.path.join(BASE_DIR, "groups.pkl")
+POST_FILE = os.path.join(BASE_DIR, "posts.pkl")
+PERSONAL_MSG_FILE = os.path.join(BASE_DIR, "personal_messages.pkl")
+GROUP_MSG_FILE = os.path.join(BASE_DIR, "group_messages.pkl")
 
 DATA_PATH = os.path.join(BASE_DIR, "数据", "地区.xlsx")
 CASES_FILE = os.path.join(BASE_DIR, "数据", "案号.xlsx")
 
-# 日志目录也指向主目录
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-os.makedirs(LOG_DIR, exist_ok=True)
+
 # ===================== 业务对象 =====================
 app = FastAPI()
 
@@ -78,10 +70,6 @@ cases_df = pd.DataFrame() # 全局存储案例数据
 # 全局写入锁，防止并发写文件
 write_lock = threading.Lock()
 
-# 控制本地模型并发调用数：根据机器能力设置为2或3
-MODEL_CONCURRENCY = 2
-model_semaphore = asyncio.Semaphore(MODEL_CONCURRENCY)
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -92,12 +80,9 @@ app.add_middleware(
 )
 
 # ===================== 工具函数 =====================
-
 _DATA_CACHE: List[Dict[str, str]] = []
 _DATA_MTIME: float = -1.0
 _save_exit_called = False
-# 用于保护数据缓存的异步锁
-_data_cache_lock = asyncio.Lock()
 
 
 def ensure_file_exists(filename: str) -> None:
@@ -210,19 +195,19 @@ def _load_excel_rows() -> List[Dict[str, str]]:
     return rows
 
 
-async def get_data_rows() -> List[Dict[str, str]]:
+def get_data_rows() -> List[Dict[str, str]]:
     global _DATA_CACHE, _DATA_MTIME
-    async with _data_cache_lock:
-        try:
-            mtime = os.path.getmtime(DATA_PATH)
-        except OSError:
-            mtime = -1.0
+    try:
+        mtime = os.path.getmtime(DATA_PATH)
+    except OSError:
+        mtime = -1.0
 
-        if mtime != _DATA_MTIME:
-            _DATA_CACHE = _load_excel_rows()
-            _DATA_MTIME = mtime
-            logger.info("已加载数据: %s 条", len(_DATA_CACHE))
-        return _DATA_CACHE
+    if mtime != _DATA_MTIME:
+        _DATA_CACHE = _load_excel_rows()
+        _DATA_MTIME = mtime
+        logger.info("已加载数据: %s 条", len(_DATA_CACHE))
+
+    return _DATA_CACHE
 
 
 def resolve_location(payload: Dict) -> Dict[str, str]:
@@ -441,12 +426,6 @@ async def handle_global_exception(request: Request, exc: Exception):
 @app.get("/")
 async def root():
     return PlainTextResponse("Combined server is running.")
-
-
-@app.get("/config")
-async def get_config():
-    # 返回前端可读取的运行时配置（可根据部署环境修改）
-    return JSONResponse(content={"API_BASE": "http://localhost:8000"})
 
 
 @app.post("/load_all_data")
@@ -701,37 +680,6 @@ async def get_posts(request: Request):
         return return_error(f"查询「{section}」板块帖子失败：{exc}", 500, request_data=dict(request.query_params))
 
 
-@app.get("/get_hot_posts")
-async def get_hot_posts(limit: int = 8):
-    """返回按热度排序的帖子（默认 top N=8）。
-    当前热度计算：以评论数为主，时间为次要排序键（评论数降序，时间降序）。
-    """
-    try:
-        posts = post_manager.get_posts(None)
-
-        def parse_time(p):
-            t = getattr(p, 'time', None)
-            if not t:
-                return datetime.datetime.min
-            try:
-                return datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
-            except Exception:
-                return datetime.datetime.min
-
-        posts_sorted = sorted(
-            posts,
-            key=lambda p: (len(getattr(p, 'comments', [])) if getattr(p, 'comments', None) is not None else 0, parse_time(p)),
-            reverse=True,
-        )
-
-        top = posts_sorted[: max(1, int(limit))]
-        posts_dict = [p.to_dict() for p in top]
-        return return_success(data={"posts": posts_dict}, message=f"查询到热帖 top {len(posts_dict)}")
-    except Exception as exc:
-        logger.error("获取热帖失败：%s", exc, exc_info=True)
-        return return_error(f"查询热帖失败：{exc}", 500)
-
-
 @app.post("/create_post")
 async def create_post(request: Request):
     data = await _get_payload(request)
@@ -902,7 +850,7 @@ async def api_search(request: Request):
     if not keyword:
         return return_error("请提供搜索关键字", 400)
 
-    rows = await get_data_rows()
+    rows = get_data_rows()
     location = resolve_location(payload)
     all_results = build_results(rows, keyword)
     recommended = build_recommended(rows, location)
@@ -928,23 +876,6 @@ async def api_search(request: Request):
             "total": page_data["total"],
         }
     )
-
-
-@app.post("/search_posts")
-async def search_posts(request: Request):
-    data = await _get_payload(request) or {}
-    keyword = _safe_text(data.get("keyword"))
-    if not keyword:
-        return return_error("请提供搜索关键字", 400)
-
-    results = []
-    for p in post_manager.post_list:
-        title = _safe_text(getattr(p, 'title', ''))
-        content = _safe_text(getattr(p, 'content', ''))
-        if keyword.lower() in title.lower() or keyword.lower() in content.lower():
-            results.append(p.to_dict())
-
-    return return_success(data={"posts": results}, message=f"找到{len(results)}条相关帖子")
 
 
 @app.post("/location")
@@ -982,20 +913,8 @@ async def legal_chat(request: Request):
     }
 
     try:
-        logger.info("→ 请求 Ollama（受并发限制）: %s...", question[:30])
-        # 在异步环境下使用 Semaphore 限制并发，并把阻塞的 requests 调用移到线程池中执行
-        async with model_semaphore:
-            try:
-                resp = await asyncio.wait_for(
-                    asyncio.to_thread(
-                        lambda: requests.post("http://127.0.0.1:11434/api/chat", json=payload, timeout=30)
-                    ),
-                    timeout=40,
-                )
-            except asyncio.TimeoutError:
-                logger.exception("❌ 模型调用超时")
-                return return_error("模型调用超时，请稍后重试", 504)
-
+        logger.info("→ 向 Ollama 发送请求：%s...", question[:30])
+        resp = requests.post("http://127.0.0.1:11434/api/chat", json=payload, timeout=30)
         resp.raise_for_status()
         answer = resp.json().get("message", {}).get("content", "暂无相关法条")
         logger.info("✅ 得到答案（前50字符）: %s", answer[:50])
@@ -1074,4 +993,4 @@ async def websocket_private_chat(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("combined_server:app", host="0.0.0.0", port=8000, reload=True)

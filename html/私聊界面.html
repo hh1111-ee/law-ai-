@@ -18,8 +18,8 @@
         }
         
         body {
-            background-color: var(--light-gray);
-            color: var(--text-dark);
+    <script src="js/app_config.js"></script>
+</head>
             font-family: 'Arial', '微软雅黑', sans-serif;
             height: 100vh;
             display: flex;
@@ -607,7 +607,7 @@
     <script>
     // 页面专用命名空间，避免与逻辑.js冲突
     (function () {
-        const PAGE_API_BASE = 'http://localhost:8000';
+        const PAGE_API_BASE = window.API_BASE || 'http://localhost:8000';
         // WebSocket 与 API 统一到合并后的端口
         const WS_BASE = 'ws://localhost:8000/ws/private';
         const sampleUsers = [

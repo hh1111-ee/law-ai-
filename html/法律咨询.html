@@ -312,6 +312,7 @@
             --light-gray: #f5f7fa;
         }
     </style>
+    <script src="js/app_config.js"></script>
 </head>
 <body>
     <header>
@@ -485,7 +486,7 @@
 
     async function fetchLocation(geo) {
         const payload = geo ? { location: geo } : {};
-        const resp = await fetch('http://localhost:8000/location', {
+        const resp = await fetch((window.API_BASE || '') + '/location', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -514,7 +515,7 @@
         const payload = { keyword, page, page_size: DEFAULT_PAGE_SIZE };
         if (geo) payload.location = geo;
 
-        const resp = await fetch('http://localhost:8000/search', {
+        const resp = await fetch((window.API_BASE || '') + '/search', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

@@ -184,7 +184,7 @@
 
         .timestamp {
             font-size: 0.7rem;
-            color: #777;
+            color: #8a8989;
             margin-top: 5px;
             text-align: right;
         }
@@ -203,8 +203,36 @@
             align-self: flex-start;
             margin: 1rem 0;
         }
+
+        /* 非阻塞提示（toast） */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 86px;
+            transform: translateX(-50%) translateY(10px);
+            background: linear-gradient(90deg,#2c6ecb,#8a4fff);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(44,110,203,0.18);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity .22s, transform .22s;
+            font-size: 0.95rem;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.warn { background: #f6a623; color: #1b1b1b; }
+        .toast.info { background: linear-gradient(90deg,#2c6ecb,#8a4fff); }
+        .icon-button.listening {
+            box-shadow: 0 8px 28px rgba(138,79,255,0.22);
+            transform: scale(1.06);
+            border: 1.5px solid rgba(138,79,255,0.9);
+            background: linear-gradient(135deg,#cdb7ff 0%, #e8e0ff 100%);
+            color: #4a148c;
+        }
     </style>
-     <link rel="stylesheet" href="css\bigstyle.css">
+    <link rel="stylesheet" href="css/bigstyle.css">
+    <script src="js/app_config.js"></script>
 </head>
 <body>
     <header>
@@ -279,6 +307,21 @@
         scrollToBottom();
     });
 
+    // ---------- 非阻塞提示（toast） ----------
+    function showToast(message, type = 'info', duration = 3000) {
+        const t = document.createElement('div');
+        t.className = `toast ${type}`;
+        t.textContent = message;
+        document.body.appendChild(t);
+        // 强制回流以触发动画
+        void t.offsetWidth;
+        t.classList.add('show');
+        setTimeout(() => {
+            t.classList.remove('show');
+            setTimeout(() => document.body.removeChild(t), 300);
+        }, duration);
+    }
+
     // ---------- 添加聊天气泡 ----------
     function addMessage(text, sender) {
         const chatContainer = document.getElementById('chatContainer');
@@ -288,7 +331,12 @@
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.textContent = text;
+        // 对后端 AI 返回的富文本做处理（支持 **加粗**、换行标识 /n 或 \n、以及 - 列表）
+        if (sender === 'bot') {
+            contentDiv.innerHTML = processAIText(text);
+        } else {
+            contentDiv.textContent = text;
+        }
 
         const timestamp = document.createElement('div');
         timestamp.className = 'timestamp';
@@ -299,6 +347,48 @@
         messageDiv.appendChild(timestamp);
         chatContainer.appendChild(messageDiv);
         scrollToBottom();
+    }
+
+    // ---------- 处理 AI 返回文本为安全的 HTML ----------
+    function escapeHTML(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function processAIText(raw) {
+        if (!raw && raw !== 0) return '';
+        // 将各种换行标识统一为真实换行
+        let text = String(raw).replace(/\r\n/g, '\n').replace(/\/n/g, '\n').replace(/\\n/g, '\n');
+        // 先转义 HTML 避免 XSS
+        text = escapeHTML(text);
+        // 支持 **加粗** 标记
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        const lines = text.split('\n');
+        let html = '';
+        let inList = false;
+
+        lines.forEach((line) => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('- ')) {
+                if (!inList) { inList = true; html += '<ul style="margin:0 0 0.5rem 1rem;">'; }
+                html += `<li>${trimmed.slice(2)}</li>`;
+            } else {
+                if (inList) { html += '</ul>'; inList = false; }
+                if (trimmed === '') {
+                    // 空行作为段间距
+                    html += '<br/>';
+                } else {
+                    html += `<p style="margin:0 0 0.4rem 0;">${trimmed}</p>`;
+                }
+            }
+        });
+        if (inList) html += '</ul>';
+        return html;
     }
 
     // ---------- 滚动到底 ----------
@@ -326,7 +416,7 @@
         scrollToBottom();
 
         try {
-            const resp = await fetch('http://localhost:8000/api/legal', {
+            const resp = await fetch((window.API_BASE || '') + '/api/legal', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: msg })
@@ -388,14 +478,99 @@
 
     // ---------- 语音按钮（保持提示） ----------
     document.getElementById('voiceButton').addEventListener('click', function () {
-        alert('语音输入功能正在开发中……');
+        showToast('语音输入功能正在开发中…', 'info', 2200);
     });
+
+    // ---------- 语音输入功能实现 ----------
+    const voiceButton = document.getElementById('voiceButton');
+
+    // 兼容性检测：优先使用标准 API（SpeechRecognition），降级到 webkit 前缀
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        voiceButton.addEventListener('click', function () {
+            showToast('当前浏览器不支持语音输入，请使用 Chrome/Edge 进行尝试。', 'warn', 5000);
+        });
+    } else {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'zh-CN'; // 设置语言为中文
+        recognition.interimResults = false; // 禁用中间结果
+        recognition.maxAlternatives = 1; // 最多返回一个结果
+
+        // 保存默认图标，支持切换显示
+        const defaultVoiceIcon = voiceButton.innerHTML;
+        let isListening = false;
+
+        function setListeningState(listening) {
+            isListening = listening;
+            if (listening) {
+                voiceButton.classList.add('listening');
+                voiceButton.setAttribute('aria-pressed', 'true');
+                voiceButton.innerHTML = '⏹';
+            } else {
+                voiceButton.classList.remove('listening');
+                voiceButton.setAttribute('aria-pressed', 'false');
+                voiceButton.innerHTML = defaultVoiceIcon;
+            }
+        }
+
+        voiceButton.addEventListener('click', function () {
+            if (!isListening) {
+                try {
+                    recognition.start();
+                    showToast('正在聆听，请开始说话…（点击按钮或按 Esc 停止）', 'info', 4000);
+                } catch (err) {
+                    console.error('启动语音识别失败：', err);
+                    showToast('无法启动语音识别，请重试。', 'warn', 3500);
+                }
+            } else {
+                try {
+                    recognition.stop();
+                    showToast('已停止语音识别', 'info', 1400);
+                } catch (err) {
+                    console.warn('停止语音识别时出错：', err);
+                }
+            }
+        });
+
+        // 按 Esc 可取消当前识别
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isListening) {
+                try {
+                    recognition.stop();
+                    showToast('已取消语音识别', 'info', 1400);
+                } catch (err) {
+                    console.warn('取消语音识别失败：', err);
+                }
+            }
+        });
+
+        recognition.onstart = function () {
+            setListeningState(true);
+        };
+
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript; // 获取识别结果
+            messageInput.value = transcript; // 将结果填入输入框
+            messageInput.style.height = 'auto'; // 调整输入框高度
+            messageInput.style.height = (messageInput.scrollHeight > 150 ? 150 : messageInput.scrollHeight) + 'px';
+        };
+
+        recognition.onerror = function (event) {
+            console.error('语音识别错误：', event.error);
+            showToast('语音识别失败，请重试。', 'warn', 3500);
+        };
+
+        recognition.onend = function () {
+            setListeningState(false);
+            console.log('语音识别结束');
+        };
+    }
 
     // 页面首次加载自动滚到底
     scrollToBottom();
 </script>
 
-<script src="js\luoji.js"></script>
+<script src="js/luoji.js"></script>
 
 
 </body>

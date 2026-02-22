@@ -4,8 +4,11 @@
 
 const DEFAULT_AVATAR = 'https://gd-hbimg.huaban.com/a0dcd065b11ba0951ae66436130cc6800671632a8bc0-9IxOal_fw236';
 const API_HOST = window.location.hostname || 'localhost';
-const API_BASE = `http://localhost:8000`;
+// 使用 window.API_BASE（若页面已设置）或回退到默认地址，避免重复声明导致错误
+const API_BASE = window.API_BASE || 'http://localhost:8000';
 const LOGIN_REDIRECT_URL = '主页.html';
+// 注册/登录流程锁，防止在异步过程中切换表单或重复提交
+let isAuthProcessing = false;
 
 // 切换登录/注册表单
 function switchTab(tabName) {
@@ -301,21 +304,27 @@ if (loginFormEl) {
             .then(data => {
                 console.log('login: user_login response json', data);
                 if (data.code !== 200) {
-                    alert(data.error || '登录失败');
+                    Utils.showMessage(data.error || '登录失败', 'error');
                     console.error('登录失败：后端返回非200', data);
                     return;
                 }
                 if (!data.data || !data.data.user) {
-                    alert('登录成功，但未返回用户信息');
+                    Utils.showMessage('登录成功，但未返回用户信息', 'warning');
                     console.error('登录成功，但未返回用户信息', data);
                     return;
                 }
                 localStorage.setItem('currentUser', JSON.stringify(data.data.user));
-                alert('登录成功');
-                window.location.href = LOGIN_REDIRECT_URL;
+                Swal.fire({
+                    icon: 'success',
+                    title: '登录成功',
+                    timer: 1200,
+                    showConfirmButton: false,
+                    position: 'top'
+                });
+                setTimeout(() => { window.location.href = LOGIN_REDIRECT_URL; }, 1200);
             })
             .catch((err) => {
-                alert('登录请求失败');
+                Utils.showMessage('登录请求失败，请检查网络', 'error');
                 console.error('登录请求异常', err);
             });
     });
@@ -325,6 +334,15 @@ const registerFormEl = document.getElementById('registerForm');
 if (registerFormEl) {
     registerFormEl.addEventListener('submit', function (e) {
         e.preventDefault();
+        if (isAuthProcessing) {
+            Utils.showMessage('正在提交，请稍候...', 'info');
+            return;
+        }
+        isAuthProcessing = true;
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        if (loginTab) loginTab.disabled = true;
+        if (registerTab) registerTab.disabled = true;
         // 处理注册逻辑
         const identity = document.getElementById('regIdentity').value;
         const username = document.getElementById('regUsername').value;
@@ -335,14 +353,24 @@ if (registerFormEl) {
 
         // 简单验证
         if (password !== confirmPassword) {
-            alert('两次输入的密码不一致');
+            Utils.showMessage('两次输入的密码不一致', 'warning');
             console.warn('注册失败：两次密码不一致', { password, confirmPassword });
+            isAuthProcessing = false;
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            if (loginTab) loginTab.disabled = false;
+            if (registerTab) registerTab.disabled = false;
             return;
         }
 
         if (!manualLocation && !autoLocation) {
-            alert('请填写位置信息');
+            Utils.showMessage('请填写位置信息', 'warning');
             console.warn('注册失败：未填写位置信息', { manualLocation, autoLocation });
+            isAuthProcessing = false;
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            if (loginTab) loginTab.disabled = false;
+            if (registerTab) registerTab.disabled = false;
             return;
         }
 
@@ -366,8 +394,13 @@ if (registerFormEl) {
             .then(data => {
                 console.log('register: user_register response json', data);
                 if (data.code !== 200) {
-                    alert(data.error || '注册失败');
+                    Utils.showMessage(data.error || '注册失败', 'error');
                     console.error('注册失败：后端返回非200', data);
+                    isAuthProcessing = false;
+                    const loginTab = document.getElementById('loginTab');
+                    const registerTab = document.getElementById('registerTab');
+                    if (loginTab) loginTab.disabled = false;
+                    if (registerTab) registerTab.disabled = false;
                     return Promise.reject('register failed');
                 }
                 // 注册成功后自动登录
@@ -389,9 +422,14 @@ if (registerFormEl) {
             .then(data => {
                 console.log('register: login result json', data);
                 if (!data || data.code !== 200) {
-                    alert(data.error || '注册成功，但自动登录失败');
+                    Utils.showMessage(data.error || '注册成功，但自动登录失败', 'warning');
                     console.error('注册成功，但自动登录失败', data);
-                    switchTab('login');
+                    // 不自动切换到登录，允许用户留在注册表单并重试
+                    isAuthProcessing = false;
+                    const loginTab = document.getElementById('loginTab');
+                    const registerTab = document.getElementById('registerTab');
+                    if (loginTab) loginTab.disabled = false;
+                    if (registerTab) registerTab.disabled = false;
                     return;
                 }
                 let user = null;
@@ -400,30 +438,41 @@ if (registerFormEl) {
                 }
                 console.log('register: 自动登录返回 user', user);
                 if (!user) {
-                    alert('注册成功，但自动登录成功后未返回用户信息');
+                    Utils.showMessage('注册成功，但自动登录未返回用户信息', 'warning');
                     console.error('自动登录成功后未返回用户信息', data);
-                    switchTab('login');
+                    isAuthProcessing = false;
+                    const loginTab = document.getElementById('loginTab');
+                    const registerTab = document.getElementById('registerTab');
+                    if (loginTab) loginTab.disabled = false;
+                    if (registerTab) registerTab.disabled = false;
                     return;
                 }
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 console.log('register: localStorage 写入 currentUser', user);
                 Swal.fire({
-                icon: 'success', // 图标：success/error/warning/info
-                title: '注册成功',
-                text: '已自动登录，即将跳转到首页',
-                timer: 2000, // 2秒后自动关闭
-                showConfirmButton: false, // 不显示确认按钮
-                position: 'top' // 显示位置
+                    icon: 'success', // 图标：success/error/warning/info
+                    title: '注册成功',
+                    text: '已自动登录，即将跳转到首页',
+                    timer: 2000, // 2秒后自动关闭
+                    showConfirmButton: false, // 不显示确认按钮
+                    position: 'top' // 显示位置
+                }).then(() => {
+                    // 在提示关闭后再跳转，确保用户能看到信息
+                    window.location.href = LOGIN_REDIRECT_URL;
+                    console.log('register: 页面跳转到', LOGIN_REDIRECT_URL);
                 });
-                window.location.href = LOGIN_REDIRECT_URL;
-                console.log('register: 页面跳转到', LOGIN_REDIRECT_URL);
               
             })
             .catch((err) => {
                 if (err !== 'register failed') {
-                    alert('注册请求失败');
+                    Utils.showMessage('注册请求失败，请检查网络或稍后重试', 'error');
                     console.error('注册请求异常', err);
                 }
+                isAuthProcessing = false;
+                const loginTab = document.getElementById('loginTab');
+                const registerTab = document.getElementById('registerTab');
+                if (loginTab) loginTab.disabled = false;
+                if (registerTab) registerTab.disabled = false;
             });
     });
 }
@@ -503,6 +552,11 @@ const Utils = {
         document.head.appendChild(style);
     }
 };
+
+// 将 Utils 暴露到 window，保证页面脚本能通过 window.Utils 调用统一的消息接口
+if (typeof window !== 'undefined') {
+    window.Utils = Utils;
+}
 
 function setActiveNavLink() {
     const currentPath = window.location.pathname;

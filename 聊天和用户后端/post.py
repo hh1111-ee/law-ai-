@@ -1,14 +1,16 @@
 import datetime
 import pickle
+
+
 class Post:
     def __init__(self, id, author, title, content, section, time=None):
-        self.id = id  # 帖子唯一ID
-        self.author = author  # 作者用户名或User对象
+        self.id = id
+        self.author = author
         self.title = title
         self.content = content
-        self.section = section  # 板块名
+        self.section = section
         self.time = time if time else datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.comments = []  # 评论列表
+        self.comments = []
 
     def add_comment(self, comment):
         self.comments.append(comment)
@@ -24,11 +26,12 @@ class Post:
             'comments': [c.to_dict() for c in self.comments]
         }
 
+
 class Comment:
     def __init__(self, id, post_id, author, content, time=None):
-        self.id = id  # 评论唯一ID
-        self.post_id = post_id  # 所属帖子ID
-        self.author = author  # 作者用户名或User对象
+        self.id = id
+        self.post_id = post_id
+        self.author = author
         self.content = content
         self.time = time if time else datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -40,6 +43,7 @@ class Comment:
             'content': self.content,
             'time': self.time
         }
+
 
 class PostManage:
     def __init__(self):
@@ -75,12 +79,14 @@ class PostManage:
 
     def to_dict(self):
         return [p.to_dict() for p in self.post_list]
+
     def save_posts(self, filename):
         try:
             with open(filename, 'wb') as f:
                 pickle.dump(self.post_list, f)
         except Exception as e:
             print(f"Error saving posts: {e}")
+
     def load_posts(self, filename):
         try:
             with open(filename, 'rb') as f:
