@@ -1,6 +1,6 @@
 (function() {
     // ---------- 配置 ----------
-    const API_BASE = window.API_BASE || 'http://localhost:8000';
+    const API_BASE = (window.API_BASE || '').toString().trim();
 
     // ---------- DOM 元素 ----------
     const searchInput = document.getElementById('searchInput');
@@ -16,9 +16,21 @@
     // ---------- 辅助函数：请求封装 ----------
     async function fetchAPI(url, params = {}) {
         const query = new URLSearchParams(params).toString();
-        const fullUrl = (API_BASE ? API_BASE.replace(/\/$/, '') : '') + url + (query ? '?' + query : '');
+        const winBase = (window.API_BASE || '').toString().trim();
+        let base = '';
+        if (winBase) base = winBase.replace(/\/$/, '');
+        else {
+            const proto = location && location.protocol === 'https:' ? 'https:' : 'http:';
+            const host = (location && location.hostname && !location.hostname.startsWith('localhost') && !location.hostname.startsWith('127.')) ? `api.${location.hostname}` : 'localhost:8000';
+            base = `${proto}//${host}`;
+        }
+        const fullUrl = base + url + (query ? '?' + query : '');
+        console.debug('[case_analysis] fetch', fullUrl);
         const res = await fetch(fullUrl);
-        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        if (!res.ok) {
+            console.error('[case_analysis] fetch failed', fullUrl, res.status, await res.text().catch(()=>''));
+            throw new Error(`HTTP error ${res.status}`);
+        }
         return await res.json();
     }
 

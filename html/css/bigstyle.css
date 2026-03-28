@@ -268,9 +268,10 @@ body {
 
 /* 主要内容区域 */
 main {
-    max-width: 1200px;
+    max-width: 1400px; /* 增加最大宽度，减少两侧空白 */
+    width: 95%; /* 确保在小屏幕上有边距 */
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 0; /* 移除左右 padding，让内部模块控制 */
 }
 
 /* 欢迎横幅样式 */
@@ -398,7 +399,10 @@ main {
 
 .identity-selection {
     margin-bottom: 1.5rem;
+
 }
+
+/* (module styles moved to html/css/home_modules.css) */
 
 .identity-selection label {
     display: block;
@@ -571,6 +575,19 @@ footer {
 .footer-links a:hover {
     color: var(--white);
 }
+
+/* footer-minimal: ensure site-wide footer style even if home_modules.css not loaded */
+.footer-minimal{
+    text-align:center;
+    padding:2rem;
+    color:var(--white);
+    font-size:0.95rem;
+    background: linear-gradient(to right, var(--dark-blue), var(--primary-blue));
+    margin-top: 3rem;
+    border-radius: 0;
+}
+.footer-minimal a { color: var(--light-purple); text-decoration: none; margin: 0 1rem; transition: color 0.3s ease; }
+.footer-minimal a:hover { color: var(--white); }
 
 /* 通用容器与次级按钮 */
 .container {
@@ -1214,4 +1231,22 @@ footer {
     .btn-next {
         width: 100%;
     }
+}
+
+/* 全站 logo 字体与样式（用于统一导航标题美化） */
+@font-face {
+    font-family: 'Noto Sans SC';
+    src: url('../fonts/NotoSansSC-Black.woff2') format('woff2'),
+         url('../fonts/NotoSansSC-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+.logo-title {
+    font-family: 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+    font-size: 1.65rem; /* 48px on desktop may be too large across pages; use responsive size */
+    color: var(--white);
+    letter-spacing: 0.5px;
 }

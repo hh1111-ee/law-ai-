@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>法律咨询 - AI法律平台</title>
-    <link rel="stylesheet" href="css\bigstyle.css">
+    <link rel="stylesheet" href="css/bigstyle.css">
+    <link rel="stylesheet" href="css/home_modules.css">
     <style>
         .consultation-container {
             max-width: 1200px;
@@ -311,6 +312,39 @@
             --text-dark: #333333;
             --light-gray: #f5f7fa;
         }
+
+        /* 顶部两栏布局（定位卡 + 搜索） */
+        .top-row{
+            display:flex;
+            gap:20px;
+            align-items:flex-start;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+        .location-card{
+            flex:0 0 320px;
+            max-width: 36%;
+            min-width: 260px;
+        }
+        .search-card{
+            flex:1 1 560px;
+            min-width: 280px;
+        }
+
+        /* 卡片样式微调 */
+        .location-section, .search-section{
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            border-radius: 12px;
+            padding: 18px;
+            background: var(--white);
+        }
+
+        /* 移动端：改为垂直堆叠 */
+        @media (max-width: 800px){
+            .location-card, .search-card{ flex: 1 1 100%; max-width:100%; }
+            .top-row{ gap:12px; }
+            .logo-title{ font-size: 1.4rem; }
+        }
     </style>
     <script src="js/app_config.js"></script>
 </head>
@@ -318,14 +352,15 @@
     <header>
         <nav class="navbar">
             <div class="nav-brand">
-                <h2>AI法律平台</h2>
+                <h2 class="logo-title">维律</h2>
             </div>
             <ul class="nav-menu">
                 <li><a href="主页.html">首页</a></li>
-                <li><a href="法律咨询.html">法律咨询</a></li>
-                <li><a href="案例分析.html">案例分析</a></li>
-                <li><a href="法律文书.html">法律文书</a></li>
-                <li><a href="关于我们.html">关于我们</a></li>
+                <li><a href="公聊社区.html">论坛群组互助</a></li>
+                <li><a href="ai小助手.html">智能法律助手</a></li>
+                <li><a href="法律咨询.html">法律条例推荐</a></li>
+                <li><a href="案例分析.html">个性案例分析</a></li>
+                <li><a href="诉讼流程.html">诉讼流程详解</a></li>
             </ul>
             <div class="nav-user" data-user-nav>
                 <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
@@ -356,8 +391,21 @@
     <main>
         <div class="consultation-container">
             <h2 style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem;">法律咨询服务</h2>
-            <!--搜索区域-->>
-            <section class="search-section">
+            <!-- 顶部两栏：定位卡 + 搜索区域（响应式显示为左右两栏） -->
+            <div class="top-row">
+                <aside class="location-card">
+                    <section class="location-section">
+                        <h3>获取您的位置信息</h3>
+                        <div class="location-info">
+                            <span class="location-text" id="currentLocation">正在获取位置信息...</span>
+                            <button class="location-btn" id="getLocationBtn">重新获取</button>
+                        </div>
+                        <p>我们将根据您的位置推荐当地的相关法律法规和案例</p>
+                    </section>
+                </aside>
+
+                <main class="search-card">
+                    <section class="search-section">
                 <h3>国家法律数据库搜索</h3>
                 <p>在中国国家法律数据库中搜索相关法条</p>
                 <form class="search-form" id="legalSearchForm">
@@ -373,16 +421,16 @@
                     <!-- 分页控件 -->
                     <div class="pagination" id="pagination"></div>
                 </div>
-            </section>
-            <!-- 位置信息区域 -->
-            <section class="location-section">
-                <h3>获取您的位置信息</h3>
-                <div class="location-info">
-                    <span class="location-text" id="currentLocation">正在获取位置信息...</span>
-                    <button class="location-btn" id="getLocationBtn">重新获取</button>
-                </div>
-                <p>我们将根据您的位置推荐当地的相关法律法规和案例</p>
-            </section>
+                    <!-- 新增搜索结果展示容器 -->
+                    <div class="search-results" id="searchResults">
+                        <h4>搜索结果：<span id="searchKeyword"></span></h4>
+                        <div id="resultsList"></div>
+                        <!-- 分页控件 -->
+                        <div class="pagination" id="pagination"></div>
+                    </div>
+                </section>
+            </main>
+            </div>
             <section class="laws-section">
                 <h3 class="recommendations-title">根据您的位置推荐的法律法规</h3>
                 <div class="laws-grid" id="recommendedLaws">
@@ -459,8 +507,8 @@
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 AI法律平台. 版权所有</p>
+    <footer class="footer-minimal">
+        <p>&copy; 2026 AI法律平台-维律. 版权所有</p>
         <div class="footer-links">
             <a href="#">隐私政策</a>
             <a href="#">使用条款</a>
@@ -469,7 +517,7 @@
         </div>
     </footer>
 
-    <script src="js\luoji.js"></script>
+    <script src="js/luoji.js"></script>
     <script>
     const DEFAULT_PAGE_SIZE = 5;
 

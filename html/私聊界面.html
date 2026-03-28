@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>私聊功能 - AI+物业管理 | AI法律平台</title>
-    <link rel="stylesheet" href="css\bigstyle.css">
+    <link rel="stylesheet" href="css/bigstyle.css">
+    <link rel="stylesheet" href="css/home_modules.css">
     <style>
         /* 私聊界面主题 */
         :root {
@@ -18,8 +19,6 @@
         }
         
         body {
-    <script src="js/app_config.js"></script>
-</head>
             font-family: 'Arial', '微软雅黑', sans-serif;
             height: 100vh;
             display: flex;
@@ -474,14 +473,15 @@
     <header class="private-header">
         <nav class="navbar">
             <div class="nav-brand">
-                <h2>AI法律平台</h2>
+                <h2 class="logo-title">维律</h2>
             </div>
             <ul class="nav-menu">
                 <li><a href="主页.html">首页</a></li>
-                <li><a href="法律咨询.html">法律咨询</a></li>
-                <li><a href="ai小助手.html">AI咨询</a></li>
-                <li><a href="公聊社区.html">社区</a></li>
-                <li><a href="私聊界面.html" class="active">私聊功能</a></li>
+                <li><a href="公聊社区.html">论坛群组互助</a></li>
+                <li><a href="ai小助手.html">智能法律助手</a></li>
+                <li><a href="法律咨询.html">法律条例推荐</a></li>
+                <li><a href="案例分析.html">个性案例分析</a></li>
+                <li><a href="诉讼流程.html">诉讼流程详解</a></li>
             </ul>
             <div class="nav-user" data-user-nav>
                 <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
@@ -580,8 +580,8 @@
     </div>
 
     <!-- 使用与主页一致的页脚 -->
-    <footer>
-        <p>&copy; 2026 AI法律平台. 版权所有</p>
+    <footer class="footer-minimal">
+        <p>&copy; 2026 AI法律平台-维律. 版权所有</p>
         <div class="footer-links">
             <a href="#">隐私政策</a>
             <a href="#">使用条款</a>
@@ -603,13 +603,25 @@
                 </div>
             </div>
     <!-- 保持原有JavaScript功能 -->
-    <script src="js\luoji.js"></script>
+    <script src="js/app_config.js"></script>
+    <script src="js/luoji.js"></script>
     <script>
     // 页面专用命名空间，避免与逻辑.js冲突
     (function () {
-        const PAGE_API_BASE = window.API_BASE || 'http://localhost:8000';
+        const PAGE_API_BASE = window.API_BASE || '';
         // WebSocket 与 API 统一到合并后的端口
-        const WS_BASE = 'ws://localhost:8000/ws/private';
+        let WS_BASE = '';
+        try{
+            if(window.API_BASE && window.API_BASE.trim()){
+                const u = new URL(window.API_BASE, location.origin);
+                const proto = (u.protocol === 'https:' ? 'wss:' : 'ws:');
+                WS_BASE = proto + '//' + u.host + '/ws/private';
+            }else{
+                WS_BASE = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/private';
+            }
+        }catch(e){
+            WS_BASE = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/private';
+        }
         const sampleUsers = [
             { id: 1, name: "李律师", role: "律师", avatar: "李", colorClass: "user2", status: "在线", lastMessage: "关于您的物业纠纷案，我建议...", time: "10:30", unread: 2 },
             { id: 2, name: "张物业经理", role: "物业", avatar: "张", colorClass: "user3", status: "在线", lastMessage: "您反映的漏水问题我们已经派人处理", time: "昨天", unread: 0 },

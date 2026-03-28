@@ -1,4 +1,4 @@
-import atexit
+from contextlib import asynccontextmanager
 import threading
 import asyncio
 import json
@@ -11,10 +11,20 @@ from typing import Dict, List, Optional, Tuple
 import requests
 import datetime
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+import uuid
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from openpyxl import load_workbook
 import pandas as pd
+
+# ======================================================
+# Combined_server.py
+# 主服务：处理聊天、用户、群组和帖子管理的 FastAPI 应用。
+# - 持久化采用本地 pickle 文件（演示/开发级别）。
+# - 将阻塞的模型调用移到线程池以避免阻塞事件循环。
+# - 所有磁盘写操作在全局线程锁下进行以避免并发写入冲突。
+# 本文件侧重于可读性与可维护性，注释均为中文以方便本地开发阅读。
+# ======================================================
 
 
 # 让BASE_DIR指向上一级目录（主目录）
@@ -25,7 +35,7 @@ if CHAT_BACKEND_DIR not in sys.path:
     sys.path.append(CHAT_BACKEND_DIR)
 
 from ChatMessage import MessageManage as MsgMgr  # noqa: E402
-from ChatMessage import personalChatMessage  # noqa: E402
+from ChatMessage import personalChatMessage, groupChatMessage  # noqa: E402
 from group import groupManage as GroupMgr  # noqa: E402
 from post import PostManage  # noqa: E402
 from user import user as UserClass  # noqa: E402
@@ -67,7 +77,33 @@ CASES_FILE = os.path.join(BASE_DIR, "数据", "案号.xlsx")
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 # ===================== 业务对象 =====================
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    使用 FastAPI 的 lifespan 协调应用的启动与关闭。
+
+    - 启动时在后台线程加载所有数据（避免阻塞事件循环）。
+    - 关闭时记录 PID 并在后台线程执行一次性保存（调用 save_all_data_on_exit）。
+    这样可以更集中地管理进程生命周期与日志，便于在多进程/热重载场景中排查哪个进程执行了保存操作。
+    """
+    try:
+        await asyncio.to_thread(load_all_data_on_start)
+        logger.info("Startup: 数据加载完成（PID=%s）", os.getpid())
+    except Exception:
+        logger.exception("Startup: 加载数据失败")
+    try:
+        yield
+    finally:
+        try:
+            pid = os.getpid()
+            logger.info("Shutdown: PID=%s 开始保存数据", pid)
+            await asyncio.to_thread(save_all_data_on_exit)
+            logger.info("Shutdown: PID=%s 保存数据完成", pid)
+        except Exception:
+            logger.exception("Shutdown: 保存数据失败")
+
+
+app = FastAPI(lifespan=lifespan)
 
 msg_manager = MsgMgr()
 user_manager = UserMgr()
@@ -83,6 +119,28 @@ MODEL_CONCURRENCY = 2
 model_semaphore = asyncio.Semaphore(MODEL_CONCURRENCY)
 
 
+# Helpers: run blocking save operations in threadpool while holding write_lock
+def _locked_exec(func, *args, **kwargs):
+    """
+    在持有模块级 `write_lock`（threading.Lock）的情况下，同步执行
+    `func(*args, **kwargs)`。
+
+    该函数设计为在后台线程中运行（例如通过 `asyncio.to_thread`），
+    将锁的获取集中在这里可以统一控制对磁盘写入的互斥访问。
+    """
+    with write_lock:
+        return func(*args, **kwargs)
+
+async def run_in_thread_with_lock(func, *args, **kwargs):
+    """
+    将同步可调用对象下放到后台线程执行，同时保证执行期间持有
+    全局的 `write_lock`。
+
+    用法示例：`await run_in_thread_with_lock(some_manager.save, filename)`
+    """
+    return await asyncio.to_thread(_locked_exec, func, *args, **kwargs)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -90,6 +148,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# 处理 CORS 预检请求（OPTIONS），捕获所有路径的预检请求并返回 200
+@app.options("/{path:path}")
+async def preflight_handler(path: str, request: Request):
+    """
+    统一响应浏览器的 CORS 预检请求。CORS 中间件会自动添加必要响应头。
+    """
+    return JSONResponse(content={}, status_code=200)
 
 # ===================== 工具函数 =====================
 
@@ -99,25 +166,45 @@ _save_exit_called = False
 # 用于保护数据缓存的异步锁
 _data_cache_lock = asyncio.Lock()
 
-
+4
 def ensure_file_exists(filename: str) -> None:
+    """
+    确保指定路径的文件存在；如果不存在则创建一个空文件。
+
+    说明：提前创建空文件可以简化后续的加载逻辑，使其无需在每处
+    都先判断文件是否存在。
+    """
     if not os.path.exists(filename):
+        # Create parent dir if necessary
+        parent = os.path.dirname(filename)
+        if parent and not os.path.exists(parent):
+            os.makedirs(parent, exist_ok=True)
         with open(filename, "wb"):
             pass
         logger.info("创建空数据文件：%s", filename)
 
 
 def return_error(message: str, code: int = 400, request_data: Optional[Dict] = None) -> JSONResponse:
-    error_info = {
-        "code": code,
-        "error": message,
-        "request_data": request_data or {},
-    }
-    logger.error("接口错误：%s，请求参数：%s", message, error_info["request_data"])
-    return JSONResponse(status_code=code, content=error_info)
+        """
+        统一的错误 JSON 响应构造器，供各 API 接口使用。
+
+        - `message`：可读的错误描述。
+        - `code`：HTTP 状态码，同时写入返回体的 `code` 字段。
+        - `request_data`：可选的请求数据，便于日志和调试。
+        """
+        error_info = {
+            "code": code,
+            "error": message,
+            "request_data": request_data or {},
+        }
+        logger.error("接口错误：%s，请求参数：%s", message, error_info["request_data"])
+        return JSONResponse(status_code=code, content=error_info)
 
 
 def return_success(data: Optional[Dict] = None, message: str = "操作成功") -> JSONResponse:
+    """
+    统一的成功 JSON 响应构造器。
+    """
     success_info = {
         "code": 200,
         "message": message,
@@ -128,31 +215,42 @@ def return_success(data: Optional[Dict] = None, message: str = "操作成功") -
 
 
 def load_all_data_on_start() -> None:
+    """
+    在应用启动时将所有持久化数据加载到内存中。
+
+    函数会确保每个预期的持久化文件存在，然后调用各自的管理器
+    进行反序列化加载。遇到错误仅记录日志，不会抛出，以便服务器
+    在数据不完整时仍能启动用于开发/调试。
+    """
     ensure_file_exists(PERSONAL_MSG_FILE)
     ensure_file_exists(GROUP_MSG_FILE)
     ensure_file_exists(USER_FILE)
     ensure_file_exists(GROUP_FILE)
     ensure_file_exists(POST_FILE)
 
+    # 加载已持久化的消息与数据，各管理器负责自己的反序列化与完整性校验。
     msg_manager.load_personal_messages(PERSONAL_MSG_FILE)
-    
-    # 加载案例数据
+
+    # 将 Excel 案例数据加载为 pandas DataFrame，用于检索与展示
     global cases_df
     try:
         if os.path.exists(CASES_FILE):
-            cases_df = pd.read_excel(CASES_FILE, dtype=str).fillna('')
-            logger.info(f"✅ 成功加载 {len(cases_df)} 条案例")
+            cases_df = pd.read_excel(CASES_FILE, dtype=str).fillna("")
+            logger.info("✅ 成功加载 %s 条案例", len(cases_df))
         else:
-            logger.warning(f"❌ 案号文件不存在: {CASES_FILE}")
+            logger.warning("❌ 案号文件不存在: %s", CASES_FILE)
             cases_df = pd.DataFrame()
     except Exception as e:
-        logger.error(f"❌ 加载 Excel 失败: {e}", exc_info=True)
+        logger.error("❌ 加载 Excel 失败: %s", e, exc_info=True)
         cases_df = pd.DataFrame()
 
+    # 继续加载其余持久化结构
     msg_manager.load_group_messages(GROUP_MSG_FILE)
     user_manager.load_users(USER_FILE)
     group_manager.load_groups(GROUP_FILE)
     post_manager.load_posts(POST_FILE)
+
+    # 输出已加载用户的简要信息，便于运维查看
     for user in user_manager.user_list:
         logger.info(
             "加载用户：%s，状态：%s，好友数：%s",
@@ -164,6 +262,12 @@ def load_all_data_on_start() -> None:
 
 
 def save_all_data_on_exit() -> None:
+    """
+    将内存中的所有数据保存到磁盘。该函数可被多次调用，但仅第一次
+    会执行保存操作（通过 `_save_exit_called` 进行保护）。
+
+    保存操作在 `write_lock` 下执行，以在关闭时提供单一的磁盘写入序列化点。
+    """
     global _save_exit_called
     if _save_exit_called:
         logger.warning("save_all_data_on_exit 已被调用，跳过重复保存")
@@ -185,18 +289,26 @@ def save_all_data_on_exit() -> None:
 
 
 def _safe_text(value) -> str:
+    """将任意值规范为去除首尾空白的字符串；None 返回空字符串。"""
     if value is None:
         return ""
     return str(value).strip()
 
 
 def _load_excel_rows() -> List[Dict[str, str]]:
+    """
+    从 `DATA_PATH` 指定的 Excel 文件加载行，并转换为字典列表，
+    每项包含 'region'、'url'、'name' 三个字段，空行将被忽略。
+    """
     if not os.path.exists(DATA_PATH):
         logger.warning("数据文件不存在: %s", DATA_PATH)
         return []
 
     workbook = load_workbook(DATA_PATH, read_only=True, data_only=True)
     sheet = workbook.active
+    if sheet is None:
+        logger.warning("Excel 表格未找到活动工作表: %s", DATA_PATH)
+        return []
     rows: List[Dict[str, str]] = []
 
     for row in sheet.iter_rows(min_row=2, max_col=3, values_only=True):
@@ -226,6 +338,11 @@ async def get_data_rows() -> List[Dict[str, str]]:
 
 
 def resolve_location(payload: Dict) -> Dict[str, str]:
+    """
+    从请求 payload 中解析用户位置信息，支持多种输入形式（顶层字段
+    或嵌套的 `location` 字典）。返回包含 `province` 和 `city` 的字典；
+    若省份缺失，默认返回 "全国"，城市会回退为省份。
+    """
     location = payload.get("location") or {}
     province = _safe_text(payload.get("province") or location.get("province"))
     city = _safe_text(payload.get("city") or location.get("city"))
@@ -241,6 +358,10 @@ def resolve_location(payload: Dict) -> Dict[str, str]:
 
 
 def build_results(rows: List[Dict[str, str]], keyword: str) -> List[Dict[str, str]]:
+    """
+    按关键字过滤 `rows`，关键字可匹配 'name' 或 'region' 字段（不区分大小写），
+    返回供 API 使用的标准化结果列表。
+    """
     keyword_lower = keyword.lower()
     results: List[Dict[str, str]] = []
 
@@ -259,6 +380,7 @@ def build_results(rows: List[Dict[str, str]], keyword: str) -> List[Dict[str, st
 
 
 def paginate_results(results: List[Dict[str, str]], page: int, page_size: int) -> Dict[str, object]:
+    """简易分页辅助：约束 `page` 和 `page_size` 的合理范围并返回切片结果。"""
     page = max(page, 1)
     page_size = max(min(page_size, 50), 1)
     total = len(results)
@@ -273,6 +395,11 @@ def paginate_results(results: List[Dict[str, str]], page: int, page_size: int) -
 
 
 def build_recommended(rows: List[Dict[str, str]], location: Dict[str, str]) -> List[Dict[str, str]]: 
+    """
+    根据 `location` 构建简短的推荐列表。
+
+    通过 (name, url) 去重，最多返回 6 条结果。
+    """
     province = location.get("province", "")
     city = location.get("city", "")
 
@@ -303,6 +430,11 @@ def build_recommended(rows: List[Dict[str, str]], location: Dict[str, str]) -> L
 
 
 def send_personal_message_logic(sender_name: str, receiver_name: str, content: str, timestamp: str) -> Tuple[bool, str]:
+    """
+    校验发送者和接收者是否存在，创建 `personalChatMessage` 并添加到
+    消息管理器中。消息的持久化由调用方异步触发，以避免在请求或
+    WebSocket 主循环中执行阻塞 IO。
+    """
     sender = user_manager.find_user(sender_name)
     receiver = user_manager.find_user(receiver_name)
 
@@ -313,30 +445,36 @@ def send_personal_message_logic(sender_name: str, receiver_name: str, content: s
 
     message = personalChatMessage(sender, receiver, content, timestamp)
     msg_manager.add_personal_message(message)
-    try:
-        msg_manager.save_personal_messages(PERSONAL_MSG_FILE)
-        logger.info("发送私信后个人消息已保存：%s", PERSONAL_MSG_FILE)
-    except Exception as exc:
-        logger.error("发送私信后保存个人消息失败：%s", exc, exc_info=True)
 
+    # Persistence (disk write) should be triggered by the caller as a
+    # background task. This keeps the hot path responsive.
     return True, "私信发送成功"
 
 
 class ConnectionManager:
     def __init__(self) -> None:
+        """管理按 `user_id` 索引的活动 WebSocket 连接。
+
+        说明：此管理器为轻量实现，直接保存 `WebSocket` 对象；当应用
+        水平扩展到多进程或多容器时，应替换为共享的 pub/sub 或实时层。
+        """
         self.active_connections: Dict[str, WebSocket] = {}
 
     async def connect(self, user_id: str, websocket: WebSocket) -> None:
+        # 接受来自客户端的 WebSocket 连接，并注册以便后续发送消息。
         await websocket.accept()
         self.active_connections[user_id] = websocket
         logger.info("用户 %s 建立WebSocket连接，当前活跃连接数：%s", user_id, len(self.active_connections))
 
     def disconnect(self, user_id: str) -> None:
+        # 从活动连接表中移除用户的 WebSocket。该方法为同步调用，便于在
+        # 清理路径中直接调用。
         if user_id in self.active_connections:
             self.active_connections.pop(user_id, None)
             logger.info("用户 %s 断开WebSocket连接，当前活跃连接数：%s", user_id, len(self.active_connections))
 
     async def send_to_user(self, user_id: str, message: Dict) -> None:
+        # 向已连接的用户发送可序列化为 JSON 的消息；若连接不存在则记录日志并返回。
         websocket = self.active_connections.get(user_id)
         if not websocket:
             logger.warning("用户 %s 无活跃WebSocket连接，消息发送失败：%s", user_id, message)
@@ -355,15 +493,11 @@ async def _get_payload(request: Request) -> Optional[Dict]:
         return None
 
 
-@app.on_event("startup")
-async def _startup() -> None:
-    load_all_data_on_start()
 
 
-_atexit_registered = False
-if not _atexit_registered:
-    atexit.register(save_all_data_on_exit)
-    _atexit_registered = True
+
+# 使用 FastAPI 生命周期钩子替代模块级的 atexit 注册，以避免在
+# 使用自动重载或多进程启动器时出现重复注册/多次保存的问题。
 
 
 # 全局异常处理器，统一返回友好错误信息
@@ -428,14 +562,8 @@ async def get_cases(search: str = "", keyword: str = ""):
         logger.error(f"Error getting cases: {e}")
         return []
 
-async def handle_global_exception(request: Request, exc: Exception):
-    error_msg = f"服务器内部错误：{exc}"
-    logger.error(error_msg, exc_info=True)
-    payload = await _get_payload(request) or dict(request.query_params)
-    return JSONResponse(
-        status_code=500,
-        content={"code": 500, "error": error_msg, "request_data": payload},
-    )
+# 已在文件顶部注册的全局异常处理器将处理所有未捕获异常，
+# 避免在文件中重复定义同名处理函数导致覆盖或类型提示冲突。
 
 
 @app.get("/")
@@ -446,7 +574,8 @@ async def root():
 @app.get("/config")
 async def get_config():
     # 返回前端可读取的运行时配置（可根据部署环境修改）
-    return JSONResponse(content={"API_BASE": "http://localhost:8000"})
+    # 在生产/HTTPS 环境下，前端应使用相对路径以避免混合内容被浏览器阻止
+    return JSONResponse(content={"API_BASE": ""})
 
 
 @app.post("/load_all_data")
@@ -472,7 +601,7 @@ async def user_register(request: Request):
     data = await _get_payload(request)
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
-
+    userid=data.get("id")
     username = data.get("username")
     identity = data.get("identity")
     password = data.get("password")
@@ -480,6 +609,8 @@ async def user_register(request: Request):
     role = data.get("role") or identity
 
     missing_fields = []
+    if not userid:
+        missing_fields.append("用户ID(id)")
     if not username:
         missing_fields.append("用户名(username)")
     if not identity:
@@ -496,16 +627,18 @@ async def user_register(request: Request):
         return return_error(f"注册失败：用户名「{username}」已存在", 400)
 
     try:
-        new_user = UserClass(username, identity, password, location, role)
+        # 注册必须提供 id（作为账号）
+        new_user = UserClass(userid, username, identity, password, location, role)
         user_manager.add_user(new_user)
         logger.info("用户注册成功：%s，身份：%s，位置：%s", username, identity, location)
         try:
-            with write_lock:
-                user_manager.save_users(USER_FILE)
+            await run_in_thread_with_lock(user_manager.save_users, USER_FILE)
             logger.info("注册后用户数据已保存：%s", USER_FILE)
         except Exception as exc:
             logger.error("注册后保存用户数据失败：%s", exc, exc_info=True)
-        return return_success(data={"user": new_user.get_profile()}, message=f"用户「{username}」注册成功")
+        profile = new_user.get_profile()
+        profile['id'] = getattr(new_user, 'id', userid)
+        return return_success(data={"user": profile}, message=f"用户「{username}」注册成功")
     except Exception as exc:
         return return_error(f"用户「{username}」注册失败：{exc}", 500)
 
@@ -516,25 +649,30 @@ async def user_login(request: Request):
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
-    username = data.get("username")
+    userid = data.get("id")
     password = data.get("password")
 
-    if not username:
-        return return_error("登录失败：缺少用户名(username)参数")
+    if not userid:
+        return return_error("登录失败：缺少用户ID(id)参数")
     if not password:
         return return_error("登录失败：缺少密码(password)参数")
 
-    user_obj = user_manager.find_user(username)
+    user_obj = None
+    for u in user_manager.user_list:
+        if getattr(u, 'id', None) == userid:
+            user_obj = u
+            break
     if not user_obj:
-        return return_error(f"登录失败：用户名「{username}」不存在", 401)
+        return return_error(f"登录失败：用户ID「{userid}」不存在", 401)
 
     if user_obj.password != password:
-        return return_error(f"登录失败：用户名「{username}」的密码错误", 401)
+        return return_error(f"登录失败：用户ID「{userid}」的密码错误", 401)
 
     user_obj.set_state("online")
     profile = user_obj.get_profile()
     profile.pop("password", None)
-    return return_success(data={"user": profile}, message=f"用户「{username}」登录成功")
+    profile['id'] = getattr(user_obj, 'id', None)
+    return return_success(data={"user": profile}, message=f"用户登录成功")
 
 
 @app.post("/user_friends")
@@ -562,14 +700,25 @@ async def user_state_search(request: Request):
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
     username = data.get("username")
-    if not username:
-        return return_error("查询失败：缺少用户名(username)参数")
+    userid = data.get("id")
+    if not username and not userid:
+        return return_error("查询失败：缺少用户名(username)或用户ID(id)参数")
 
-    user_in_state = [u.get_profile() for u in user_manager.user_list if u.username == username]
+    user_in_state = []
+    for u in user_manager.user_list:
+        if username and getattr(u, 'username', None) == username:
+            p = u.get_profile()
+            p['id'] = getattr(u, 'id', None)
+            user_in_state.append(p)
+        elif userid and getattr(u, 'id', None) == userid:
+            p = u.get_profile()
+            p['id'] = getattr(u, 'id', None)
+            user_in_state.append(p)
+
     if not user_in_state:
-        return return_error(f"查询失败：未找到用户名「{username}」的用户信息", 404)
+        return return_error(f"查询失败：未找到对应的用户信息", 404)
 
-    return return_success(data={"users": user_in_state}, message=f"查询到用户「{username}」的状态信息")
+    return return_success(data={"users": user_in_state}, message="查询到用户的状态信息")
 
 
 @app.post("/send_personal_message")
@@ -596,9 +745,18 @@ async def send_personal_message(request: Request):
     if missing_fields:
         return return_error(f"发送私信失败：缺少必填参数 - {', '.join(missing_fields)}")
 
+    # 类型断言：上方已验证必填字段存在，向类型检查器表明它们为 str
+    assert isinstance(sender_name, str) and isinstance(receiver_name, str) and isinstance(content, str) and isinstance(timestamp, str)
+
     ok, message = send_personal_message_logic(sender_name, receiver_name, content, timestamp)
     if not ok:
         return return_error(f"发送私信失败：{message}", 404)
+
+    # 异步保存消息，避免阻塞当前请求
+    try:
+        asyncio.create_task(run_in_thread_with_lock(msg_manager.save_personal_messages, PERSONAL_MSG_FILE))
+    except Exception:
+        logger.exception("异步保存私信消息任务创建失败")
 
     return return_success(message=f"私信发送成功：从「{sender_name}」到「{receiver_name}」，内容：{content}")
 
@@ -639,7 +797,10 @@ async def send_group_message(request: Request):
     if error_msg:
         return return_error(f"发送群消息失败：{'; '.join(error_msg)}", 404)
 
-    try:  
+    # 确保 sender 和 group 已经存在（类型检查提示）
+    assert sender is not None and group is not None
+    try:
+        assert isinstance(content, str) and isinstance(timestamp, str)
         message = groupChatMessage(sender, group, content, timestamp)
         msg_manager.add_group_message(message)
         return return_success(message=f"群消息发送成功：「{sender_name}」发送到群组「{group_name}」")
@@ -686,19 +847,61 @@ async def get_personal_messages(request: Request):
 
 @app.get("/get_posts")
 async def get_posts(request: Request):
+    """
+    获取帖子列表，支持按板块(section)筛选和按关键词(keyword)搜索。
+    :param section: 板块名称（可选，如 'contract', 'owners', 'security', 'public_use'）
+    :param keyword: 搜索关键词（可选）
+    """
     section = request.query_params.get("section")
-    if not section:
-        return return_error("查询帖子失败：缺少板块名称(section)参数", request_data=dict(request.query_params))
+    keyword = request.query_params.get("keyword")
 
     try:
-        posts = post_manager.get_posts(section)
+        # 获取所有帖子或特定板块的帖子
+        if section:
+            posts = post_manager.get_posts(section)
+        else:
+            posts = post_manager.get_posts(None) # 获取所有
+
+        # 如果有关键词，进行过滤
+        if keyword:
+            keyword = str(keyword).lower().strip()
+            filtered_posts = []
+            for p in posts:
+                title = str(getattr(p, 'title', '')).lower()
+                content = str(getattr(p, 'content', '')).lower()
+                if keyword in title or keyword in content:
+                    filtered_posts.append(p)
+            posts = filtered_posts
+
+        # 按时间倒序排列（最新的在前）
+        def parse_time(p):
+            t = getattr(p, 'time', None)
+            if not t:
+                return datetime.datetime.min
+            try:
+                if isinstance(t, str):
+                    return datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
+                return t
+            except Exception:
+                return datetime.datetime.min
+
+        posts.sort(key=parse_time, reverse=True)
+
         posts_dict = [p.to_dict() for p in posts]
+        
+        msg = f"查询成功"
+        if section:
+            msg += f"，板块「{section}」"
+        if keyword:
+            msg += f"，关键词「{keyword}」"
+        msg += f"，共{len(posts_dict)}条数据"
+
         return return_success(
             data={"posts": posts_dict},
-            message=f"查询到「{section}」板块下共{len(posts_dict)}条帖子",
+            message=msg,
         )
     except Exception as exc:
-        return return_error(f"查询「{section}」板块帖子失败：{exc}", 500, request_data=dict(request.query_params))
+        return return_error(f"查询帖子失败：{exc}", 500, request_data=dict(request.query_params))
 
 
 @app.get("/get_hot_posts")
@@ -762,8 +965,7 @@ async def create_post(request: Request):
     try:
         post = post_manager.add_post(author, title, content, section)
         try:
-            with write_lock:
-                post_manager.save_posts(POST_FILE)
+            await run_in_thread_with_lock(post_manager.save_posts, POST_FILE)
             logger.info("创建帖子后帖子数据已保存：%s", POST_FILE)
         except Exception as exc:
             logger.error("创建帖子后保存帖子数据失败：%s", exc, exc_info=True)
@@ -782,7 +984,7 @@ async def get_post_detail(request: Request):
         return return_error("查询帖子详情失败：缺少帖子ID(post_id)参数", request_data=dict(request.query_params))
 
     try:
-        post_id = int(post_id_str)
+        post_id = int(str(post_id_str))
     except ValueError:
         return return_error(f"查询帖子详情失败：帖子ID「{post_id_str}」不是有效的数字")
 
@@ -815,7 +1017,7 @@ async def add_comment(request: Request):
         return return_error(f"添加评论失败：缺少必填参数 - {', '.join(missing_fields)}")
 
     try:
-        post_id = int(post_id_str)
+        post_id = int(str(post_id_str))
     except ValueError:
         return return_error(f"添加评论失败：帖子ID「{post_id_str}」不是有效的数字")
 
@@ -826,8 +1028,7 @@ async def add_comment(request: Request):
     if not comment:
         return return_error(f"添加评论失败：未找到ID为{post_id}的帖子", 404)
     try:
-        with write_lock:
-            post_manager.save_posts(POST_FILE)
+        await run_in_thread_with_lock(post_manager.save_posts, POST_FILE)
         logger.info("添加评论后帖子数据已保存：%s", POST_FILE)
     except Exception as exc:
         logger.error("添加评论后保存帖子数据失败：%s", exc, exc_info=True)
@@ -844,15 +1045,24 @@ async def user_logout(request: Request):
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
     username = data.get("username")
-    if not username:
-        return return_error("登出失败：缺少用户名(username)参数")
+    userid = data.get("id")
+    if not username and not userid:
+        return return_error("登出失败：缺少用户名(username)或用户ID(id)参数")
 
-    user_obj = user_manager.find_user(username)
+    user_obj = None
+    if username:
+        user_obj = user_manager.find_user(username)
+    if not user_obj and userid:
+        for u in user_manager.user_list:
+            if getattr(u, 'id', None) == userid:
+                user_obj = u
+                break
+
     if not user_obj:
-        return return_error(f"登出失败：用户名「{username}」不存在", 404)
+        return return_error("登出失败：用户不存在", 404)
 
     user_obj.set_state("offline")
-    return return_success(message=f"用户「{username}」已成功登出，状态更新为离线")
+    return return_success(message=f"用户已成功登出，状态更新为离线")
 
 
 @app.post("/add_friend")
@@ -883,6 +1093,8 @@ async def add_friend(request: Request):
 
     if error_msg:
         return return_error(f"添加好友失败：{'; '.join(error_msg)}", 404)
+    # 向类型检查器表明 user_obj 和 friend_obj 已存在
+    assert user_obj is not None and friend_obj is not None
 
     if friend_obj in user_obj.get_friends():
         return return_error(f"添加好友失败：「{username}」已添加「{friend_name}」为好友", 400)
@@ -955,7 +1167,59 @@ async def api_location(request: Request):
     else:
         payload = await _get_payload(request) or {}
 
+    # 首先尝试使用请求体或 query 中的位置信息
     location = resolve_location(payload)
+
+    # 如果前端未提供任何省市信息，则尝试从请求中提取客户端 IP 并调用第三方 IP 定位服务回退
+    def _get_client_ip(req: Request) -> str:
+        # 支持常见代理头
+        forwarded = req.headers.get("x-forwarded-for") or req.headers.get("X-Forwarded-For")
+        if forwarded:
+            return forwarded.split(",")[0].strip()
+        try:
+            client = getattr(req, "client", None)
+            host = getattr(client, "host", None)
+            return host or ""
+        except Exception:
+            return ""
+
+    def _resolve_ip_to_location(ip: str) -> dict:
+        if not ip:
+            return {}
+        try:
+            # 使用 ip-api 免费接口（字段：status, regionName, city）
+            resp = requests.get(f"http://ip-api.com/json/{ip}?fields=status,regionName,city,query", timeout=5)
+            data = resp.json()
+            if data.get("status") == "success":
+                province = data.get("regionName") or ""
+                city = data.get("city") or province or ""
+                return {"province": province, "city": city}
+        except Exception as exc:
+            logger.debug("IP 定位请求失败：%s", exc)
+        return {}
+
+    # 规范化为字段安全的字典视图，避免类型检查器报错
+    payload_dict = payload if isinstance(payload, dict) else {}
+
+    # 判断是否需要 IP 回退：payload 未提供 province/city 且解析后只有默认值
+    # 显式取值以避免在静态检查器中对 .get 的不确定性
+    province_val = payload_dict["province"] if "province" in payload_dict else None
+    city_val = payload_dict["city"] if "city" in payload_dict else None
+    location_val = payload_dict["location"] if ("location" in payload_dict and isinstance(payload_dict["location"], dict)) else {}
+    location_province = location_val["province"] if (isinstance(location_val, dict) and "province" in location_val) else None
+    location_city = location_val["city"] if (isinstance(location_val, dict) and "city" in location_val) else None
+
+    provided_province = bool(province_val or location_province)
+    provided_city = bool(city_val or location_city)
+
+    if not provided_province and not provided_city:
+        client_ip = _get_client_ip(request)
+        logger.info("/location: 尝试使用客户端 IP 回退定位，ip=%s", client_ip)
+        ip_location = _resolve_ip_to_location(client_ip)
+        if ip_location:
+            # 以 IP 定位结果覆盖或补全 location
+            location = resolve_location({"province": ip_location.get("province"), "city": ip_location.get("city")})
+
     return JSONResponse(content={"location": location})
 
 
@@ -970,7 +1234,7 @@ async def legal_chat(request: Request):
         return return_error("问题不能为空", 400)
 
     payload = {
-        "model": "gpt-oss:120b-cloud",
+        "model": "deepseek-v3.1:671b-cloud",
         "stream": False,
         "messages": [
             {
@@ -1053,6 +1317,12 @@ async def websocket_private_chat(websocket: WebSocket):
             if not ok:
                 logger.warning("WebSocket消息保存失败：%s", error_message)
 
+            # 异步保存消息，避免阻塞 WebSocket 循环
+            try:
+                asyncio.create_task(run_in_thread_with_lock(msg_manager.save_personal_messages, PERSONAL_MSG_FILE))
+            except Exception:
+                logger.exception("异步保存私信消息任务创建失败")
+
             send_msg = {
                 "type": "message",
                 "from": sender,
@@ -1074,4 +1344,7 @@ async def websocket_private_chat(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=True)
+    # 以模块方式直接运行时，禁止 uvicorn 的 reload（reload 会启动
+    # 监视器进程和子进程，可能导致多进程重复保存）。开发时推荐
+    # 使用 `uvicorn 聊天和用户后端.Combined_server:app --reload` 在命令行
+    uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=False)

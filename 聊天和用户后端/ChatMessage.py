@@ -1,6 +1,7 @@
 from group import group
 from user import user
 import pickle
+import threading
 class personalChatMessage:
     def __init__(self, sender, receiver, content, timestamp):
         self.sender = sender
@@ -39,6 +40,7 @@ class MessageManage:
     def __init__(self):
         self.personal_messages = []
         self.group_messages = []
+        self.thread_lock = threading.Lock()
     def add_personal_message(self, message):
         self.personal_messages.append(message)
     def get_personal_messages(self, user1, user2):
@@ -60,27 +62,31 @@ class MessageManage:
     def add_group_message(self, message):
         self.group_messages.append(message)
     def save_personal_messages(self, filename):
-        try:
-            with open(filename, 'wb') as f:
-                pickle.dump(self.personal_messages, f)
-        except Exception as e:
-            print(f"Error saving personal messages: {e}")
+        with self.thread_lock:
+            try:
+                with open(filename, 'wb') as f:
+                    pickle.dump(self.personal_messages, f)
+            except Exception as e:
+                print(f"Error saving personal messages: {e}")
     def load_personal_messages(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                self.personal_messages = pickle.load(f)
-        except Exception as e:
-            print(f"Error loading personal messages: {e}")
+        with self.thread_lock:
+            try:
+                with open(filename, 'rb') as f:
+                    self.personal_messages = pickle.load(f)
+            except Exception as e:
+                print(f"Error loading personal messages: {e}")
     def save_group_messages(self, filename):
-        try:
-            with open(filename, 'wb') as f:
-                pickle.dump(self.group_messages, f)
-        except Exception as e:
-            print(f"Error saving group messages: {e}")
+        with self.thread_lock:
+            try:
+                with open(filename, 'wb') as f:
+                    pickle.dump(self.group_messages, f)
+            except Exception as e:
+                print(f"Error saving group messages: {e}")
     def load_group_messages(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                self.group_messages = pickle.load(f)
-        except Exception as e:
-            print(f"Error loading group messages: {e}")
+        with self.thread_lock:
+            try:
+                with open(filename, 'rb') as f:
+                    self.group_messages = pickle.load(f)
+            except Exception as e:
+                print(f"Error loading group messages: {e}")
      

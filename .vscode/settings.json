@@ -11,5 +11,8 @@
         "**/数据/**",
         "**/logs/**",
         "**/__pycache__/**"
+    ],
+    "python.analysis.extraPaths": [
+        "./聊天和用户后端"
     ]
 }

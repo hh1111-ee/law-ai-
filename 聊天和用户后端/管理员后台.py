@@ -55,6 +55,7 @@ load_all_data()
 # ------------------- 功能实现 -------------------
 def addUser() -> None:
     """在管理员后台添加新用户（兼容 `user` 类的 role 参数）。"""
+    id = eg.enterbox("请输入用户 ID（数字）")
     identity = eg.choicebox("请选择身份类型", choices=["业主方", "物业方", "律师"])
     name = eg.enterbox("请输入用户名")
     password = eg.enterbox("请输入密码")
@@ -67,7 +68,7 @@ def addUser() -> None:
         return
 
     # 创建并写入
-    new_user = user(name, identity, password, location, role=identity)
+    new_user = user(id,name, identity, password, location, role=identity)
     user_manager.add_user(new_user)
     user_manager.save_users(USER_FILE)
     eg.msgbox(f"用户 {name} 添加成功！")
@@ -98,6 +99,7 @@ def showUsers() -> None:
     for idx, u in enumerate(user_manager.user_list, 1):
         lines.append(
             f"===== 用户 {idx} =====\n"
+            f"ID：{u.id}\n"
             f"用户名：{u.username}\n"
             f"身份类型：{u.identity}\n"
             f"好友数量：{len(u.friends)}\n"
@@ -106,7 +108,7 @@ def showUsers() -> None:
             f"状态：{u.state}\n"
         )
         print(f'用户 {idx}：{u.username}，身份：{u.identity}')
-    eg.textbox("数据表","用户数据列表","\n".join(lines))
+    eg.textbox("数据表","用户数据列表（共{}条）".format(len(user_manager.user_list)),"\n".join(lines))
 
 
 def showPosts() -> None:
