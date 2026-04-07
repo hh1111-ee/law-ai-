@@ -13,8 +13,6 @@ AI法律平台（演示版）
 - 渐进式迁移路径：保留清晰的 pickles -> Postgres 的迁移脚本模板（`scripts/migrate_pickles.py`），支持评审时展示从原型到工程化的演进。
 
 系统架构（组件与职责）
-----
-
 ```mermaid
 graph TD
 	Browser[前端 (静态 HTML/JS)] -->|REST / WebSocket| API[FastAPI 后端]
