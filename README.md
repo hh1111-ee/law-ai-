@@ -15,11 +15,10 @@ AI法律平台（演示版）
 系统架构（组件与职责）
 ```mermaid
 graph TD
-	Browser[前端 (静态 HTML/JS)] -->|REST / WebSocket| API[FastAPI 后端]
-	API -->|持久化| Postgres[(Postgres DB)]
-	API -->|失败时持久化| Retry[MessageRetryManager (JSONL)]
-	API -->|可选：模型服务| Model[模型服务 (Ollama / 本地)]
-```
+    Browser["前端 (静态 HTML/JS)"] -->|REST / WebSocket| API["FastAPI 后端"]
+    API -->|持久化| Postgres[("Postgres DB")]
+    API -->|失败时持久化| Retry["MessageRetryManager (JSONL)"]
+    API -->|可选：模型服务| Model["模型服务 (Ollama / 本地)"]
 
 - 前端：静态页面（`html/` 下），演示用无框架实现，重点在可读可测的交互逻辑（见 `html/私聊界面.html` 与 `html/js/app_config.js`）。
 - 后端：主应用在 [聊天和用户后端/Combined_server.py](聊天和用户后端/Combined_server.py)，包含 REST 与 WebSocket，实现认证（演示级）、消息编排、帖子与评论管理。
