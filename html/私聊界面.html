@@ -530,12 +530,12 @@
         <!-- 右侧聊天区域 -->
         <div class="chat-area" id="chatArea">
             <div class="chat-header">
-                <div class="chat-user-avatar" id="chatUserAvatar">李</div>
+                <div class="chat-user-avatar" id="chatUserAvatar">无</div>
                 <div class="chat-user-info">
-                    <div class="chat-user-name" id="chatUserName">李律师</div>
+                    <div class="chat-user-name" id="chatUserName">暂无对象</div>
                     <div class="chat-user-status">
                         <div class="status-dot"></div>
-                        <span id="chatUserStatus">在线</span>
+                        <span id="chatUserStatus">Invaild</span>
                     </div>
                 </div>
                 <div class="chat-actions">
@@ -589,19 +589,396 @@
             <a href="登录注册.html">用户登录</a>
         </div>
     </footer>
-    <!--隐藏的窗口-->
-            <div id="addFriendModal" class="modal-overlay">
-                <div class="modal-content">
-                    <h3 class="modal-title">添加好友</h3>
-                    <input id="addFriendSearchInput" class="modal-search-input" type="text" placeholder="搜索用户名...">
+    <!--隐藏的窗口 - 优化版添加好友模态框-->
+    <div id="addFriendModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-plus"></i>
+                    添加好友
+                </h3>
+                <button class="modal-close-btn" id="modalCloseBtn" title="关闭">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="search-section">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input id="addFriendSearchInput" class="modal-search-input" type="text" placeholder="输入用户名搜索...">
+                        <button id="searchBtn" class="search-btn" title="搜索">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="result-section">
+                    <div class="result-header">
+                        <span class="result-title">搜索结果</span>
+                        <span class="result-count" id="resultCount">0 个用户</span>
+                    </div>
                     <div id="addFriendSearchResult" class="modal-search-result">
                         <!-- 匹配用户列表，初始为空 -->
-                    </div>
-                    <div class="modal-btn-row">
-                        <button id="addFriendCancelBtn" class="modal-cancel-btn">取消</button>
+                        <div class="empty-result">
+                            <i class="fas fa-user-friends empty-icon"></i>
+                            <p class="empty-text">输入用户名开始搜索</p>
+                            <p class="empty-hint">找到好友后可以发送好友请求</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button id="addFriendCancelBtn" class="modal-cancel-btn">
+                    <i class="fas fa-times"></i>
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 模态框基础样式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 480px;
+            max-height: 80vh;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 模态框头部 */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 1.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-title i {
+            font-size: 1.1rem;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        /* 模态框主体 */
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper .search-icon {
+            position: absolute;
+            left: 12px;
+            color: #999;
+        }
+
+        .modal-search-input {
+            width: 100%;
+            padding: 0.9rem 3.5rem 0.9rem 2.5rem;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .modal-search-input:focus {
+            border-color: var(--secondary-purple);
+            box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(138, 79, 255, 0.3);
+        }
+
+        /* 结果区域 */
+        .result-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e1e5eb;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .result-count {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            background: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+        }
+
+        .modal-search-result {
+            min-height: 150px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        /* 空状态 */
+        .empty-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .empty-text {
+            font-size: 1rem;
+            margin: 0 0 0.5rem;
+            color: #666;
+        }
+
+        .empty-hint {
+            font-size: 0.85rem;
+            margin: 0;
+            color: #999;
+        }
+
+        /* 用户列表项 */
+        .add-friend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .add-friend-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(138, 79, 255, 0.15);
+        }
+
+        .add-friend-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .add-friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .add-friend-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-friend-name {
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 0.95rem;
+        }
+
+        .add-friend-role {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        .add-friend-confirm {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .add-friend-confirm:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(138, 79, 255, 0.3);
+        }
+
+        .add-friend-confirm:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 模态框底部 */
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e1e5eb;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .modal-cancel-btn {
+            background: #f8f9fa;
+            border: 1px solid #e1e5eb;
+            color: #666;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .modal-cancel-btn:hover {
+            background: #e9ecef;
+            border-color: #ccc;
+        }
+
+        /* 加载状态 */
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--secondary-purple);
+        }
+
+        .loading-spinner i {
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 成功/失败提示 */
+        .friend-status {
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .friend-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .friend-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
     <!-- 保持原有JavaScript功能 -->
     <script src="js/app_config.js"></script>
     <script src="js/luoji.js"></script>
@@ -680,7 +1057,16 @@
         }
 
         function getCurrentUser() {
-            return JSON.parse(localStorage.getItem('currentUser') || 'null');
+            try {
+                // 优先使用全局安全读取器（若存在）
+                if (typeof getStoredUser === 'function') {
+                    return getStoredUser();
+                }
+                return JSON.parse(localStorage.getItem('currentUser') || 'null');
+            } catch (e) {
+                try { localStorage.removeItem('currentUser'); } catch (err) {}
+                return null;
+            }
         }
 
         function formatTime(ts) {
@@ -760,60 +1146,113 @@ function toggleAddFriendModal(show) {
 })();
 
         function renderAddFriendResult(userProfiles) {
-            if (!addFriendResult) {
-                return;
-            }
+            if (!addFriendResult) return;
             addFriendResult.innerHTML = '';
+            
+            // 更新结果计数
+            const resultCount = document.getElementById('resultCount');
+            if (resultCount) {
+                resultCount.textContent = `${userProfiles ? userProfiles.length : 0} 个用户`;
+            }
 
             if (!userProfiles || userProfiles.length === 0) {
-                addFriendResult.textContent = '未找到用户';
+                addFriendResult.innerHTML = `
+                    <div class="empty-result">
+                        <i class="fas fa-user-slash empty-icon"></i>
+                        <p class="empty-text">未找到用户</p>
+                        <p class="empty-hint">请尝试其他搜索关键词</p>
+                    </div>
+                `;
                 return;
             }
 
             userProfiles.forEach(profile => {
                 const item = document.createElement('div');
                 item.className = 'add-friend-item';
-                item.innerHTML = `
-                    <span class="add-friend-name">${escapeHtml(profile.username || '')}</span>
-                    <button class="add-friend-confirm">添加</button>
-                `;
-                const btn = item.querySelector('.add-friend-confirm');
-                btn.addEventListener('click', () => {
-                    addFriend(profile.username);
-                });
+
+                const avatar = document.createElement('div');
+                avatar.className = 'add-friend-avatar';
+                avatar.textContent = (profile.username || '?')[0];
+
+                const info = document.createElement('div');
+                info.className = 'add-friend-info';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'add-friend-name';
+                nameSpan.textContent = profile.username || '';
+
+                const roleSpan = document.createElement('span');
+                roleSpan.className = 'add-friend-role';
+                roleSpan.textContent = profile.identity || '用户';
+
+                info.appendChild(nameSpan);
+                info.appendChild(roleSpan);
+
+                const btn = document.createElement('button');
+                btn.className = 'add-friend-confirm';
+                btn.type = 'button';
+                btn.textContent = '添加';
+                btn.addEventListener('click', () => addFriend(profile.id));
+
+                item.appendChild(avatar);
+                item.appendChild(info);
+                item.appendChild(btn);
                 addFriendResult.appendChild(item);
             });
         }
+        
+        function showLoadingState() {
+            if (!addFriendResult) return;
+            addFriendResult.innerHTML = `
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner"></i>
+                    <span>搜索中...</span>
+                </div>
+            `;
+            
+            const resultCount = document.getElementById('resultCount');
+            if (resultCount) {
+                resultCount.textContent = '搜索中...';
+            }
+        }
 
-        function searchUserByName(name) {
-                const currentUser = getCurrentUser();
-                console.log('searchUserByName: 输入name =', name);
-                if (!currentUser || !currentUser.username) {
-                    console.warn('searchUserByName: 当前未登录');
+        function searchUserByName(username) {
+            const currentUser = getCurrentUser();
+            console.log('searchUserByName: 输入username =', username);
+            if (!currentUser || !currentUser.username) {
+                console.warn('searchUserByName: 当前未登录');
+                renderAddFriendResult([]);
+                return;
+            }
+            if (!username) {
+                addFriendResult && (addFriendResult.innerHTML = '');
+                console.log('searchUserByName: username为空，清空结果');
+                return;
+            }
+
+            try {
+                const payload = { username: username || null };
+                if (!payload.username && payload.id === null) {
+                    console.warn('searchUserByName: 无有效查询参数，跳过请求', payload);
                     renderAddFriendResult([]);
                     return;
                 }
-                if (!name) {
-                    addFriendResult && (addFriendResult.innerHTML = '');
-                    console.log('searchUserByName: name为空，清空结果');
-                    return;
-                }
 
-                fetch(`${PAGE_API_BASE}/user_state_search`, {
+                fetch(apiUrl('/search_users'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: name })
+                    body: JSON.stringify(payload)
                 })
-                    .then(res => res.json().then(data => ({ ok: res.ok, data })))
-                    .then(({ ok, data }) => {
-                        console.log('searchUserByName: fetch返回', data);
-                        const usersArr = data && data.data && data.data.users;
+                    .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })).catch(() => ({ ok: res.ok, status: res.status, data: null })))
+                    .then(({ ok, status, data }) => {
+                        console.log('searchUserByName: fetch返回', { ok, status, data });
+                        const usersArr = data && (data.data && data.data.users) || (data && data.users) || null;
                         if (!ok || !usersArr) {
                             console.warn('searchUserByName: 未查到用户或接口异常', data);
                             renderAddFriendResult([]);
                             return;
                         }
-                        const filtered = usersArr.filter(u => u.username !== currentUser.username);
+                        const filtered = usersArr.filter(u => u.id !== currentUser.id);
                         console.log('searchUserByName: 过滤后结果', filtered);
                         renderAddFriendResult(filtered);
                     })
@@ -821,26 +1260,29 @@ function toggleAddFriendModal(show) {
                         console.error('searchUserByName: 请求异常', err);
                         renderAddFriendResult([]);
                     });
+            } catch (e) {
+                console.error('searchUserByName: 构造请求失败', e);
+                renderAddFriendResult([]);
+            }
         }
 
-        function addFriend(friendName) {
+        function addFriend(friendId) {
             const currentUser = getCurrentUser();
-            if (!currentUser || !currentUser.username) {
+            if (!currentUser || !currentUser.id) {
                 alert('请先登录');
                 return;
             }
-            if (!friendName) {
-                return;
-            }
-            fetch(`${PAGE_API_BASE}/add_friend`, {
+            if (!friendId) return;
+
+            fetch(apiUrl('/add_friend'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: currentUser.username, friend: friendName })
+                body: JSON.stringify({ user_id: currentUser.id, friend_id: friendId })
             })
-                .then(res => res.json().then(data => ({ ok: res.ok, data })))
-                .then(({ ok, data }) => {
+                .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })).catch(() => ({ ok: res.ok, status: res.status, data: null })))
+                .then(({ ok, status, data }) => {
                     if (!ok) {
-                        alert(data.error || '添加失败');
+                        alert((data && data.error) || '添加失败');
                         return;
                     }
                     toggleAddFriendModal(false);
@@ -873,11 +1315,11 @@ function toggleAddFriendModal(show) {
 
         function connectWebSocket() {
             const currentUser = getCurrentUser();
-            if (!currentUser || !currentUser.username) {
+            if (!currentUser || !currentUser.id) {
                 return;
             }
 
-            ws = new WebSocket(`${WS_BASE}?user_id=${encodeURIComponent(currentUser.username)}`);
+            ws = new WebSocket(`${WS_BASE}?user_id=${encodeURIComponent(currentUser.id)}`);
 
             ws.addEventListener('open', () => {
                 wsConnected = true;
@@ -895,16 +1337,12 @@ function toggleAddFriendModal(show) {
                     return;
                 }
 
-                if (payload.type !== 'message') {
-                    return;
-                }
+                if (payload.type !== 'message') return;
 
                 const senderUser = ensureUserByName(payload.from);
                 const senderId = senderUser.id;
 
-                if (!messages[senderId]) {
-                    messages[senderId] = [];
-                }
+                if (!messages[senderId]) messages[senderId] = [];
 
                 messages[senderId].push({
                     id: messages[senderId].length + 1,
@@ -914,25 +1352,23 @@ function toggleAddFriendModal(show) {
                     type: 'received'
                 });
 
-                // 只刷新聊天区域，不刷新好友列表
                 if (selectedUserId === senderId) {
                     console.log('收到消息，当前正在与发送者聊天，刷新消息列表');
                     renderMessages();
                 } else {
                     senderUser.unread += 1;
-                    // 不再调用 renderUserList()，只更新数据，等用户主动切换时刷新
                 }
             });
         }
 
         function normalizeUsers(friendProfiles) {
             return friendProfiles.map((u, idx) => ({
-                id: idx + 1,
+                id: u.id,
                 name: u.username,
                 role: u.identity || '用户',
                 avatar: u.username ? u.username[0] : '?',
                 colorClass: '',
-                status: '在线',
+                status: u.state || '在线',
                 lastMessage: '',
                 time: '',
                 unread: 0
@@ -951,7 +1387,7 @@ function toggleAddFriendModal(show) {
                 return;
             }
 
-            fetch(`${PAGE_API_BASE}/user_friends`, {
+            fetch(apiUrl('/user_friends'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: currentUser.username })
@@ -1015,19 +1451,36 @@ function toggleAddFriendModal(show) {
                 const userItem = document.createElement('div');
                 userItem.className = 'user-item';
                 userItem.dataset.userId = user.id;
+                console.log('渲染用户列表项:', user.id, user.name, 'selectedUserId=', selectedUserId);
+                if (selectedUserId === user.id) userItem.classList.add('active');
 
-                if (selectedUserId === user.id) {
-                    userItem.classList.add('active');
+                const avatarEl = document.createElement('div');
+                avatarEl.className = `user-avatar-small ${user.colorClass}`.trim();
+                avatarEl.textContent = user.avatar || '?';
+
+                const detailsEl = document.createElement('div');
+                detailsEl.className = 'user-details';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'user-name';
+                nameEl.textContent = user.name || '';
+
+                const statusEl = document.createElement('div');
+                statusEl.className = 'user-status';
+                statusEl.textContent = `${user.role || ''} • ${user.status || ''}`;
+
+                detailsEl.appendChild(nameEl);
+                detailsEl.appendChild(statusEl);
+
+                userItem.appendChild(avatarEl);
+                userItem.appendChild(detailsEl);
+
+                if (user.unread && user.unread > 0) {
+                    const badge = document.createElement('div');
+                    badge.className = 'unread-badge';
+                    badge.textContent = String(user.unread);
+                    userItem.appendChild(badge);
                 }
-
-                userItem.innerHTML = `
-                    <div class="user-avatar-small ${user.colorClass}">${user.avatar}</div>
-                    <div class="user-details">
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-status">${user.role} • ${user.status}</div>
-                    </div>
-                    ${user.unread > 0 ? `<div class="unread-badge">${user.unread}</div>` : ''}
-                `;
 
                 userItem.addEventListener('click', () => selectUser(user.id));
                 usersContainer.appendChild(userItem);
@@ -1049,21 +1502,17 @@ function toggleAddFriendModal(show) {
 
             // 拉取历史消息
             const currentUser = getCurrentUser();
-            if (currentUser && currentUser.username && selectedUser && selectedUser.name) {
-                fetch(`${PAGE_API_BASE}/get_personal_messages`, {
+            if (currentUser && currentUser.id && selectedUser && selectedUser.id) {
+                fetch(apiUrl('/get_personal_messages'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user1: currentUser.username,
-                        user2: selectedUser.name
+                        user1: currentUser.id,
+                        user2: selectedUser.id
                     })
                 })
-                .then(res => res.json())
-                .then(data => {
-                    // 兼容后端返回结构
-                    // 1. { ok: true, data: { messages: [...] } }
-                    // 2. { messages: [...] }
-                    // 3. { data: { messages: [...] } }
+                .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })).catch(() => ({ ok: res.ok, status: res.status, data: null })))
+                .then(({ ok, status, data }) => {
                     let msgs = null;
                     if (data && Array.isArray(data.messages)) {
                         msgs = data.messages;
@@ -1073,13 +1522,12 @@ function toggleAddFriendModal(show) {
                     if (Array.isArray(msgs)) {
                         messages[userId] = msgs.map((msg, idx) => ({
                             id: idx + 1,
-                            sender: msg.sender === currentUser.username ? currentUserId : userId,
+                            sender: msg.sender === currentUser.id ? currentUserId : userId,
                             text: msg.content || msg.text || '',
                             time: formatTime(msg.timestamp || msg.time),
-                            type: msg.sender === currentUser.username ? 'sent' : 'received'
+                            type: msg.sender === currentUser.id ? 'sent' : 'received'
                         }));
                     } else {
-                        // 没查到历史消息则清空
                         messages[userId] = [];
                     }
                     renderMessages();
@@ -1111,27 +1559,34 @@ function toggleAddFriendModal(show) {
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${msg.type}`;
 
-                const senderName = msg.type === 'received'
-                    ? users.find(u => u.id === msg.sender)?.name || '用户'
-                    : '我';
+                const senderName = msg.type === 'received' ? (users.find(u => u.id === msg.sender)?.name || '用户') : '我';
+                const avatarText = msg.type === 'received' ? (users.find(u => u.id === msg.sender)?.avatar || '?') : '我';
+                const avatarColorClass = msg.type === 'received' ? (users.find(u => u.id === msg.sender)?.colorClass || '') : '';
 
-                const avatarText = msg.type === 'received'
-                    ? users.find(u => u.id === msg.sender)?.avatar || '?'
-                    : '我';
+                const avatarEl = document.createElement('div');
+                avatarEl.className = `message-avatar ${avatarColorClass}`.trim();
+                avatarEl.textContent = avatarText;
 
-                const avatarColorClass = msg.type === 'received'
-                    ? users.find(u => u.id === msg.sender)?.colorClass || ''
-                    : '';
+                const contentEl = document.createElement('div');
+                contentEl.className = 'message-content';
 
-                messageElement.innerHTML = `
-                    <div class="message-avatar ${avatarColorClass}">${avatarText}</div>
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            <div class="message-text">${msg.text}</div>
-                        </div>
-                        <div class="message-time">${msg.time}</div>
-                    </div>
-                `;
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+
+                const textEl = document.createElement('div');
+                textEl.className = 'message-text';
+                textEl.textContent = msg.text || '';
+
+                const timeEl = document.createElement('div');
+                timeEl.className = 'message-time';
+                timeEl.textContent = msg.time || '';
+
+                bubble.appendChild(textEl);
+                contentEl.appendChild(bubble);
+                contentEl.appendChild(timeEl);
+
+                messageElement.appendChild(avatarEl);
+                messageElement.appendChild(contentEl);
 
                 messagesContainer.appendChild(messageElement);
             });
@@ -1182,7 +1637,7 @@ function toggleAddFriendModal(show) {
             if (wsConnected && ws) {
                 ws.send(JSON.stringify(payload));
             } else {
-                fetch(`${PAGE_API_BASE}/send_personal_message`, {
+                fetch(apiUrl('/send_personal_message'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1235,7 +1690,29 @@ function toggleAddFriendModal(show) {
         addFriendInput && addFriendInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
+                showLoadingState();
                 searchUserByName(addFriendInput.value.trim());
+            }
+        });
+        
+        // 搜索按钮点击事件
+        const searchBtn = document.getElementById('searchBtn');
+        searchBtn && searchBtn.addEventListener('click', () => {
+            showLoadingState();
+            searchUserByName(addFriendInput.value.trim());
+        });
+        
+        // 关闭按钮事件
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        modalCloseBtn && modalCloseBtn.addEventListener('click', () => {
+            toggleAddFriendModal(false);
+        });
+        
+        // 点击模态框外部关闭
+        const addFriendModal = document.getElementById('addFriendModal');
+        addFriendModal && addFriendModal.addEventListener('click', (e) => {
+            if (e.target === addFriendModal) {
+                toggleAddFriendModal(false);
             }
         });
 

@@ -1,5 +1,4 @@
 import datetime
-import pickle
 import threading
 import tempfile
 import os
@@ -88,6 +87,8 @@ class PostManage:
                 dir_name = os.path.dirname(filename) or '.'
                 fd, tmp_path = tempfile.mkstemp(dir=dir_name)
                 try:
+                    # 延迟导入 pickle，避免模块导入时立即依赖它（使运行时不依赖本地 pkl）
+                    import pickle
                     with os.fdopen(fd, 'wb') as f:
                         pickle.dump(self.post_list, f)
                     os.replace(tmp_path, filename)
@@ -103,6 +104,8 @@ class PostManage:
     def load_posts(self, filename):
         with self.thread_lock:
             try:
+                # 延迟导入 pickle，避免模块导入时立即依赖它
+                import pickle
                 with open(filename, 'rb') as f:
                     self.post_list = pickle.load(f)
                     if self.post_list:

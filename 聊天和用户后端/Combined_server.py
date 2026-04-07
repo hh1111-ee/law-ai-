@@ -16,6 +16,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from openpyxl import load_workbook
 import pandas as pd
+try:
+    from passlib.hash import argon2
+except Exception:
+    argon2 = None
+
+# On Windows, psycopg async requires a selector-based event loop policy.
+# The actual policy will be set after logger is configured to allow logging.
+
+
+try:
+    from postgres_data import adapter as pg_adapter  # type: ignore
+    _PG_ADAPTER_AVAILABLE = True
+except Exception:
+    pg_adapter = None
+    _PG_ADAPTER_AVAILABLE = False
+
+
+# NOTE: `_run_coro_with_selector` 已被移除以避免在线程中运行协程。
+# 所有异步 DB 操作应在主事件循环中直接 `await`，或在短期脚本中使用
+# postgres_data.adapter 提供的同步 `_sync` 辅助函数。
 
 # ======================================================
 # Combined_server.py
@@ -31,6 +51,13 @@ import pandas as pd
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 CHAT_BACKEND_DIR = os.path.dirname(__file__)
 
+# Ensure project root is on sys.path so sibling packages (e.g. postgres_data)
+# can be imported when running this file directly (python 聊天和用户后端\Combined_server.py).
+if BASE_DIR not in sys.path:
+    # insert at front to prefer local packages over site-packages
+    sys.path.insert(0, BASE_DIR)
+
+# Keep backend dir on path for local imports within the package
 if CHAT_BACKEND_DIR not in sys.path:
     sys.path.append(CHAT_BACKEND_DIR)
 
@@ -40,6 +67,7 @@ from group import groupManage as GroupMgr  # noqa: E402
 from post import PostManage  # noqa: E402
 from user import user as UserClass  # noqa: E402
 from user import userManage as UserMgr  # noqa: E402
+from message_retry import MessageRetryManager  # noqa: E402
 
 # ===================== 日志配置 =====================
 LOG_DIR = os.path.join(BASE_DIR, "logs")
@@ -60,18 +88,25 @@ console_handler.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FORMAT))
 
 logging.basicConfig(level=logging.INFO, handlers=[file_handler, console_handler])
 logger = logging.getLogger(__name__)
-
+# Use default event loop (uvicorn manages the loop). Ensure asyncpg is installed for async DB.
+if sys.platform.startswith('win'):
+    # 注意：从 Python 3.14 起，asyncio 的 policy 系统（如
+    # set_event_loop_policy / WindowsSelectorEventLoopPolicy）已被弃用并将在
+    # 未来版本移除。不要在模块导入时设置全局 policy；应在程序入口处
+    # 使用 `asyncio.run(..., loop_factory=...)` 或 `asyncio.Runner(loop_factory=...)`。
+    logger.info("Windows 平台：不要在模块顶部设置事件循环策略；将在程序入口使用 loop_factory。")
 # ===================== 数据路径 =====================
-# 数据文件全部指向主目录
-BASE_FLODER="数据库"
-USER_FILE = os.path.join(BASE_DIR, BASE_FLODER, "users.pkl")
-GROUP_FILE = os.path.join(BASE_DIR, BASE_FLODER, "groups.pkl")
-POST_FILE = os.path.join(BASE_DIR, BASE_FLODER, "posts.pkl")
-PERSONAL_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "personal_messages.pkl")
-GROUP_MSG_FILE = os.path.join(BASE_DIR, BASE_FLODER, "group_messages.pkl")
+# 数据文件目录（历史上用于本地备份）
+BASE_FOLDER = "数据库"
 
 DATA_PATH = os.path.join(BASE_DIR, "数据", "地区.xlsx")
 CASES_FILE = os.path.join(BASE_DIR, "数据", "案号.xlsx")
+
+# 配置：是否以数据库为唯一数据源（优先环境变量，默认开启）
+DB_ONLY = os.environ.get("DB_ONLY", "1") in ("1", "true", "True")
+# 配置：是否启用内存读取缓存（默认关闭）。若关闭，所有读写操作均直接访问 DB。
+USE_CACHE = os.environ.get("USE_CACHE", "0") in ("1", "true", "True")
+
 
 # 日志目录也指向主目录
 LOG_DIR = os.path.join(BASE_DIR, "logs")
@@ -86,19 +121,67 @@ async def lifespan(app: FastAPI):
     - 关闭时记录 PID 并在后台线程执行一次性保存（调用 save_all_data_on_exit）。
     这样可以更集中地管理进程生命周期与日志，便于在多进程/热重载场景中排查哪个进程执行了保存操作。
     """
+    # make clear we will mutate module-level message_save_task
+    global message_save_task
+
     try:
-        await asyncio.to_thread(load_all_data_on_start)
-        logger.info("Startup: 数据加载完成（PID=%s）", os.getpid())
+        # 启动时强制使用 Postgres 作为唯一持久化层；若不可用则停止启动。
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            try:
+                counts = await pg_adapter.ensure_seed_data()
+                logger.info("Startup: Postgres 种子检查完成 users=%s posts=%s", counts.get('users'), counts.get('posts'))
+            except Exception:
+                logger.exception("Startup: Postgres 种子检查或种子初始化失败，停止启动")
+                # 统一要求 Postgres 可用，停止服务启动以避免使用本地 pkl 回退
+                raise RuntimeError("Postgres 不可用或种子检查失败，停止启动")
+        else:
+            logger.error("Postgres 适配器不可用：服务必须依赖 Postgres 进行持久化，停止启动")
+            raise RuntimeError("未检测到 Postgres 适配器，停止启动")
+
+        # 若 pg_adapter 可用，使用它加载必要的运行时缓存（用户、帖子等），不再读取本地 pkl
+        try:
+            await load_all_data_on_start()
+            logger.info("Startup: 从 Postgres 加载运行时缓存完成（PID=%s）", os.getpid())
+        except Exception:
+            logger.exception("从 Postgres 加载运行时缓存失败，停止启动")
+            raise
     except Exception:
         logger.exception("Startup: 加载数据失败")
+    # 启动消息重试管理器：在 DB 写失败时持久化并重试发送
+    try:
+        global message_retry_manager
+        retry_file = os.path.join(BASE_DIR, BASE_FOLDER, 'pending_messages.jsonl')
+        message_retry_manager = MessageRetryManager(retry_file, retry_interval=5.0)
+        await message_retry_manager.start()
+    except Exception:
+        logger.exception("启动 MessageRetryManager 失败")
     try:
         yield
     finally:
         try:
             pid = os.getpid()
             logger.info("Shutdown: PID=%s 开始保存数据", pid)
-            await asyncio.to_thread(save_all_data_on_exit)
-            logger.info("Shutdown: PID=%s 保存数据完成", pid)
+            # 停止消息重试管理器
+            try:
+                if message_retry_manager is not None:
+                    await message_retry_manager.stop()
+            except Exception:
+                logger.exception("停止 MessageRetryManager 失败")
+
+            # 不再进行本地 pkl 的保存；所有持久化以 Postgres 为准
+            logger.info("Shutdown: 跳过本地 pkl 保存，Postgres 为唯一持久化层")
+
+            # 尝试优雅关闭 async engine，使用 postgres_data.db_session.dispose_db()
+            try:
+                from postgres_data import db_session as pg_db_session
+                if hasattr(pg_db_session, 'dispose_db'):
+                    try:
+                        await pg_db_session.dispose_db()
+                        logger.info("已优雅关闭 Postgres async engine")
+                    except Exception:
+                        logger.exception("关闭 async engine 失败")
+            except Exception:
+                logger.exception("尝试关闭 Postgres 引擎时发生错误")
         except Exception:
             logger.exception("Shutdown: 保存数据失败")
 
@@ -110,6 +193,8 @@ user_manager = UserMgr()
 group_manager = GroupMgr()
 post_manager = PostManage()
 cases_df = pd.DataFrame() # 全局存储案例数据
+
+message_retry_manager: Optional[MessageRetryManager] = None
 
 # 全局写入锁，防止并发写文件
 write_lock = threading.Lock()
@@ -165,8 +250,6 @@ _DATA_MTIME: float = -1.0
 _save_exit_called = False
 # 用于保护数据缓存的异步锁
 _data_cache_lock = asyncio.Lock()
-
-4
 def ensure_file_exists(filename: str) -> None:
     """
     确保指定路径的文件存在；如果不存在则创建一个空文件。
@@ -214,51 +297,84 @@ def return_success(data: Optional[Dict] = None, message: str = "操作成功") -
     return JSONResponse(content=success_info)
 
 
-def load_all_data_on_start() -> None:
+async def load_all_data_on_start() -> None:
     """
-    在应用启动时将所有持久化数据加载到内存中。
+    在应用启动时以异步方式将必要的运行时缓存从数据库加载到内存。
 
-    函数会确保每个预期的持久化文件存在，然后调用各自的管理器
-    进行反序列化加载。遇到错误仅记录日志，不会抛出，以便服务器
-    在数据不完整时仍能启动用于开发/调试。
+    - 仅在 Postgres 可用时加载；若不可用，仅记录日志并返回（不抛异常，避免阻塞启动流程）。
+    - 该函数改为纯 async，必须在事件循环内直接 await 调用，禁止在后台线程中使用 run_until_complete。
     """
-    ensure_file_exists(PERSONAL_MSG_FILE)
-    ensure_file_exists(GROUP_MSG_FILE)
-    ensure_file_exists(USER_FILE)
-    ensure_file_exists(GROUP_FILE)
-    ensure_file_exists(POST_FILE)
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        logger.error("load_all_data_on_start: Postgres 适配器不可用，无法加载运行时缓存")
+        return
 
-    # 加载已持久化的消息与数据，各管理器负责自己的反序列化与完整性校验。
-    msg_manager.load_personal_messages(PERSONAL_MSG_FILE)
+    # 若未启用缓存，跳过将 DB 数据加载到内存的过程（所有读取接口请走 DB）。
+    if not USE_CACHE:
+        logger.info("load_all_data_on_start: 内存缓存加载已禁用（USE_CACHE=false），跳过")
+        return
 
-    # 将 Excel 案例数据加载为 pandas DataFrame，用于检索与展示
-    global cases_df
+    # 加载用户到 user_manager（同步更新内存缓存以支持管理界面与短期优化）
     try:
-        if os.path.exists(CASES_FILE):
-            cases_df = pd.read_excel(CASES_FILE, dtype=str).fillna("")
-            logger.info("✅ 成功加载 %s 条案例", len(cases_df))
-        else:
-            logger.warning("❌ 案号文件不存在: %s", CASES_FILE)
-            cases_df = pd.DataFrame()
-    except Exception as e:
-        logger.error("❌ 加载 Excel 失败: %s", e, exc_info=True)
-        cases_df = pd.DataFrame()
+        users = await pg_adapter.fetch_users_rows()
+    except Exception:
+        logger.exception("从 Postgres 加载 users 失败")
+        users = []
 
-    # 继续加载其余持久化结构
-    msg_manager.load_group_messages(GROUP_MSG_FILE)
-    user_manager.load_users(USER_FILE)
-    group_manager.load_groups(GROUP_FILE)
-    post_manager.load_posts(POST_FILE)
+    user_manager.user_list = []
+    for u in users:
+        try:
+            uid = u.get('id')
+            username = u.get('username')
+            identity = u.get('identity') or ''
+            location = u.get('location') or ''
+            role = u.get('role') or identity
+            usr = UserClass(uid, username, identity, '', location, role)
+            usr.friends = list(u.get('friends') or [])
+            usr.state = u.get('state') or 'offline'
+            user_manager.add_user(usr)
+        except Exception:
+            logger.exception("填充 user_manager 时发生异常: %s", u)
 
-    # 输出已加载用户的简要信息，便于运维查看
-    for user in user_manager.user_list:
-        logger.info(
-            "加载用户：%s，状态：%s，好友数：%s",
-            user.username,
-            user.state,
-            len(user.get_friends()),
-        )
-    logger.info("所有数据加载成功")
+    # 加载帖子到 post_manager
+    try:
+        posts = await pg_adapter.fetch_posts_rows()
+    except Exception:
+        logger.exception("从 Postgres 加载 posts 失败")
+        posts = []
+
+    post_manager.post_list = []
+    max_post_id = 0
+    max_comment_id = 0
+    from post import Post as PostObj, Comment as CommentObj
+    for p in posts:
+        try:
+            pid = p.get('id')
+            author = p.get('author')
+            title = p.get('title')
+            content = p.get('content')
+            section = p.get('section')
+            time = p.get('time')
+            post_obj = PostObj(pid, author, title, content, section, time)
+            # 帖子评论
+            for c in p.get('comments', []):
+                try:
+                    cid = c.get('id')
+                    comment = CommentObj(cid, pid, c.get('author'), c.get('content'), c.get('time'))
+                    post_obj.add_comment(comment)
+                    if isinstance(cid, int) and cid > max_comment_id:
+                        max_comment_id = cid
+                except Exception:
+                    logger.exception("构建评论对象失败: %s", c)
+            post_manager.post_list.append(post_obj)
+            if isinstance(pid, int) and pid > max_post_id:
+                max_post_id = pid
+        except Exception:
+            logger.exception("填充 post_manager 时发生异常: %s", p)
+
+    post_manager.next_post_id = max_post_id + 1 if max_post_id else 1
+    post_manager.next_comment_id = max_comment_id + 1 if max_comment_id else 1
+
+    logger.info("从 Postgres 加载运行时缓存完成：users=%d posts=%d", len(user_manager.user_list), len(post_manager.post_list))
 
 
 def save_all_data_on_exit() -> None:
@@ -267,25 +383,121 @@ def save_all_data_on_exit() -> None:
     会执行保存操作（通过 `_save_exit_called` 进行保护）。
 
     保存操作在 `write_lock` 下执行，以在关闭时提供单一的磁盘写入序列化点。
+    注意：DB 写入由各 API 接口在运行时处理，退出时仅保存本地文件以避免连接池问题。
     """
-    global _save_exit_called
-    if _save_exit_called:
-        logger.warning("save_all_data_on_exit 已被调用，跳过重复保存")
+    # 移除本地 pkl 的保存逻辑：Postgres 为唯一持久化层，退出时不再将内存数据写回本地文件。
+    logger.info("save_all_data_on_exit: 跳过本地 pkl 保存（Postgres 为唯一持久化层）")
+
+
+async def _async_update_user_cache(created: dict) -> None:
+    """异步（非阻塞）地将新创建的用户写入内存缓存（仅作可选优化）。"""
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
         return
-    _save_exit_called = True
-    logger.info("开始保存所有数据（退出钩子）")
-    with write_lock:
-        msg_manager.save_personal_messages(PERSONAL_MSG_FILE)
-        logger.info("个人消息保存完成")
-        msg_manager.save_group_messages(GROUP_MSG_FILE)
-        logger.info("群消息保存完成")
-        user_manager.save_users(USER_FILE)
-        logger.info("用户数据保存完成")
-        group_manager.save_groups(GROUP_FILE)
-        logger.info("群组数据保存完成")
-        post_manager.save_posts(POST_FILE)
-        logger.info("帖子数据保存完成")
-    logger.info("所有数据保存成功")
+
+    def _sync():
+        try:
+            from user import user as UserClass  # local import for safety
+            usr_obj = UserClass(created.get('id'), created.get('username'), created.get('identity'), '', created.get('location'), created.get('role'))
+            usr_obj.friends = list(created.get('friends') or [])
+            usr_obj.state = created.get('state') or 'offline'
+            try:
+                user_manager.add_user(usr_obj)
+            except Exception:
+                logger.debug('异步更新 user_manager 缓存失败（可忽略）')
+        except Exception:
+            logger.exception('构建内存 User 对象失败（异步）')
+
+    loop.run_in_executor(None, _sync)
+
+
+async def _async_update_post_cache(db_post: dict) -> None:
+    """异步将新创建的帖子追加到内存缓存（若启用），不影响主流程结果。"""
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+
+    def _sync():
+        try:
+            from post import Post as PostObj
+            p_obj = PostObj(db_post.get('id'), db_post.get('author'), db_post.get('title'), db_post.get('content'), db_post.get('section'), db_post.get('time'))
+            try:
+                post_manager.post_list.append(p_obj)
+                try:
+                    _pid_val = db_post.get('id')
+                    _pid_int = int(_pid_val) if _pid_val is not None else None
+                    if _pid_int is not None:
+                        post_manager.next_post_id = max(getattr(post_manager, 'next_post_id', 1), _pid_int + 1)
+                except Exception:
+                    pass
+            except Exception:
+                logger.debug('异步更新 post_manager 缓存失败（可忽略）')
+        except Exception:
+            logger.exception('构建内存 Post 对象失败（异步）')
+
+    loop.run_in_executor(None, _sync)
+
+
+async def _async_update_post_comment_cache(post_id: int, db_comment: dict) -> None:
+    """异步将新评论追加到内存帖子对象（若存在）。"""
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+
+    def _sync():
+        try:
+            from post import Comment as CommentObj
+            post_obj = post_manager.get_post(post_id)
+            if post_obj:
+                cobj = CommentObj(db_comment.get('id'), post_id, db_comment.get('author'), db_comment.get('content'), db_comment.get('time'))
+                try:
+                    post_obj.add_comment(cobj)
+                    try:
+                        _cid_val = db_comment.get('id')
+                        _cid_int = int(_cid_val) if _cid_val is not None else None
+                        if _cid_int is not None:
+                            post_manager.next_comment_id = max(getattr(post_manager, 'next_comment_id', 1), _cid_int + 1)
+                    except Exception:
+                        pass
+                except Exception:
+                    logger.debug('异步更新内存帖子评论失败（可忽略）')
+        except Exception:
+            logger.exception('构建内存 Comment 对象失败（异步）')
+
+    loop.run_in_executor(None, _sync)
+
+
+async def _async_update_friend_cache(user_id: int, friend_id: int) -> None:
+    """异步在内存缓存中为两位用户互相添加好友（仅作优化）。"""
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+
+    def _sync():
+        try:
+            try:
+                mem_a = user_manager.find_user_by_id(user_id)
+                mem_b = user_manager.find_user_by_id(friend_id)
+            except Exception:
+                return
+            if mem_a and friend_id not in mem_a.get_friends():
+                try:
+                    mem_a.add_friend(friend_id)
+                except Exception:
+                    logger.debug('异步更新内存用户 A 好友列表失败')
+            if mem_b and user_id not in mem_b.get_friends():
+                try:
+                    mem_b.add_friend(user_id)
+                except Exception:
+                    logger.debug('异步更新内存用户 B 好友列表失败')
+        except Exception:
+            logger.debug('异步更新好友缓存发生异常（可忽略）')
+
+    loop.run_in_executor(None, _sync)
 
 
 def _safe_text(value) -> str:
@@ -325,6 +537,15 @@ def _load_excel_rows() -> List[Dict[str, str]]:
 async def get_data_rows() -> List[Dict[str, str]]:
     global _DATA_CACHE, _DATA_MTIME
     async with _data_cache_lock:
+        # 若 Postgres 适配器可用，则直接从数据库读取并返回（不使用文件缓存）
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            try:
+                rows = await pg_adapter.fetch_example_legal_rows()
+                logger.info("从 Postgres 加载法规数据，共 %s 条", len(rows))
+                return rows
+            except Exception:
+                logger.exception("调用 pg_adapter.fetch_example_legal_rows 失败，退回到本地 Excel")
+
         try:
             mtime = os.path.getmtime(DATA_PATH)
         except OSError:
@@ -427,28 +648,82 @@ def build_recommended(rows: List[Dict[str, str]], location: Dict[str, str]) -> L
             break
 
     return recommended
+# 用户标识解析函数：支持 ID 或用户名，优先尝试 ID 查询，失败后回退到用户名查询。    
+async def resolve_user_identifier(identifier: str | int) -> tuple[int | None, dict | None]:
+    """
+    根据用户标识（可以是数字ID或用户名字符串）从数据库查询用户。
+    返回 (user_id, user_dict) ，若不存在则返回 (None, None)
+    """
+    if not identifier:
+        return None, None
 
+    # 检查数据库适配器是否可用
+    if not _PG_ADAPTER_AVAILABLE or pg_adapter is None:
+        logger.error("resolve_user_identifier: 数据库适配器不可用")
+        return None, None
 
-def send_personal_message_logic(sender_name: str, receiver_name: str, content: str, timestamp: str) -> Tuple[bool, str]:
+    try:
+        # 尝试当作用户名查询
+        user = await pg_adapter.get_user_by_username(str(identifier))
+        if user:
+            uid = user.get('id')
+            if uid is not None:
+                return int(uid), user
+    except (ValueError, TypeError):
+        pass
+
+    # 当作ID
+    uid = int(identifier)  
+    user = await pg_adapter.get_user_by_id(uid)
+    if user:
+            return int(uid), user
+    return None, None
+
+async def send_personal_message_logic(sender_name: int, receiver_name: int, content: str, timestamp: str) -> Tuple[bool, str]:
     """
     校验发送者和接收者是否存在，创建 `personalChatMessage` 并添加到
     消息管理器中。消息的持久化由调用方异步触发，以避免在请求或
     WebSocket 主循环中执行阻塞 IO。
     """
-    sender = user_manager.find_user(sender_name)
-    receiver = user_manager.find_user(receiver_name)
+    # 统一使用 Postgres 校验用户存在性并将消息加入本地内存缓存（不再回退到本地用户管理器）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return False, "数据库不可用"
 
-    if not sender:
-        return False, f"发送方「{sender_name}」不存在"
-    if not receiver:
-        return False, f"接收方「{receiver_name}」不存在"
+    try:
+        # 支持 id 或 username
+        s_id = None
+        r_id = None
+        try:
+            s_id = int(str(sender_name))
+        except Exception:
+            s_id = None
+        try:
+            r_id = int(str(receiver_name))
+        except Exception:
+            r_id = None
 
-    message = personalChatMessage(sender, receiver, content, timestamp)
-    msg_manager.add_personal_message(message)
+        if s_id is not None:
+            s_info = await pg_adapter.get_user_by_id(s_id)
+        else:
+            s_info = await pg_adapter.get_user_by_username(str(sender_name))
 
-    # Persistence (disk write) should be triggered by the caller as a
-    # background task. This keeps the hot path responsive.
-    return True, "私信发送成功"
+        if r_id is not None:
+            r_info = await pg_adapter.get_user_by_id(r_id)
+        else:
+            r_info = await pg_adapter.get_user_by_username(str(receiver_name))
+
+        if not s_info:
+            return False, f"发送方「{sender_name}」不存在"
+        if not r_info:
+            return False, f"接收方「{receiver_name}」不存在"
+
+        # 将消息加入内存缓存用于即时广播（不作本地文件持久化）
+        message = personalChatMessage(str(sender_name), str(receiver_name), content, timestamp)
+        msg_manager.add_personal_message(message)
+        return True, "私信发送成功"
+    except Exception:
+        logger.exception("send_personal_message_logic: DB 校验路径出错")
+        return False, "内部错误"
 
 
 class ConnectionManager:
@@ -488,9 +763,23 @@ manager = ConnectionManager()
 
 async def _get_payload(request: Request) -> Optional[Dict]:
     try:
-        return await request.json()
+        # 先读取原始 body，便于调试和重复读取
+        raw = await request.body()
+        # 保存原始 body 供上层使用/调试
+        try:
+            request.state._raw_body = raw
+        except Exception:
+            pass
+        if not raw:
+            return None
+        try:
+            return json.loads(raw.decode('utf-8'))
+        except Exception:
+            # 无法解析为 JSON
+            return None
     except Exception:
         return None
+#用户名映射函数
 
 
 
@@ -503,63 +792,85 @@ async def _get_payload(request: Request) -> Optional[Dict]:
 # 全局异常处理器，统一返回友好错误信息
 @app.exception_handler(Exception)
 async def handle_global_exception(request: Request, exc: Exception):
-    error_msg = f"服务器内部错误：{exc}"
-    logger.error(error_msg, exc_info=True)
+    # 记录完整异常和请求体（用于诊断）——日志中保留详细信息
     try:
         payload = await _get_payload(request) or dict(request.query_params)
     except Exception:
         payload = {}
+    logger.error("Unhandled exception for %s %s; payload=%s", request.method, request.url.path, payload, exc_info=True)
+
+    # 对外返回：通用错误信息且对可能的敏感字段（例如 password）进行脱敏
+    def _redact(obj):
+        if isinstance(obj, dict):
+            out = {}
+            for k, v in obj.items():
+                if isinstance(k, str) and 'password' in k.lower():
+                    out[k] = "<redacted>"
+                else:
+                    out[k] = _redact(v)
+            return out
+        if isinstance(obj, list):
+            return [_redact(i) for i in obj]
+        return obj
+
+    safe_payload = _redact(payload) if payload else {}
     return JSONResponse(
         status_code=500,
-        content={"code": 500, "error": error_msg, "request_data": payload},
+        content={"code": 500, "error": "服务器内部错误", "request_data": safe_payload},
     )
 # ------------------- API: 获取所有关键词（去重）-------------------
 @app.get('/api/keywords')
 async def get_keywords():
-    if cases_df.empty:
-        return []
-    # 将三个关键词列合并为一列，去重，并排除空字符串
-    # 注意：pandas series 操作
+    # 优先使用 DB 适配器；回退到本地 DataFrame
     try:
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            rows = await pg_adapter.fetch_relations_rows()
+            kws = set()
+            for r in rows:
+                for k in ('关键词1', '关键词2', '关键词3'):
+                    v = (r.get(k) or '').strip()
+                    if v:
+                        kws.add(v)
+            return list(kws)
+
+        if cases_df.empty:
+            return []
         keywords = pd.concat([cases_df['关键词1'], cases_df['关键词2'], cases_df['关键词3']])
         unique_keywords = keywords[keywords != ''].unique().tolist()
         return unique_keywords
     except Exception as e:
-        logger.error(f"Error getting keywords: {e}")
+        logger.exception("Error getting keywords: %s", e)
         return []
 
 # ------------------- API: 获取案例（支持筛选）-------------------
 @app.get('/api/cases')
 async def get_cases(search: str = "", keyword: str = ""):
-    if cases_df.empty:
-        return []
-
-    # 拷贝 DataFrame 避免修改原数据
-    data = cases_df.copy()
-
+    # 优先使用 DB 适配器，返回与原来 DataFrame.to_dict(orient='records') 相同格式的列表
     try:
+        rows = []
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            rows = await pg_adapter.fetch_relations_rows()
+        else:
+            if cases_df.empty:
+                return []
+            rows = [r for r in cases_df.to_dict(orient='records')]
+
         # 1. 按关键词筛选（精确匹配任意一个关键词列）
         if keyword:
-            mask = (
-                (data['关键词1'] == keyword) |
-                (data['关键词2'] == keyword) |
-                (data['关键词3'] == keyword)
-            )
-            data = data[mask]
+            rows = [r for r in rows if (r.get('关键词1') == keyword or r.get('关键词2') == keyword or r.get('关键词3') == keyword)]
 
         # 2. 按搜索词筛选（在案号或摘要中模糊匹配，大小写不敏感）
         if search:
-            mask = (
-                data['案号'].str.contains(search, case=False, na=False) |
-                data['摘要'].str.contains(search, case=False, na=False)
-            )
-            data = data[mask]
+            s = search.lower()
+            def matches(r):
+                an = (r.get('案号') or '').lower()
+                summary = (r.get('摘要') or '').lower()
+                return s in an or s in summary
+            rows = [r for r in rows if matches(r)]
 
-        # 转换为字典列表返回
-        result = data.to_dict(orient='records')
-        return result
+        return rows
     except Exception as e:
-        logger.error(f"Error getting cases: {e}")
+        logger.exception("Error getting cases: %s", e)
         return []
 
 # 已在文件顶部注册的全局异常处理器将处理所有未捕获异常，
@@ -581,7 +892,7 @@ async def get_config():
 @app.post("/load_all_data")
 async def load_all_data():
     try:
-        load_all_data_on_start()
+        await load_all_data_on_start()
         return return_success(message="所有数据加载成功")
     except Exception as exc:
         return return_error(f"数据加载失败：{exc}", 500)
@@ -601,6 +912,9 @@ async def user_register(request: Request):
     data = await _get_payload(request)
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
+    # 在 DB_ONLY 模式下要求 DB 可用
+    if DB_ONLY and not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("注册失败：服务被配置为仅使用数据库（DB_ONLY），但数据库不可用", 503)
     userid=data.get("id")
     username = data.get("username")
     identity = data.get("identity")
@@ -623,24 +937,42 @@ async def user_register(request: Request):
     if missing_fields:
         return return_error(f"注册失败：缺少必填参数 - {', '.join(missing_fields)}")
 
-    if user_manager.find_user(username):
-        return return_error(f"注册失败：用户名「{username}」已存在", 400)
+    # 强制使用 Postgres 写入用户，移除本地回退逻辑
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("注册失败：数据库不可用，请稍后重试", 503)
 
     try:
-        # 注册必须提供 id（作为账号）
-        new_user = UserClass(userid, username, identity, password, location, role)
-        user_manager.add_user(new_user)
-        logger.info("用户注册成功：%s，身份：%s，位置：%s", username, identity, location)
-        try:
-            await run_in_thread_with_lock(user_manager.save_users, USER_FILE)
-            logger.info("注册后用户数据已保存：%s", USER_FILE)
-        except Exception as exc:
-            logger.error("注册后保存用户数据失败：%s", exc, exc_info=True)
-        profile = new_user.get_profile()
-        profile['id'] = getattr(new_user, 'id', userid)
-        return return_success(data={"user": profile}, message=f"用户「{username}」注册成功")
+        username_str = str(username)
+        userid_int = int(str(userid))
+        # 计算 password_hash（若 argon2 可用）以便写入 DB
+        password_hash = None
+        if argon2 is not None and password:
+            try:
+                password_hash = argon2.hash(password)
+            except Exception:
+                logger.exception("生成 password_hash 失败，继续使用明文写入")
+
+        created = await pg_adapter.create_user(userid_int, username_str, password, identity, location, role, friends=[], password_hash=password_hash)
+        if created and created.get('id'):
+            logger.info("用户已写入 DB：%s", username_str)
+            # 异步尝试更新内存缓存（若启用），不依赖其成功
+            try:
+                asyncio.create_task(_async_update_user_cache(created))
+            except Exception:
+                logger.debug('注册后调度异步缓存更新失败（可忽略）')
+            return return_success(data={"user": created}, message=f"用户「{username_str}」注册成功（存储于DB）")
+        else:
+            return return_error("注册失败：用户名或用户ID已存在或创建失败", 400)
     except Exception as exc:
-        return return_error(f"用户「{username}」注册失败：{exc}", 500)
+        try:
+            from postgres_data.adapter import DatabaseError
+            if isinstance(exc, DatabaseError):
+                logger.exception("数据库错误：%s", exc)
+                return return_error("注册失败：数据库内部错误，请稍后重试", 500)
+        except Exception:
+            pass
+        logger.exception("创建用户时发生错误")
+        return return_error("注册失败：内部错误，请稍后重试", 500)
 
 
 @app.post("/user_login")
@@ -648,6 +980,10 @@ async def user_login(request: Request):
     data = await _get_payload(request)
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
+
+    # 强制使用 Postgres 进行登录验证
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("登录失败：数据库不可用，请稍后重试", 503)
 
     userid = data.get("id")
     password = data.get("password")
@@ -657,22 +993,134 @@ async def user_login(request: Request):
     if not password:
         return return_error("登录失败：缺少密码(password)参数")
 
-    user_obj = None
-    for u in user_manager.user_list:
-        if getattr(u, 'id', None) == userid:
-            user_obj = u
-            break
-    if not user_obj:
-        return return_error(f"登录失败：用户ID「{userid}」不存在", 401)
+    try:
+        userid_int = int(str(userid))
+    except Exception:
+        return return_error("登录失败：用户ID无效", 400)
 
-    if user_obj.password != password:
-        return return_error(f"登录失败：用户ID「{userid}」的密码错误", 401)
+    try:
+        # 先尝试从 DB 获取凭据（password / password_hash）并验证
+        creds = await pg_adapter.get_user_credentials(userid_int)
+        if not creds:
+            return return_error(f"登录失败：用户ID「{userid}」不存在", 401)
 
-    user_obj.set_state("online")
-    profile = user_obj.get_profile()
-    profile.pop("password", None)
-    profile['id'] = getattr(user_obj, 'id', None)
-    return return_success(data={"user": profile}, message=f"用户登录成功")
+        db_pass = creds.get('password')
+        db_hash = creds.get('password_hash')
+        db_state = creds.get('state')
+        # if db_state == 'online':
+        #     return return_error(f"登录失败：用户ID「{userid}」已在线", 403)
+        if db_hash:
+            if argon2 is None or not hasattr(argon2, 'verify'):
+                logger.exception("服务器缺少 argon2，无法验证存储的密码哈希")
+                return return_error("登录失败：服务器配置错误，无法验证密码", 500)
+            try:
+                if not argon2.verify(password, db_hash):
+                    return return_error(f"登录失败：用户ID「{userid}」的密码错误", 401)
+            except Exception:
+                logger.exception("argon2 验证异常")
+                return return_error(f"登录失败：用户ID「{userid}」的密码错误", 401)
+        elif db_pass is not None:
+            if str(db_pass) != str(password):
+                return return_error(f"登录失败：用户ID「{userid}」的密码错误", 401)
+    except Exception:
+        logger.exception("登录验证过程中发生错误")
+        return return_error("登录失败：验证过程中发生错误，请稍后重试", 500)
+
+    # 如果到达这里，表示凭据验证通过（未抛出异常），返回用户信息并设置在线状态
+    try:
+        uinfo = await pg_adapter.get_user_by_id(userid_int)
+        if not uinfo:
+            return return_error(f"登录失败：用户ID「{userid}」不存在", 401)
+
+        # 原子化设置在线状态以避免并发竞态：优先调用 adapter 中的 set_user_state_if_offline
+        try:
+            if getattr(pg_adapter, 'set_user_state_if_offline', None):
+                ok = await pg_adapter.set_user_state_if_offline(user_id=userid_int)
+            else:
+                # 退回到非原子写法（兼容旧适配器）
+                await pg_adapter.set_user_state(user_id=userid_int, state='online')
+                ok = True
+            if not ok:
+                return return_error(f"登录失败：用户ID「{userid}」已在线", 403)
+        except Exception:
+            logger.exception('登录后同步 DB 状态失败')
+            return return_error("登录失败：内部错误，请稍后重试", 500)
+
+        profile = uinfo
+        profile.pop('password', None)
+        return return_success(data={"user": profile}, message="用户登录成功")
+    except Exception as exc:
+        try:
+            from postgres_data.adapter import DatabaseError
+            if isinstance(exc, DatabaseError):
+                logger.exception("数据库错误：%s", exc)
+                return return_error("登录失败：数据库内部错误，请稍后重试", 500)
+        except Exception:
+            pass
+        logger.exception("获取登录用户信息失败")
+        return return_error("登录失败：内部错误，请稍后重试", 500)
+
+@app.post("/user_logout")
+async def user_logout(request: Request):
+    data = await _get_payload(request) or {}
+    # 若请求体为空，尝试从 query params / headers 回退（提高对不同客户端的兼容性）
+    if not data:
+        # 记录原始 body 与 headers（若 _get_payload 已保存 raw）以便定位客户端来源
+        raw_logged = None
+        try:
+            raw_logged = getattr(request.state, '_raw_body', b'')
+        except Exception:
+            raw_logged = b''
+        try:
+            logger.warning('user_logout: 收到空请求体，raw_body=%r, headers=%s', raw_logged, dict(request.headers))
+        except Exception:
+            logger.warning('user_logout: 收到空请求体，无法记录 raw_body 或 headers')
+        try:
+            qp = dict(request.query_params)
+            hdr_user = request.headers.get('x-username') or request.headers.get('username')
+            fallback_username = qp.get('username') or hdr_user
+            fallback_id = qp.get('id') or request.headers.get('x-user-id')
+            if fallback_username or fallback_id:
+                data = {}
+                if fallback_username:
+                    data['username'] = fallback_username
+                if fallback_id:
+                    # 尝试转为 int
+                    try:
+                        data['id'] = int(fallback_id)
+                    except Exception:
+                        data['id'] = fallback_id
+            else:
+                logger.warning('user_logout: 请求体为空且无回退参数，将忽略该登出请求')
+                return return_success(message='登出请求已忽略（未提供用户信息）')
+        except Exception:
+            logger.exception('user_logout: 解析回退参数失败，忽略该登出请求')
+            return return_success(message='登出请求已忽略（解析失败）')
+
+    username = data.get("username")
+    userid = data.get("id")
+    if not username and not userid:
+        return return_error("登出失败：缺少用户名(username)或用户ID(id)参数")
+    # 统一使用 Postgres 更新用户状态（不再使用本地回退逻辑）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("登出失败：数据库不可用，请稍后重试", 503)
+
+    try:
+        if userid is not None:
+            try:
+                uid = int(userid)
+            except Exception:
+                uid = None
+            if uid is not None:
+                await pg_adapter.set_user_state(user_id=uid, state='offline')
+            else:
+                await pg_adapter.set_user_state(username=str(userid), state='offline')
+        else:
+            await pg_adapter.set_user_state(username=str(username), state='offline')
+        return return_success(message='登出成功，状态已更新为离线')
+    except Exception:
+        logger.exception('登出时更新 DB 状态失败')
+        return return_error('登出失败：更新数据库状态时出错', 500)
 
 
 @app.post("/user_friends")
@@ -685,12 +1133,65 @@ async def user_friends(request: Request):
     if not username:
         return return_error("查询失败：缺少用户名(username)参数")
 
-    user_obj = user_manager.find_user(username)
-    if not user_obj:
-        return return_error(f"查询失败：用户名「{username}」不存在", 404)
+    # 使用 Postgres 查询用户及其好友列表（不再回退到本地实现）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
 
-    friends = [friend.get_profile() for friend in user_obj.get_friends()]
-    return return_success(data={"friends": friends}, message=f"查询到用户「{username}」的好友列表")
+    try:
+        db_user = await pg_adapter.get_user_by_username(username)
+        if not db_user:
+            return return_error(f"查询失败：用户名「{username}」不存在", 404)
+
+        friends_usernames = db_user.get('friends', []) or []
+        friends_profiles = []
+        for fn in friends_usernames:
+            try:
+                finfo = await pg_adapter.get_user_by_id(fn)
+                if finfo:
+                    finfo.pop('password', None)
+                    friends_profiles.append(finfo)
+                    continue
+            except Exception:
+                logger.exception("查询好友 %s 时调用 pg_adapter.get_user_by_username 失败", fn)
+                continue
+
+        return return_success(data={"friends": friends_profiles}, message=f"查询到用户「{username}」的好友列表")
+    except Exception:
+        logger.exception("查询好友失败：%s", username)
+        return return_error("查询失败：内部错误，请稍后重试", 500)
+
+
+@app.get("/user_friends")
+async def user_friends_get(username: Optional[str] = None):
+    """兼容 GET 请求（query 参数 username），始终返回 JSON。"""
+    if not username:
+        return return_error("查询失败：缺少用户名(username)参数")
+
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
+
+    try:
+        db_user = await pg_adapter.get_user_by_username(username)
+        if not db_user:
+            return return_error(f"查询失败：用户名「{username}」不存在", 404)
+
+        friends_usernames = db_user.get('friends', []) or []
+        friends_profiles = []
+        for fn in friends_usernames:
+            try:
+                finfo = await pg_adapter.get_user_by_username(fn)
+                if finfo:
+                    finfo.pop('password', None)
+                    friends_profiles.append(finfo)
+                    continue
+            except Exception:
+                logger.exception("查询好友 %s 时调用 pg_adapter.get_user_by_username 失败", fn)
+                continue
+
+        return return_success(data={"friends": friends_profiles}, message=f"查询到用户「{username}」的好友列表")
+    except Exception:
+        logger.exception("查询好友失败（GET）：%s", username)
+        return return_error("查询失败：内部错误，请稍后重试", 500)
 
 
 @app.post("/user_state_search")
@@ -699,66 +1200,115 @@ async def user_state_search(request: Request):
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
+    # 在 DB_ONLY 模式下要求 DB 可用
+    if DB_ONLY and not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：服务被配置为仅使用数据库（DB_ONLY），但数据库不可用", 503)
+
     username = data.get("username")
     userid = data.get("id")
     if not username and not userid:
         return return_error("查询失败：缺少用户名(username)或用户ID(id)参数")
 
-    user_in_state = []
-    for u in user_manager.user_list:
-        if username and getattr(u, 'username', None) == username:
-            p = u.get_profile()
-            p['id'] = getattr(u, 'id', None)
-            user_in_state.append(p)
-        elif userid and getattr(u, 'id', None) == userid:
-            p = u.get_profile()
-            p['id'] = getattr(u, 'id', None)
-            user_in_state.append(p)
+    # 使用 Postgres 查询用户状态（不再回退到本地 user_manager）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
 
-    if not user_in_state:
-        return return_error(f"查询失败：未找到对应的用户信息", 404)
+    try:
+        if username:
+            db_user = await pg_adapter.get_user_by_username(username)
+            if not db_user:
+                return return_error(f"查询失败：用户名「{username}」不存在", 404)
+            return return_success(data={"users": [db_user]}, message="查询到用户的状态信息")
 
-    return return_success(data={"users": user_in_state}, message="查询到用户的状态信息")
-
-
-@app.post("/send_personal_message")
-async def send_personal_message(request: Request):
+        if userid is not None:
+            try:
+                uid_int = int(userid)
+            except Exception:
+                uid_int = None
+            if uid_int is None:
+                return return_error("查询失败：用户ID格式不正确", 400)
+            db_user = await pg_adapter.get_user_by_id(uid_int)
+            if not db_user:
+                return return_error(f"查询失败：用户ID「{userid}」不存在", 404)
+            return return_success(data={"users": [db_user]}, message="查询到用户的状态信息")
+    except Exception:
+        logger.exception("查询用户状态失败")
+        return return_error("查询失败：内部错误，请稍后重试", 500)
+@app.post("/search_users")
+async def search_users(request: Request):
     data = await _get_payload(request)
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
-    sender_name = data.get("sender")
-    receiver_name = data.get("receiver")
+    username = data.get("username")
+    if not username:
+        return return_error("查询失败：缺少用户名(username)参数")
+
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
+
+    try:
+        db_users = await pg_adapter.get_users_by_name(username)
+        if not db_users:
+            return return_error(f"查询失败：用户名「{username}」不存在", 404)
+        for user in db_users:
+            user.pop('password', None)
+        return return_success(data={"users": db_users}, message="查询到用户的信息")
+    except Exception:
+        logger.exception("查询用户信息失败")
+        return return_error("查询失败：内部错误，请稍后重试", 500)
+
+@app.post("/send_personal_message")
+async def send_personal_message(request: Request):
+    data = await _get_payload(request)
+    if data is None:
+        return return_error("请求参数不能为空，请传入JSON格式数据")
+
+    sender = data.get("sender")
+    receiver = data.get("receiver")
     content = data.get("content")
     timestamp = data.get("timestamp")
 
     missing_fields = []
-    if not sender_name:
+    if sender is None:
         missing_fields.append("发送方(sender)")
-    if not receiver_name:
+    if receiver is None:
         missing_fields.append("接收方(receiver)")
-    if not content:
+    if content is None:
         missing_fields.append("消息内容(content)")
-    if not timestamp:
+    if timestamp is None:
         missing_fields.append("时间戳(timestamp)")
 
     if missing_fields:
         return return_error(f"发送私信失败：缺少必填参数 - {', '.join(missing_fields)}")
 
-    # 类型断言：上方已验证必填字段存在，向类型检查器表明它们为 str
-    assert isinstance(sender_name, str) and isinstance(receiver_name, str) and isinstance(content, str) and isinstance(timestamp, str)
+    # 类型断言（帮助静态类型检查器并在运行时捕获异常）
+    assert isinstance(sender,int) and isinstance(receiver,int) and isinstance(content,str) and isinstance(timestamp,str), "参数类型不正确"
+    # 在 DB_ONLY 模式下要求 DB 可用（消息持久化应由 DB 负责）
+    if DB_ONLY and not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("发送私信失败：服务被配置为仅使用数据库（DB_ONLY），但数据库不可用", 503)
 
-    ok, message = send_personal_message_logic(sender_name, receiver_name, content, timestamp)
+    ok, message = await send_personal_message_logic(sender, receiver, content, timestamp)
     if not ok:
         return return_error(f"发送私信失败：{message}", 404)
 
-    # 异步保存消息，避免阻塞当前请求
-    try:
-        asyncio.create_task(run_in_thread_with_lock(msg_manager.save_personal_messages, PERSONAL_MSG_FILE))
-    except Exception:
-        logger.exception("异步保存私信消息任务创建失败")
+    # 若 DB 可用则优先写入 DB；写入失败时尝试入队重试，否则返回 503
+    if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+        try:
+            db_row = await pg_adapter.create_personal_message(sender, receiver, content, timestamp)
+            return return_success(data={"message": db_row}, message=f"私信发送成功（存储于DB）：从「{sender}」到「{receiver}」")
+        except Exception:
+            logger.exception("调用 pg_adapter.create_personal_message 失败")
+            # 将消息持久化到重试队列，优先使用 message_retry_manager
+            try:
+                if message_retry_manager is not None:
+                    await message_retry_manager.enqueue_personal(sender, receiver, content, timestamp)
+                    return return_success(message=f"私信已入队，稍后重试写入DB：从「{sender}」到「{receiver}」")
+            except Exception:
+                logger.exception("将私信加入重试队列失败")
 
-    return return_success(message=f"私信发送成功：从「{sender_name}」到「{receiver_name}」，内容：{content}")
+    # 若执行到此处，表示 DB 不可用或入队失败，返回错误（不再做本地 pkl 保存）
+    return return_error("发送私信失败：数据库不可用且无法入队重试，请稍后重试", 503)
 
 
 @app.post("/send_group_message")
@@ -785,64 +1335,106 @@ async def send_group_message(request: Request):
     if missing_fields:
         return return_error(f"发送群消息失败：缺少必填参数 - {', '.join(missing_fields)}")
 
-    sender = user_manager.find_user(sender_name)
-    group = group_manager.find_group(group_name)
+    # 在 DB_ONLY 模式下要求 DB 可用
+    if DB_ONLY and not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("发送群消息失败：服务被配置为仅使用数据库（DB_ONLY），但数据库不可用", 503)
 
-    error_msg = []
-    if not sender:
-        error_msg.append(f"发送方「{sender_name}」不存在")
-    if not group:
-        error_msg.append(f"群组「{group_name}」不存在")
+    # 明确断言为 str，帮助静态类型检查器（并在运行时捕获异常）
+    assert isinstance(sender_name, str), "sender_name must be a str"
+    assert isinstance(group_name, str), "group_name must be a str"
+    assert isinstance(content, str), "content must be a str"
+    assert isinstance(timestamp, str), "timestamp must be a str"
 
-    if error_msg:
-        return return_error(f"发送群消息失败：{'; '.join(error_msg)}", 404)
+    # 确保 Postgres 适配器可用，避免在后续调用时出现 None 成员访问错误
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("发送群消息失败：数据库不可用，请稍后重试", 503)
 
-    # 确保 sender 和 group 已经存在（类型检查提示）
-    assert sender is not None and group is not None
+    # 校验发送者仅使用 DB（内存缓存不可作为权威数据源）
     try:
-        assert isinstance(content, str) and isinstance(timestamp, str)
-        message = groupChatMessage(sender, group, content, timestamp)
-        msg_manager.add_group_message(message)
-        return return_success(message=f"群消息发送成功：「{sender_name}」发送到群组「{group_name}」")
-    except Exception as exc:
-        return return_error(f"发送群消息失败：{exc}", 500)
+        if str(sender_name).isdigit():
+            try:
+                ucheck = await pg_adapter.get_user_by_id(int(sender_name))
+            except Exception:
+                ucheck = None
+        else:
+            ucheck = await pg_adapter.get_user_by_username(sender_name)
+    except Exception:
+        logger.exception('发送群消息: 校验发送者时 DB 查询失败')
+        return return_error('发送群消息失败：无法校验发送者，请稍后重试', 500)
+
+    if not ucheck:
+        return return_error(f"发送群消息失败：发送方「{sender_name}」不存在", 404)
+
+    # NOTE: 暂不校验群组是否存在（若需严格校验，请在 DB 中添加群组表并由 pg_adapter 提供查询）。
+
+    # 若 DB 可用则写入 DB（优先）；写入失败时尝试入队重试，否则返回 503
+    if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+        try:
+            db_row = await pg_adapter.create_group_message(group_name, sender_name, content, timestamp)
+            # 将消息加入本地内存缓存以便即时广播（不再写本地 pkl）
+            try:
+                msg = groupChatMessage(sender_name, group_name, content, timestamp)
+                msg_manager.add_group_message(msg)
+            except Exception:
+                logger.exception("将群消息加入本地缓存失败")
+            return return_success(data={"message": db_row}, message=f"群消息发送成功（存储于DB）：由「{sender_name}」发送到群「{group_name}」")
+        except Exception:
+            logger.exception("调用 pg_adapter.create_group_message 失败")
+            try:
+                if message_retry_manager is not None:
+                    await message_retry_manager.enqueue_group(group_name, sender_name, content, timestamp)
+                    return return_success(message=f"群消息已入队，稍后重试写入DB：由「{sender_name}」发送到群「{group_name}」")
+            except Exception:
+                logger.exception("将群消息加入重试队列失败")
+
+    # DB 不可用或入队失败时，返回错误（移除本地 pkl 保存）
+    return return_error("发送群消息失败：数据库不可用且无法入队重试，请稍后重试", 503)
 
 
 @app.post("/get_personal_messages")
 async def get_personal_messages(request: Request):
     data = await _get_payload(request)
-    if not data:
+    if data is None:
         return return_error("请求参数不能为空，请传入JSON格式数据")
     user1 = data.get("user1")
     user2 = data.get("user2")
-    if not user1 or not user2:
+    if user1 is None or user2 is None:
         return return_error("查询失败：缺少 user1 或 user2 参数")
 
-    u1 = user_manager.find_user(user1)
-    u2 = user_manager.find_user(user2)
-    if not u1 or not u2:
-        return return_error(f"查询失败：用户不存在（{user1 if not u1 else ''} {user2 if not u2 else ''})", 404)
+    # 仅使用 DB 查询私信记录，不再回退到内存历史（内存仅用于实时广播）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
 
     try:
-        messages = msg_manager.get_personal_messages(user1, user2)
+        # 确保传递给 adapter 的为整数 id
+        try:
+            uid1 = int(user1) if not isinstance(user1, int) else user1
+            uid2 = int(user2) if not isinstance(user2, int) else user2
+        except Exception:
+            return return_error("查询失败：user1 或 user2 格式不正确，应为用户 ID", 400)
 
-        def to_str(val):
-            return getattr(val, "username", str(val))
+        rows = await pg_adapter.fetch_personal_messages(uid1, uid2)
+        return return_success(data={"messages": rows}, message=f"查询到{uid1}与{uid2}的历史私聊消息，共{len(rows)}条")
+    except Exception:
+        logger.exception("使用 pg_adapter.fetch_personal_messages 查询失败")
+        return return_error("查询失败：数据库内部错误，请稍后重试", 500)
 
-        msg_list = []
-        for msg in messages:
-            msg_list.append(
-                {
-                    "sender": to_str(getattr(msg, "sender", getattr(msg, "from_user", ""))),
-                    "receiver": to_str(getattr(msg, "receiver", getattr(msg, "to_user", ""))),
-                    "content": getattr(msg, "content", getattr(msg, "text", "")),
-                    "timestamp": getattr(msg, "timestamp", getattr(msg, "time", "")),
-                }
-            )
-        return return_success(data={"messages": msg_list}, message=f"查询到{user1}与{user2}的历史私聊消息，共{len(msg_list)}条")
-    except Exception as exc:
-        logger.error("查询历史私聊消息失败：%s", exc, exc_info=True)
-        return return_error(f"查询历史私聊消息失败：{exc}", 500)
+
+@app.get("/get_personal_messages")
+async def get_personal_messages_get(user1: Optional[int] = None, user2: Optional[int] = None):
+    """支持 GET 查询的兼容接口，接受 query 参数 `user1` 和 `user2`。"""
+    if user1 is None or user2 is None:
+        return return_error("查询失败：缺少 user1 或 user2 参数")
+
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询失败：数据库不可用，请稍后重试", 503)
+
+    try:
+        rows = await pg_adapter.fetch_personal_messages(int(user1), int(user2))
+        return return_success(data={"messages": rows}, message=f"查询到{int(user1)}与{int(user2)}的历史私聊消息，共{len(rows)}条")
+    except Exception:
+        logger.exception("使用 pg_adapter.fetch_personal_messages 查询失败（GET）")
+        return return_error("查询失败：数据库内部错误，请稍后重试", 500)
 
 
 @app.get("/get_posts")
@@ -855,40 +1447,28 @@ async def get_posts(request: Request):
     section = request.query_params.get("section")
     keyword = request.query_params.get("keyword")
 
+    # 强制使用 Postgres 查询帖子列表（不再回退到内存缓存）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询帖子失败：数据库不可用，请稍后重试", 503)
+
     try:
-        # 获取所有帖子或特定板块的帖子
-        if section:
-            posts = post_manager.get_posts(section)
-        else:
-            posts = post_manager.get_posts(None) # 获取所有
+        posts_rows = await pg_adapter.fetch_posts_rows(section)
 
-        # 如果有关键词，进行过滤
+        # 关键词过滤（基于 title/content）
         if keyword:
-            keyword = str(keyword).lower().strip()
-            filtered_posts = []
-            for p in posts:
-                title = str(getattr(p, 'title', '')).lower()
-                content = str(getattr(p, 'content', '')).lower()
-                if keyword in title or keyword in content:
-                    filtered_posts.append(p)
-            posts = filtered_posts
+            k = str(keyword).lower().strip()
+            posts_rows = [p for p in posts_rows if k in p.get('title', '').lower() or k in p.get('content', '').lower()]
 
-        # 按时间倒序排列（最新的在前）
-        def parse_time(p):
-            t = getattr(p, 'time', None)
-            if not t:
-                return datetime.datetime.min
-            try:
-                if isinstance(t, str):
-                    return datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
-                return t
-            except Exception:
-                return datetime.datetime.min
+        # 时间排序（字符串时间解析）
+        def _parse_time_dict(pdict):
+            t = pd.to_datetime(pdict.get('time', ''), errors='coerce')
+            if pd.isna(t):
+                return pd.Timestamp.min
+            return t
 
-        posts.sort(key=parse_time, reverse=True)
+        posts_rows.sort(key=_parse_time_dict, reverse=True)
+        posts_dict = posts_rows
 
-        posts_dict = [p.to_dict() for p in posts]
-        
         msg = f"查询成功"
         if section:
             msg += f"，板块「{section}」"
@@ -896,12 +1476,10 @@ async def get_posts(request: Request):
             msg += f"，关键词「{keyword}」"
         msg += f"，共{len(posts_dict)}条数据"
 
-        return return_success(
-            data={"posts": posts_dict},
-            message=msg,
-        )
+        return return_success(data={"posts": posts_dict}, message=msg)
     except Exception as exc:
-        return return_error(f"查询帖子失败：{exc}", 500, request_data=dict(request.query_params))
+        logger.exception("查询帖子失败：%s", exc)
+        return return_error("查询帖子失败：数据库内部错误，请稍后重试", 500)
 
 
 @app.get("/get_hot_posts")
@@ -909,30 +1487,30 @@ async def get_hot_posts(limit: int = 8):
     """返回按热度排序的帖子（默认 top N=8）。
     当前热度计算：以评论数为主，时间为次要排序键（评论数降序，时间降序）。
     """
-    try:
-        posts = post_manager.get_posts(None)
+    # 热帖计算仅基于 DB 数据，不回退到内存缓存
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询热帖失败：数据库不可用，请稍后重试", 503)
 
-        def parse_time(p):
-            t = getattr(p, 'time', None)
-            if not t:
-                return datetime.datetime.min
-            try:
-                return datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
-            except Exception:
-                return datetime.datetime.min
+    try:
+        posts_rows = await pg_adapter.fetch_posts_rows(None)
+
+        def _parse_time(p):
+            t = pd.to_datetime(p.get('time', ''), errors='coerce')
+            if pd.isna(t):
+                return pd.Timestamp.min
+            return t
 
         posts_sorted = sorted(
-            posts,
-            key=lambda p: (len(getattr(p, 'comments', [])) if getattr(p, 'comments', None) is not None else 0, parse_time(p)),
+            posts_rows,
+            key=lambda p: (len(p.get('comments', [])), _parse_time(p)),
             reverse=True,
         )
-
         top = posts_sorted[: max(1, int(limit))]
-        posts_dict = [p.to_dict() for p in top]
+        posts_dict = top
         return return_success(data={"posts": posts_dict}, message=f"查询到热帖 top {len(posts_dict)}")
     except Exception as exc:
-        logger.error("获取热帖失败：%s", exc, exc_info=True)
-        return return_error(f"查询热帖失败：{exc}", 500)
+        logger.exception("获取热帖失败：%s", exc)
+        return return_error("查询热帖失败：数据库内部错误，请稍后重试", 500)
 
 
 @app.post("/create_post")
@@ -959,22 +1537,53 @@ async def create_post(request: Request):
     if missing_fields:
         return return_error(f"创建帖子失败：缺少必填参数 - {', '.join(missing_fields)}")
 
-    if not user_manager.find_user(author):
+    # 强制使用 Postgres 进行创建操作
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("创建帖子失败：数据库不可用，请稍后重试", 503)
+
+    # 验证作者存在性（仅在 DB 中校验）
+    author_name_str = str(author)
+    try:
+        if author_name_str.isdigit():
+            try:
+                uid = int(author_name_str)
+                u = await pg_adapter.get_user_by_id(uid)
+            except Exception:
+                u = None
+        else:
+            u = await pg_adapter.get_user_by_username(author_name_str)
+    except Exception:
+        logger.exception("调用 pg_adapter.get_user_by_username/get_user_by_id 失败")
+        return return_error("创建帖子失败：无法验证作者，请稍后重试", 500)
+
+    if not u:
         return return_error(f"创建帖子失败：作者「{author}」不存在", 404)
 
     try:
-        post = post_manager.add_post(author, title, content, section)
+        db_post = await pg_adapter.create_post(author, title, content, section)
+        if not db_post or not db_post.get('id'):
+            logger.error("pg_adapter.create_post 未返回有效结果")
+            return return_error("创建帖子失败：数据库未返回有效结果", 500)
+        # 异步尝试更新内存缓存（若启用），不阻塞主请求流程
         try:
-            await run_in_thread_with_lock(post_manager.save_posts, POST_FILE)
-            logger.info("创建帖子后帖子数据已保存：%s", POST_FILE)
-        except Exception as exc:
-            logger.error("创建帖子后保存帖子数据失败：%s", exc, exc_info=True)
+            asyncio.create_task(_async_update_post_cache(db_post))
+        except Exception:
+            logger.debug('创建帖子后调度异步缓存更新失败（可忽略）')
+
         return return_success(
-            data={"post": post.to_dict()},
-            message=f"帖子「{title}」创建成功（ID：{post.id}）",
+            data={"post": db_post},
+            message=f"帖子「{title}」创建成功（ID：{db_post.get('id')}，存储于DB）",
         )
     except Exception as exc:
-        return return_error(f"创建帖子「{title}」失败：{exc}", 500)
+        try:
+            from postgres_data.adapter import DatabaseError
+            if isinstance(exc, DatabaseError):
+                logger.exception("数据库错误：%s", exc)
+                return return_error("创建帖子失败：数据库内部错误，请稍后重试", 500)
+        except Exception:
+            pass
+        logger.exception("调用 pg_adapter.create_post 失败")
+        return return_error("创建帖子失败：内部错误，请稍后重试", 500)
 
 
 @app.get("/get_post_detail")
@@ -988,11 +1597,18 @@ async def get_post_detail(request: Request):
     except ValueError:
         return return_error(f"查询帖子详情失败：帖子ID「{post_id_str}」不是有效的数字")
 
-    post = post_manager.get_post(post_id)
-    if not post:
-        return return_error(f"查询帖子详情失败：未找到ID为{post_id}的帖子", 404)
+    # 仅使用 DB 查询帖子详情（不再回退到内存）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("查询帖子详情失败：数据库不可用，请稍后重试", 503)
 
-    return return_success(data={"post": post.to_dict()}, message=f"查询到ID为{post_id}的帖子详情")
+    try:
+        post_row = await pg_adapter.get_post_by_id(post_id)
+        if not post_row:
+            return return_error(f"查询帖子详情失败：未找到ID为{post_id}的帖子", 404)
+        return return_success(data={"post": post_row}, message=f"查询到ID为{post_id}的帖子详情")
+    except Exception:
+        logger.exception("从 pg_adapter.get_post_by_id 获取帖子详情失败")
+        return return_error("查询帖子详情失败：数据库内部错误，请稍后重试", 500)
 
 
 @app.post("/add_comment")
@@ -1016,54 +1632,63 @@ async def add_comment(request: Request):
     if missing_fields:
         return return_error(f"添加评论失败：缺少必填参数 - {', '.join(missing_fields)}")
 
+    # 在 DB_ONLY 模式下要求 DB 可用
+    if DB_ONLY and not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("添加评论失败：服务被配置为仅使用数据库（DB_ONLY），但数据库不可用", 503)
+
     try:
         post_id = int(str(post_id_str))
     except ValueError:
         return return_error(f"添加评论失败：帖子ID「{post_id_str}」不是有效的数字")
 
-    if not user_manager.find_user(author):
+    # 强制使用 Postgres 添加评论，移除本地回退逻辑
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("添加评论失败：数据库不可用，请稍后重试", 503)
+
+    # 验证作者存在性（仅使用 DB）
+    comment_author_name_str = str(author)
+    try:
+        if comment_author_name_str.isdigit():
+            try:
+                cid = int(comment_author_name_str)
+                u = await pg_adapter.get_user_by_id(cid)
+            except Exception:
+                u = None
+        else:
+            u = await pg_adapter.get_user_by_username(comment_author_name_str)
+    except Exception:
+        logger.exception("调用 pg_adapter.get_user_by_username/get_user_by_id 失败")
+        return return_error("添加评论失败：无法验证作者，请稍后重试", 500)
+
+    if not u:
         return return_error(f"添加评论失败：作者「{author}」不存在", 404)
 
-    comment = post_manager.add_comment(post_id, author, content)
-    if not comment:
-        return return_error(f"添加评论失败：未找到ID为{post_id}的帖子", 404)
     try:
-        await run_in_thread_with_lock(post_manager.save_posts, POST_FILE)
-        logger.info("添加评论后帖子数据已保存：%s", POST_FILE)
+        db_comment = await pg_adapter.add_comment(post_id, author, content)
+        if db_comment and db_comment.get('id'):
+            # 异步更新内存缓存（若启用），不阻塞请求
+            try:
+                asyncio.create_task(_async_update_post_comment_cache(post_id, db_comment))
+            except Exception:
+                logger.debug('添加评论后调度异步缓存更新失败（可忽略）')
+
+            return return_success(
+                data={"comment": db_comment},
+                message=f"成功为ID{post_id}的帖子添加评论（评论作者：{author}，存储于DB）",
+            )
+        else:
+            logger.error("pg_adapter.add_comment 未返回有效结果")
+            return return_error("添加评论失败：数据库未返回有效结果", 500)
     except Exception as exc:
-        logger.error("添加评论后保存帖子数据失败：%s", exc, exc_info=True)
-    return return_success(
-        data={"comment": comment.to_dict()},
-        message=f"成功为ID{post_id}的帖子添加评论（评论作者：{author}）",
-    )
-
-
-@app.post("/user_logout")
-async def user_logout(request: Request):
-    data = await _get_payload(request)
-    if not data:
-        return return_error("请求参数不能为空，请传入JSON格式数据")
-
-    username = data.get("username")
-    userid = data.get("id")
-    if not username and not userid:
-        return return_error("登出失败：缺少用户名(username)或用户ID(id)参数")
-
-    user_obj = None
-    if username:
-        user_obj = user_manager.find_user(username)
-    if not user_obj and userid:
-        for u in user_manager.user_list:
-            if getattr(u, 'id', None) == userid:
-                user_obj = u
-                break
-
-    if not user_obj:
-        return return_error("登出失败：用户不存在", 404)
-
-    user_obj.set_state("offline")
-    return return_success(message=f"用户已成功登出，状态更新为离线")
-
+        try:
+            from postgres_data.adapter import DatabaseError
+            if isinstance(exc, DatabaseError):
+                logger.exception("数据库错误：%s", exc)
+                return return_error("添加评论失败：数据库内部错误，请稍后重试", 500)
+        except Exception:
+            pass
+        logger.exception("调用 pg_adapter.add_comment 失败")
+        return return_error("添加评论失败：内部错误，请稍后重试", 500)
 
 @app.post("/add_friend")
 async def add_friend(request: Request):
@@ -1071,40 +1696,50 @@ async def add_friend(request: Request):
     if not data:
         return return_error("请求参数不能为空，请传入JSON格式数据")
 
-    username = data.get("username")
-    friend_name = data.get("friend")
+    user_id = data.get("user_id")
+    friend_id = data.get("friend_id")
 
-    if not username:
-        return return_error("添加好友失败：缺少用户名(username)参数")
-    if not friend_name:
-        return return_error("添加好友失败：缺少好友用户名(friend)参数")
+    if not user_id:
+        return return_error("添加好友失败：缺少用户ID(user_id)参数")
+    if not friend_id:
+        return return_error("添加好友失败：缺少好友ID(friend_id)参数")
 
-    if username == friend_name:
-        return return_error(f"添加好友失败：不能添加自己（用户名：{username}）", 400)
+    if user_id == friend_id:
+        return return_error(f"添加好友失败：不能添加自己（用户ID：{user_id}）", 400)
 
-    user_obj = user_manager.find_user(username)
-    friend_obj = user_manager.find_user(friend_name)
+    # 使用 DB 校验并添加好友关系（不回退到内存）
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return return_error("添加好友失败：数据库不可用，请稍后重试", 503)
 
-    error_msg = []
-    if not user_obj:
-        error_msg.append(f"当前用户「{username}」不存在")
-    if not friend_obj:
-        error_msg.append(f"好友「{friend_name}」不存在")
+    # 校验两位用户在 DB 中存在
+    try:
+        u_a = await pg_adapter.get_user_by_id(user_id)
+        u_b = await pg_adapter.get_user_by_id(friend_id)
+    except Exception:
+        logger.exception('添加好友: 校验用户时 DB 查询失败')
+        return return_error('添加好友失败：无法校验用户，请稍后重试', 500)
 
-    if error_msg:
-        return return_error(f"添加好友失败：{'; '.join(error_msg)}", 404)
-    # 向类型检查器表明 user_obj 和 friend_obj 已存在
-    assert user_obj is not None and friend_obj is not None
-
-    if friend_obj in user_obj.get_friends():
-        return return_error(f"添加好友失败：「{username}」已添加「{friend_name}」为好友", 400)
+    if not u_a or not u_b:
+        lost_u=user_id if not u_a else friend_id
+        logger.warning('添加好友失败：用户「%s」在数据库中不存在', lost_u)
+        return return_error('添加好友失败：其中一方用户在数据库中不存在', 404)
 
     try:
-        user_obj.add_friend(friend_obj)
-        friend_obj.add_friend(user_obj)
-        return return_success(message=f"添加好友成功：「{username}」和「{friend_name}」已互加为好友")
-    except Exception as exc:
-        return return_error(f"添加好友失败：{exc}", 500)
+        ua = int(u_a.get('id') or user_id)
+        ub = int(u_b.get('id') or friend_id)
+        ok = await pg_adapter.add_friend_db(ua, ub)
+        if not ok:
+            return return_error('添加好友失败：数据库操作未成功', 500)
+        # DB 更新成功后，异步尝试更新内存缓存（若启用），不影响主流程
+        try:
+            asyncio.create_task(_async_update_friend_cache(ua, ub))
+        except Exception:
+            logger.debug('添加好友后调度异步缓存更新失败（可忽略）')
+
+        return return_success(message=f"添加好友成功（存储于DB）：{u_a.get('username')} ↔ {u_b.get('username')}")
+    except Exception:
+        logger.exception('调用 pg_adapter.add_friend_db 失败')
+        return return_error('添加好友失败：内部错误，请稍后重试', 500)
 
 
 @app.post("/search")
@@ -1149,14 +1784,18 @@ async def search_posts(request: Request):
     if not keyword:
         return return_error("请提供搜索关键字", 400)
 
-    results = []
-    for p in post_manager.post_list:
-        title = _safe_text(getattr(p, 'title', ''))
-        content = _safe_text(getattr(p, 'content', ''))
-        if keyword.lower() in title.lower() or keyword.lower() in content.lower():
-            results.append(p.to_dict())
-
-    return return_success(data={"posts": results}, message=f"找到{len(results)}条相关帖子")
+    try:
+        # 仅使用 Postgres 进行全文（关键词）过滤，不再回退到本地内存列表
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            posts_rows = await pg_adapter.fetch_posts_rows(None)
+            k = str(keyword).lower().strip()
+            filtered = [p for p in posts_rows if k in p.get('title', '').lower() or k in p.get('content', '').lower()]
+            return return_success(data={"posts": filtered}, message=f"找到{len(filtered)}条相关帖子")
+        else:
+            return return_error("搜索失败：数据库不可用", 503)
+    except Exception as exc:
+        logger.exception("search_posts 处理失败：%s", exc)
+        return return_error(f"搜索帖子失败：{exc}", 500)
 
 
 @app.post("/location")
@@ -1272,6 +1911,22 @@ async def legal_chat(request: Request):
         return return_error(f"服务器内部错误：{exc}", 500)
 
 
+@app.get("/health/db")
+async def health_db():
+    """数据库健康检查：尝试调用 adapter 的 ensure_seed_data（轻量查询）。
+
+    返回 200 表示 DB 可用，返回 503 表示不可用或发生异常。
+    """
+    if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+        return JSONResponse(status_code=503, content={"code": 503, "db_ok": False, "error": "Postgres adapter unavailable"})
+    try:
+        counts = await pg_adapter.ensure_seed_data()
+        return JSONResponse(status_code=200, content={"code": 200, "db_ok": True, "counts": counts})
+    except Exception as exc:
+        logger.exception("/health/db 检查失败: %s", exc)
+        return JSONResponse(status_code=503, content={"code": 503, "db_ok": False, "error": str(exc)})
+
+
 @app.websocket("/ws/private")
 async def websocket_private_chat(websocket: WebSocket):
     user_id = websocket.query_params.get("user_id")
@@ -1281,6 +1936,57 @@ async def websocket_private_chat(websocket: WebSocket):
         return
 
     await manager.connect(user_id, websocket)
+    # WebSocket 建立后将用户状态设为 online（内存与 DB）
+    try:
+        # 优先使用 DB 查询用户并尽量在内存中找到对应对象以设置状态
+        mem_user = None
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            try:
+                try:
+                    uid = int(user_id)
+                except Exception:
+                    uid = None
+
+                if uid is not None:
+                    db_user = await pg_adapter.get_user_by_id(uid)
+                else:
+                    db_user = await pg_adapter.get_user_by_username(user_id)
+
+                if db_user:
+                    # 尝试在内存中找到对应用户对象以更新其状态（非必需）
+                    try:
+                        mem_user = user_manager.find_user(db_user.get('username'))
+                    except Exception:
+                        mem_user = None
+                # 无论是否找到内存对象，都在 DB 中设置 online
+                try:
+                    if uid is not None:
+                        await pg_adapter.set_user_state(user_id=uid, state='online')
+                    else:
+                        await pg_adapter.set_user_state(username=user_id, state='online')
+                except Exception:
+                    logger.exception('WebSocket connect: 同步 DB 状态失败')
+            except Exception:
+                logger.exception('WebSocket connect: DB 查询失败，跳过内存查找')
+
+        # 仅在 DB 可用时设置 online 状态（不回退到内存用户列表）
+        if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+            try:
+                try:
+                    uid = int(user_id)
+                except Exception:
+                    uid = None
+
+                if uid is not None:
+                    await pg_adapter.set_user_state(user_id=uid, state='online')
+                else:
+                    await pg_adapter.set_user_state(username=user_id, state='online')
+            except Exception:
+                logger.exception('WebSocket connect: 同步 DB 状态失败')
+        else:
+            logger.warning('WebSocket connect: Postgres 不可用，无法设置用户在线状态')
+    except Exception:
+        logger.exception('WebSocket connect: 更新在线状态失败')
 
     try:
         while True:
@@ -1294,10 +2000,21 @@ async def websocket_private_chat(websocket: WebSocket):
                 await manager.send_to_user(user_id, {"type": "error", "message": "Invalid JSON payload."})
                 continue
 
-            sender = payload.get("from")
-            receiver = payload.get("to")
+            sender_raw = payload.get("from")
+            receiver_raw = payload.get("to")
             content = payload.get("content")
             timestamp = payload.get("ts")
+
+            # 1. 解析发送者和接收者的真实数据库 ID
+            sender, sender_info = await resolve_user_identifier(sender_raw)
+            
+            receiver, receiver_info = await resolve_user_identifier(receiver_raw)
+            
+            if not sender or not receiver:
+                error_msg = f"用户不存在: sender={sender_raw}, receiver={receiver_raw}"
+                logger.error(error_msg)
+                await manager.send_to_user(str(sender_raw), {"type": "error", "message": error_msg})
+                continue
 
             missing_fields = []
             if not sender:
@@ -1312,16 +2029,89 @@ async def websocket_private_chat(websocket: WebSocket):
                 logger.error("用户 %s %s，payload：%s", user_id, error_msg, payload)
                 await manager.send_to_user(user_id, {"type": "error", "message": "Missing fields: from/to/content."})
                 continue
+            # 当存在 Postgres 适配器时，优先使用 DB 完成存在性校验与持久化写入，避免依赖内存用户对象
+            if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+                try:
+                    # 校验发送者和接收者在 DB 中是否存在（支持 id 或 username）
+                    s_exists = False
+                    r_exists = False
+                    try:
+                        s_id = sender if isinstance(sender, int) else int(str(sender))
+                    except Exception:
+                        s_id = None
+                    try:
+                        r_id = receiver if isinstance(receiver, int) else int(str(receiver))
+                    except Exception:
+                        r_id = None
 
-            ok, error_message = send_personal_message_logic(sender, receiver, content, timestamp)
-            if not ok:
-                logger.warning("WebSocket消息保存失败：%s", error_message)
+                    if s_id is not None:
+                        s_info = await pg_adapter.get_user_by_id(s_id)
+                    else:
+                        s_info = await pg_adapter.get_user_by_username(str(sender))
+                    if s_info:
+                        s_exists = True
 
-            # 异步保存消息，避免阻塞 WebSocket 循环
-            try:
-                asyncio.create_task(run_in_thread_with_lock(msg_manager.save_personal_messages, PERSONAL_MSG_FILE))
-            except Exception:
-                logger.exception("异步保存私信消息任务创建失败")
+                    if r_id is not None:
+                        r_info = await pg_adapter.get_user_by_id(r_id)
+                    else:
+                        r_info = await pg_adapter.get_user_by_username(str(receiver))
+                    if r_info:
+                        r_exists = True
+
+                    if not (s_exists and r_exists):
+                        await manager.send_to_user(str(sender), {"type": "error", "message": "发送失败：发送方或接收方在数据库中不存在"})
+                        logger.warning("WebSocket: 发送失败，DB 中缺少用户：%s -> %s", sender, receiver)
+                        continue
+
+                    # DB 写入私信记录
+                    try:
+                        await pg_adapter.create_personal_message(sender, receiver, content, timestamp)
+                    except Exception:
+                        logger.exception("WebSocket: 调用 pg_adapter.create_personal_message 失败")
+                        try:
+                            # 优先入队重试管理器
+                            if message_retry_manager is not None:
+                                await message_retry_manager.enqueue_personal(sender, receiver, content, timestamp)
+                                await manager.send_to_user(str(sender), {"type": "info", "message": "消息已入队，稍后重试写入DB"})
+                            else:
+                                # 无本地 pkl 回退，告知发送者失败
+                                await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：数据库不可用且无重试队列"})
+                                logger.warning("WebSocket: 数据库写失败且无重试队列，消息丢失")
+                                continue
+                        except Exception:
+                            logger.exception("WebSocket: 将消息加入重试队列失败，无法持久化")
+                            await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：无法将消息入队重试"})
+                            continue
+
+                except Exception:
+                    logger.exception("WebSocket: DB 路径处理消息出错，尝试入队重试")
+                    try:
+                        if message_retry_manager is not None:
+                            await message_retry_manager.enqueue_personal(sender, receiver, content, timestamp)
+                            await manager.send_to_user(str(sender), {"type": "info", "message": "消息已入队，稍后重试写入DB"})
+                        else:
+                            await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：数据库错误且无重试队列"})
+                            logger.warning("WebSocket: DB 写失败且无重试队列，消息无法持久化")
+                        continue
+                    except Exception:
+                        logger.exception("WebSocket: 将消息加入重试队列失败")
+                        await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：无法将消息入队重试"})
+                        continue
+
+            # 若 Postgres 不可用，尝试将消息入队至重试管理器；若也不可用则通知发送者错误
+            if not (_PG_ADAPTER_AVAILABLE and pg_adapter is not None):
+                try:
+                    if message_retry_manager is not None:
+                        await message_retry_manager.enqueue_personal(sender, receiver, content, timestamp)
+                        await manager.send_to_user(str(sender), {"type": "info", "message": "消息已入队，稍后重试写入DB"})
+                    else:
+                        await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：数据库不可用且无重试队列"})
+                        logger.warning("WebSocket: 数据库不可用且无重试队列，消息无法持久化")
+                        continue
+                except Exception:
+                    logger.exception("WebSocket: 将消息加入重试队列失败，无法持久化")
+                    await manager.send_to_user(str(sender), {"type": "error", "message": "消息发送失败：无法将消息入队重试"})
+                    continue
 
             send_msg = {
                 "type": "message",
@@ -1330,21 +2120,101 @@ async def websocket_private_chat(websocket: WebSocket):
                 "content": content,
                 "ts": timestamp,
             }
-            await manager.send_to_user(receiver, send_msg)
+            await manager.send_to_user(str(receiver), send_msg)
 
     except WebSocketDisconnect:
         logger.info("用户 %s 主动断开WebSocket连接", user_id)
         manager.disconnect(user_id)
+        # 断开时同步状态为 offline
+        try:
+            # 仅在 DB 可用时设置 offline（不回退到内存 user_manager）
+            if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+                try:
+                    try:
+                        uid = int(user_id)
+                    except Exception:
+                        uid = None
+                    if uid is not None:
+                        await pg_adapter.set_user_state(user_id=uid, state='offline')
+                    else:
+                        await pg_adapter.set_user_state(username=user_id, state='offline')
+                except Exception:
+                    logger.exception('WebSocketDisconnect: 同步 DB 状态失败')
+            else:
+                logger.warning('WebSocketDisconnect: Postgres 不可用，无法设置用户离线状态')
+        except Exception:
+            logger.exception('WebSocketDisconnect: 更新离线状态失败')
     except Exception as exc:
         logger.critical("用户 %s 连接发生未预期异常：%s", user_id, exc, exc_info=True)
         manager.disconnect(user_id)
+        # 连接异常时同步离线状态
+        try:
+            if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+                try:
+                    try:
+                        uid = int(user_id)
+                    except Exception:
+                        uid = None
+                    if uid is not None:
+                        await pg_adapter.set_user_state(user_id=uid, state='offline')
+                    else:
+                        await pg_adapter.set_user_state(username=user_id, state='offline')
+                except Exception:
+                    logger.exception('WebSocket exception: 同步 DB 状态失败')
+            else:
+                logger.warning('WebSocket exception: Postgres 不可用，无法设置用户离线状态')
+        except Exception:
+            logger.exception('WebSocket exception: 更新离线状态失败')
         await websocket.close(code=1011)
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    # 以模块方式直接运行时，禁止 uvicorn 的 reload（reload 会启动
-    # 监视器进程和子进程，可能导致多进程重复保存）。开发时推荐
-    # 使用 `uvicorn 聊天和用户后端.Combined_server:app --reload` 在命令行
-    uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=False)
+    # 以模块方式直接运行时，使用 asyncio.run / asyncio.Runner 启动 uvicorn
+    # 并在需要时通过 loop_factory 指定 SelectorEventLoop（避免 Windows 上
+    # Proactor 与某些 async DB 驱动的兼容性问题）。保留回退到同步
+    # uvicorn.run 以兼容旧环境。
+    async def _uvicorn_serve():
+        config = uvicorn.Config("Combined_server:app", host="0.0.0.0", port=8000, reload=False)
+        server = uvicorn.Server(config)
+        await server.serve()
+
+    def _uvicorn_run_sync():
+        uvicorn.run("Combined_server:app", host="0.0.0.0", port=8000, reload=False)
+
+    try:
+        if sys.platform.startswith("win"):
+            # 优先尝试在 asyncio.run 中传入 loop_factory（Python 3.12+）
+            try:
+                asyncio.run(_uvicorn_serve(), loop_factory=asyncio.SelectorEventLoop)
+            except TypeError:
+                # loop_factory 参数不可用，尝试使用 asyncio.Runner
+                try:
+                    with asyncio.Runner(loop_factory=asyncio.SelectorEventLoop) as runner:
+                        try:
+                            runner.run(_uvicorn_serve())
+                        except KeyboardInterrupt:
+                            logger.info("入口：收到 KeyboardInterrupt，退出（Runner）")
+                        except asyncio.CancelledError:
+                            logger.info("入口：Runner 被取消，优雅退出（Runner）")
+                except Exception:
+                    logger.exception("入口：Runner 启动失败，回退到同步 uvicorn.run")
+                    _uvicorn_run_sync()
+            except KeyboardInterrupt:
+                logger.info("入口：收到 KeyboardInterrupt，退出（asyncio.run loop_factory）")
+            except asyncio.CancelledError:
+                logger.info("入口：asyncio.run 被取消，优雅退出（Windows loop_factory）")
+        else:
+            try:
+                asyncio.run(_uvicorn_serve())
+            except KeyboardInterrupt:
+                logger.info("入口：收到 KeyboardInterrupt，退出（asyncio.run）")
+            except asyncio.CancelledError:
+                logger.info("入口：asyncio.run 被取消，优雅退出")
+    except KeyboardInterrupt:
+        logger.info("入口：收到 KeyboardInterrupt，退出")
+        raise
+    except Exception:
+        logger.exception("入口：异步启动失败，回退到同步 uvicorn.run")
+        _uvicorn_run_sync()

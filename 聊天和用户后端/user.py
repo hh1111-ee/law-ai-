@@ -1,4 +1,3 @@
-import pickle
 import threading
 import tempfile
 import os
@@ -58,6 +57,11 @@ class userManage:
             if user.username == username:
                 return user
         return None
+    def find_user_by_id(self, user_id):
+        for user in self.user_list:
+            if user.id == user_id:
+                return user
+        return None
     def save_users(self, filename):
         with self.lock:
             fd = None
@@ -65,6 +69,8 @@ class userManage:
             try:
                 dirn = os.path.dirname(filename) or '.'
                 fd, tmp_path = tempfile.mkstemp(dir=dirn)
+                # 延迟导入 pickle，避免模块导入时立即依赖它（使运行时不依赖本地 pkl）
+                import pickle
                 with os.fdopen(fd, 'wb') as f:
                     pickle.dump(self.user_list, f)
                 os.replace(tmp_path, filename)
@@ -78,6 +84,8 @@ class userManage:
     def load_users(self, filename):
         with self.lock:
             try:
+                # 延迟导入 pickle，避免模块导入时立即依赖它
+                import pickle
                 with open(filename, 'rb') as f:
                     self.user_list = pickle.load(f)
             except Exception as e:

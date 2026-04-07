@@ -53,7 +53,9 @@ function clearClientCache() {
 
 // 根据环境决定是否自动清理（只在开发时打开）
 try {
-    const DEV_CLEAR = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.search.indexOf('dev_clear_cache=1') !== -1;
+    // 仅在显式传入查询参数 ?dev_clear_cache=1 时启用自动清理，
+    // 避免本地开发（localhost）导航时意外清空 localStorage 导致登录信息丢失
+    const DEV_CLEAR = location.search.indexOf('dev_clear_cache=1') !== -1;
     if (DEV_CLEAR) {
         window.addEventListener('beforeunload', clearClientCache);
         window.addEventListener('pagehide', clearClientCache);
@@ -187,23 +189,40 @@ function getStoredUser() {
             localStorage.removeItem('currentUser');
             return null;
         }
-        // 补充状态同步
-        if (user && user.username) {
+        // 若后端只返回 id 而未返回 username，使用 id 填充 username 以保证前端显示逻辑正常
+        try {
+            if (user && !user.username && (user.id || user.id === 0)) {
+                user.username = String(user.id);
+                console.log('getStoredUser: 用 id 填充 username，value=', user.username);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+        } catch (e) {
+            console.warn('getStoredUser: 填充 username 失败', e);
+        }
+        // 补充状态同步：仅在明确拥有 username 或 id 时才发起请求，避免发送空 JSON 导致服务器返回 400/404
+        try {
+            const payload = { username: user?.username || null, id: (user && (user.id || user.id === 0)) ? user.id : null };
+            if (payload.username || payload.id !== null) {
                 fetch(apiUrl('/user_state_search'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user.username, id: user.id || null })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.users && data.users.length > 0) {
-                        user.state = data.users[0].state;
-                        localStorage.setItem('currentUser', JSON.stringify(user));
-                        console.log('getStoredUser: 用户状态已同步', user);
-                        renderNavUser();
-                    }
+                    body: JSON.stringify(payload)
                 })
-                .catch((err) => { console.error('getStoredUser: 用户状态同步失败', err); });
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.users && data.users.length > 0) {
+                            user.state = data.users[0].state;
+                            localStorage.setItem('currentUser', JSON.stringify(user));
+                            console.log('getStoredUser: 用户状态已同步', user);
+                            renderNavUser();
+                        }
+                    })
+                    .catch((err) => { console.error('getStoredUser: 用户状态同步失败', err); });
+            } else {
+                console.warn('getStoredUser: 未提供 username 或 id，跳过状态同步', payload);
+            }
+        } catch (e) {
+            console.warn('getStoredUser: 状态同步流程异常', e);
         }
         return user;
     } catch (error) {
@@ -240,7 +259,7 @@ function renderNavUser() {
         const roleEls = container.querySelectorAll('.user-role, .user-dropdown-role');
         const stateEls = container.querySelectorAll('.user-state');
 
-        if (!authLink || !chip || !dropdown || avatars.length === 0) {
+        if (!authLink || !chip || !dropdown) {
             console.warn('renderNavUser: 必要元素未找到，跳过该容器');
             return;
         }
@@ -261,10 +280,12 @@ function renderNavUser() {
             chip.style.display = 'flex';
             chip.hidden = false;
             dropdown.hidden = true;
-            avatars.forEach(avatar => {
-                avatar.src = DEFAULT_AVATAR;
-                avatar.alt = `${displayName}头像`;
-            });
+            if (avatars && avatars.length > 0) {
+                avatars.forEach(avatar => {
+                    avatar.src = DEFAULT_AVATAR;
+                    avatar.alt = `${displayName}头像`;
+                });
+            }
             nameEls.forEach(el => {
                 el.textContent = displayName;
             });
@@ -318,16 +339,28 @@ function setupNavUserEvents() {
             return;
         }
         const user = getStoredUser();
-        if (user && user.username) {
+        try {
+            const payload = { username: user?.username || null, id: (user && (user.id || user.id === 0)) ? user.id : null };
+            if (payload.username || payload.id !== null) {
                 fetch(apiUrl('/user_logout'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user.username || null, id: user.id || null })
-            }).then(() => {
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    localStorage.removeItem('currentUser');
+                    renderNavUser();
+                }).catch(err => {
+                    console.error('logout: 请求异常', err);
+                    localStorage.removeItem('currentUser');
+                    renderNavUser();
+                });
+            } else {
+                console.warn('logout: 无有效用户信息，直接清理 localStorage', payload);
                 localStorage.removeItem('currentUser');
                 renderNavUser();
-            });
-        } else {
+            }
+        } catch (e) {
+            console.error('logout: 处理失败', e);
             localStorage.removeItem('currentUser');
             renderNavUser();
         }
