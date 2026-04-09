@@ -203,14 +203,15 @@ def import_example_legal(conn, file_path: str) -> int:
 
     df = df[list(required)]
     df = df[df["title"].notna()]
-    df["region"] = df["region"].where(pd.notnull(df["region"]), None)
+    # Convert NaN to None for region column (handles pandas float NaN)
+    df["region"] = df["region"].apply(lambda x: None if pd.isna(x) else x)
     df = df.drop_duplicates(subset=["title", "region"])
     log.info("Rows to process (legal records): %d", len(df))
 
     inserted = skipped = 0
     for _, row in df.iterrows():
         title  = row["title"]
-        region = row["region"]
+        region = row["region"]   # Now either string or None
         exists = conn.execute(
             text(
                 "SELECT 1 FROM example_legal "
