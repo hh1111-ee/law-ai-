@@ -1,4 +1,3 @@
- 
 AI法律平台（演示版）
 
 给竞赛评审的技术说明（摘要）
@@ -23,10 +22,26 @@ graph TD
     API -->|可选：模型服务| Model["模型服务 (Ollama / 本地)"]
 ```
 
-- 前端：静态页面（`html/` 下），演示用无框架实现，重点在可读可测的交互逻辑（见 `html/私聊界面.html` 与 `html/js/app_config.js`）。
-- 后端：主应用在 [聊天和用户后端/Combined_server.py](聊天和用户后端/Combined_server.py)，包含 REST 与 WebSocket，实现认证（演示级）、消息编排、帖子与评论管理。
-- 存储：通过 [postgres_data/adapter.py](postgres_data/adapter.py) 封装 DB 操作，便于未来替换或增强（如引入事务、审计表、分片等）。
-- 重试队列：`message_retry.py` 负责在 DB 不可用时把消息写入磁盘（JSONL），并在后台安全重试，支持死信文件与重试参数配置。
+项目结构
+```
+├── .cloudflared/           # Cloudflare Tunnel 配置（示例）
+├── html/                   # 前端静态文件（演示用）
+├── postgres_data/          # PostgreSQL 数据目录（可选，演示用）
+	|—— adapter.py            # PostgreSQL 适配层实现
+	|—— models.py             # SQLAlchemy 模型定义
+	|——db_config.py          # 数据库连接与配置
+	|——db_session.py         # 数据库会话管理
+	|——init_.py			 # 包初始化
+├── 聊天和用户后端/         # FastAPI 后端实现
+	|—— Combined_server.py     # 主服务入口与 API 实现
+	|—— message_retry.py       # 消息重试管理器实现
+├── scripts/                # 辅助脚本（迁移、测试等）
+├── .env                    # 环境变量配置（不应提交）
+├── .githooks/              # Git hooks（如 pre-commit）
+├── README.md               # 项目说明文档
+├── CHANGELOG.md            # 变更日志
+├── requirements.txt        # Python 依赖列表
+```	
 
 关键模块详解
 ----
@@ -98,6 +113,7 @@ Copy-Item .env.example .env
 
 ```powershell
 uvicorn "聊天和用户后端.Combined_server:app" --host 0.0.0.0 --port 8000
+python 服务.py #将网页开放在5001端口
 ```
 
 4. 健康检查：
@@ -109,11 +125,10 @@ python scripts/smoke_test.py
 5. 消息重试队列验证：
 
 ```powershell
-Get-Content .\数据库\pending_messages.jsonl -Tail 20
+Get-Content .\logs\pending_messages.jsonl -Tail 20
 ```
 
-说明：项目已抛弃本地 pkl 作为业务持久化，`数据库/` 目录当前主要用于重试队列文件与历史兼容内容，不再作为权威数据源。
-
+说明：项目已抛弃本地 pkl 作为业务持久化， `pending_messages.jsonl` 是消息重试队列的持久化文件，不是业务数据库文件；请勿混淆。
 测试（当前有效路径）：
 
 ```powershell
@@ -219,3 +234,5 @@ cmd /c "mklink /J chromium-1200 chromium-1181"
  
 
 ---
+
+
