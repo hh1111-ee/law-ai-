@@ -5,7 +5,7 @@
   const local=`http://localhost:8000`;
   // 先行设置全局 API_BASE 为 BACKEND，保证同步脚本能够立刻使用后端地址
   // 异步配置加载完成后会覆盖此值。
-  try{ window.API_BASE = BACKEND; }catch(e){}
+  try{ window.API_BASE = local; }catch(e){}
 
   // 尝试按顺序获取配置：同域 /config -> 本地后端 -> cpolar
    
