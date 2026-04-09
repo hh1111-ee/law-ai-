@@ -77,7 +77,15 @@
                 <form id="registerForm" class="auth-form-content" style="display:none;">
                     <div class="form-group">
                         <label for="regId">账号（ID）</label>
-                        <input type="text" id="regId" name="id" required placeholder="请设置账号 ID（用于登录）">
+                        <input type="text" 
+                                id="regId" 
+                                name="id" 
+                                required 
+                                placeholder="请设置账号 ID（用于登录）"
+                                pattern="\d{1,9}"
+                                maxlength="9"
+                                title="只能输入数字，最多9位"
+                                oninput="this.value = this.value.replace(/\D/g, '')">
                     </div>
                     <div class="form-group">
                         <label for="regIdentity">身份类型</label>
@@ -90,15 +98,15 @@
                     </div>
                     <div class="form-group">
                         <label for="regUsername">用户名</label>
-                        <input type="text" id="regUsername" name="username" required>
+                        <input type="text" id="regUsername" name="username" required placeholder="请输入用户名">
                     </div>
                     <div class="form-group">
                         <label for="regPassword">密码</label>
-                        <input type="password" id="regPassword" name="password" required>
+                        <input type="password" id="regPassword" name="password" required placeholder="请输入密码" pattern="\d{6,12}" title="密码长度为6-12个字符">
                     </div>
                     <div class="form-group">
                         <label for="confirmPassword">确认密码</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="请再次输入密码" pattern="\d{6,12}" title="密码长度为6-12个字符">
                     </div>
                     
                     <!-- 位置相关字段 -->

@@ -13,7 +13,8 @@ import datetime
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 import uuid
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from openpyxl import load_workbook
 import pandas as pd
 from typing import List, Dict, Optional, Any, cast, Union
@@ -897,9 +898,10 @@ async def get_cases(search: str = "", keyword: str = ""):
 # 避免在文件中重复定义同名处理函数导致覆盖或类型提示冲突。
 
 
-@app.get("/")
-async def root():
-    return PlainTextResponse("Combined server is running.")
+# @app.get("/")
+# async def root():
+#     return PlainTextResponse("Combined server is running.")
+
 
 
 @app.get("/config")
@@ -2219,7 +2221,22 @@ async def websocket_private_chat(websocket: WebSocket):
         except Exception:
             logger.exception('WebSocket exception: 更新离线状态失败')
         await websocket.close(code=1011)
+# ===================== 静态文件托管与首页重定向 =====================
+import os
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
+# 计算 html 目录的绝对路径（Combined_server.py 位于 聊天和用户后端/ 子目录）
+HTML_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'html'))
+
+# 根路径：直接返回主页.html（不经过静态文件挂载，避免被 index.html 覆盖）
+@app.get("/")
+async def serve_homepage():
+    return FileResponse(os.path.join(HTML_DIR, "主页.html"))
+
+# 挂载整个 html 目录，用于提供 CSS、JS、图片等静态资源
+# 注意：挂载路径为 "/"，但根路径已经被上面的函数处理，所以只影响子路径
+app.mount("/", StaticFiles(directory=HTML_DIR), name="static")
 
 if __name__ == "__main__":
     import uvicorn

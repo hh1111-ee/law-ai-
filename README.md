@@ -113,7 +113,6 @@ Copy-Item .env.example .env
 
 ```powershell
 uvicorn "聊天和用户后端.Combined_server:app" --host 0.0.0.0 --port 8000
-python 服务.py #将网页开放在5001端口
 ```
 
 4. 健康检查：
