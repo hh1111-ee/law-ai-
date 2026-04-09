@@ -1389,14 +1389,14 @@ footer {
 }
 
 /* 全站 logo 字体与样式（用于统一导航标题美化） */
-@font-face {
+/* @font-face {
     font-family: 'Noto Sans SC';
     src: url('../fonts/NotoSansSC-Black.woff2') format('woff2'),
          url('../fonts/NotoSansSC-Black.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
-}
+} */
 
 .logo-title {
     font-family: 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
