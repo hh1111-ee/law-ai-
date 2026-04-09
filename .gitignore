@@ -37,3 +37,4 @@ dump_*.sql
 数据库/*.pkl
 # local postgres data directory (do NOT commit production DB files)
 postgres_data/
+弃用/

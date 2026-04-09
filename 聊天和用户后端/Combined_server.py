@@ -16,6 +16,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from openpyxl import load_workbook
 import pandas as pd
+from typing import List, Dict, Optional, Any, cast, Union
+from openai import AsyncOpenAI
+from openai.types.chat import (
+    ChatCompletionSystemMessageParam,
+    ChatCompletionUserMessageParam,
+    ChatCompletionAssistantMessageParam,
+)
+from dotenv import load_dotenv
+load_dotenv()
+
 try:
     from passlib.hash import argon2
 except Exception:
@@ -111,6 +121,16 @@ USE_CACHE = os.environ.get("USE_CACHE", "0") in ("1", "true", "True")
 # 日志目录也指向主目录
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
+#==========ai初始化===========  
+AIClient = AsyncOpenAI(
+    api_key=os.getenv("AI_API_KEY"),  # 从智谱AI开放平台获取
+    base_url=os.getenv("AI_API_BASE_URL")
+)
+MessageParam = Union[
+    ChatCompletionSystemMessageParam,
+    ChatCompletionUserMessageParam,
+    ChatCompletionAssistantMessageParam,
+]
 # ===================== 业务对象 =====================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -1117,7 +1137,7 @@ async def user_logout(request: Request):
                 await pg_adapter.set_user_state(username=str(userid), state='offline')
         else:
             await pg_adapter.set_user_state(username=str(username), state='offline')
-        return return_success(message='登出成功，状态已更新为离线')
+        return return_success(message=f'{username}登出成功，状态已更新为离线')
     except Exception:
         logger.exception('登出时更新 DB 状态失败')
         return return_error('登出失败：更新数据库状态时出错', 500)
@@ -1543,24 +1563,24 @@ async def create_post(request: Request):
 
     # 验证作者存在性（仅在 DB 中校验）
     author_name_str = str(author)
+    u = None
     try:
-        if author_name_str.isdigit():
+        if author_name_str:
             try:
-                uid = int(author_name_str)
-                u = await pg_adapter.get_user_by_id(uid)
+                u = await pg_adapter.get_user_by_username(author_name_str)
             except Exception:
                 u = None
-        else:
-            u = await pg_adapter.get_user_by_username(author_name_str)
     except Exception:
         logger.exception("调用 pg_adapter.get_user_by_username/get_user_by_id 失败")
         return return_error("创建帖子失败：无法验证作者，请稍后重试", 500)
 
     if not u:
+        print(f"作者「{author}」不存在，无法创建帖子")
         return return_error(f"创建帖子失败：作者「{author}」不存在", 404)
 
     try:
-        db_post = await pg_adapter.create_post(author, title, content, section)
+        author_id = u.get('id')
+        db_post = await pg_adapter.create_post(author_id, title, content, section)
         if not db_post or not db_post.get('id'):
             logger.error("pg_adapter.create_post 未返回有效结果")
             return return_error("创建帖子失败：数据库未返回有效结果", 500)
@@ -1647,15 +1667,15 @@ async def add_comment(request: Request):
 
     # 验证作者存在性（仅使用 DB）
     comment_author_name_str = str(author)
+    u = None
     try:
-        if comment_author_name_str.isdigit():
+        if comment_author_name_str:
             try:
-                cid = int(comment_author_name_str)
-                u = await pg_adapter.get_user_by_id(cid)
+                cid = comment_author_name_str
+                u = await pg_adapter.get_user_by_username(cid)
             except Exception:
                 u = None
-        else:
-            u = await pg_adapter.get_user_by_username(comment_author_name_str)
+        
     except Exception:
         logger.exception("调用 pg_adapter.get_user_by_username/get_user_by_id 失败")
         return return_error("添加评论失败：无法验证作者，请稍后重试", 500)
@@ -1860,7 +1880,40 @@ async def api_location(request: Request):
             location = resolve_location({"province": ip_location.get("province"), "city": ip_location.get("city")})
 
     return JSONResponse(content={"location": location})
+@app.post("/api/newlegal")
+async def api_newlegal(request: Request):
+    data = await _get_payload(request)
+    if not data or "question" not in data:
+        return return_error("请输入要咨询的法律问题", 400)
+    question = str(data.get("question", "")).strip()
+    if not question:
+        return return_error("问题不能为空", 400)
+    # 系统提示词
+    SYSTEM_PROMPT = """
+    你是一个AI法律咨询助手，请基于中国法律法规回答用户问题。
 
+    - 引用具体法律条款作为依据
+    - 不确定的内容请告知"建议咨询执业律师"
+    - 不提供具体的法律行动建议
+    """
+    messages:List[MessageParam] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+    ]
+    # 用户提问
+    messages.append({"role": "user", "content": question})
+    try:
+        logger.info("调用法律助手API，问题前30字符: %s", question[:30])
+        response = await AIClient.chat.completions.create(
+            model="farui-plus",  
+            messages=messages,
+            temperature=0.3,  # 法律场景温度不宜过高，保持准确性
+            max_tokens=1999,
+        )
+        logger.info("法律助手API调用成功，回答前50字符: %s", str(response.choices[0].message.content)[:50])
+        return JSONResponse(content={"answer": response.choices[0].message.content})
+    except Exception as e:
+        logger.error("调用法律助手API失败: %s", e)
+        return JSONResponse(content={"answer": "抱歉，AI法律助手暂时无法回答，请稍后再试。"})
 
 @app.post("/api/legal")
 async def legal_chat(request: Request):

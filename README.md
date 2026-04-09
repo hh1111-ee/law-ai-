@@ -10,7 +10,7 @@ AI法律平台（演示版）
 - 消息可靠性：在 DB 写入失败时，`MessageRetryManager` 将消息追加到 JSONL 文件并后台重试，避免消息丢失；这一设计易于验证（演示时可断开 DB 并观察 JSONL 行为）。
 - 工程兼容性：考虑 Windows 平台异步驱动差异，不在模块导入阶段设置全局事件循环策略，而在程序入口使用 `loop_factory`，提高跨平台稳定性。
 - 可观测性：详尽日志（文件与控制台）、健康检查 `/health/db`、启动时种子检查，便于评审快速确认系统健康与数据完整性。
-- 渐进式迁移路径：保留清晰的 pickles -> Postgres 的迁移脚本模板（`scripts/migrate_pickles.py`），支持评审时展示从原型到工程化的演进。
+- 渐进式迁移路径：保留 `scripts/migrate_pickles.py` 作为历史迁移的实验脚本（当前并不完善，建议仅 dry-run 使用并人工校验结果）。
 
 系统架构（组件与职责）
 
@@ -68,7 +68,7 @@ graph TD
 
 1. 启动 Postgres 与后端服务，打开私聊页面（`html/私聊界面.html`）。
 2. 正常发送私聊消息，展示消息写入到 DB（观察日志、或查询 `postgres` 表）。
-3. 模拟故障：临时停掉 Postgres，继续发送多个私聊消息，展示如何在 `pending_messages.jsonl` 中看到持久化的消息行（位于 `数据库/` 下）。
+3. 模拟故障：临时停掉 Postgres，继续发送多个私聊消息，展示如何在 `logs/pending_messages.jsonl` 中看到持久化的消息行（该文件是重试队列，不是业务数据库文件）。
 4. 恢复 Postgres，观察后台重试任务将消息入库并完成投递；演示日志中关于重试的可观测条目。
 
 评审关注点（可供问答）
@@ -76,21 +76,47 @@ graph TD
 - 如何证明消息“不丢失”？（演示中通过停止 DB、发消息、恢复 DB 来展示文件持久化与重试入库流程）
 - 扩展到高并发场景的关键瓶颈是什么？（DB 连接池、WebSocket 数量、模型并发调用）
 
-如何运行（快速上手）
+本地开发与部署（更新）
 ----
 
-PowerShell 快速运行示例：
+1. 准备环境（PowerShell）：
 
 ```powershell
 & d:\项目：ai法律平台\venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+```
+
+2. 编辑 `.env`（至少配置以下变量）：
+
+- `DATABASE_URL`：Postgres 连接串。
+- `AI_API_KEY`：`/api/newlegal` 使用的 OpenAI 兼容 API Key。
+- `AI_API_BASE_URL`：`/api/newlegal` 使用的 OpenAI 兼容 Base URL。
+
+3. 启动服务（推荐手动启动，便于排障）：
+
+```powershell
 uvicorn "聊天和用户后端.Combined_server:app" --host 0.0.0.0 --port 8000
 ```
 
-运行测试：
+4. 健康检查：
 
 ```powershell
-python -m pytest -q tests/test_message_retry.py
+python scripts/smoke_test.py
+```
+
+5. 消息重试队列验证：
+
+```powershell
+Get-Content .\数据库\pending_messages.jsonl -Tail 20
+```
+
+说明：项目已抛弃本地 pkl 作为业务持久化，`数据库/` 目录当前主要用于重试队列文件与历史兼容内容，不再作为权威数据源。
+
+测试（当前有效路径）：
+
+```powershell
+python -m pytest -q scripts/tests/test_message_retry.py
 ```
 
 开发者与维护信息
@@ -99,10 +125,19 @@ python -m pytest -q tests/test_message_retry.py
 - 关键文件：
 	- [聊天和用户后端/Combined_server.py](聊天和用户后端/Combined_server.py)
 	- [postgres_data/adapter.py](postgres_data/adapter.py)
-	- [message_retry.py](message_retry.py)
+	- [聊天和用户后端/message_retry.py](聊天和用户后端/message_retry.py)
 	- [html/私聊界面.html](html/私聊界面.html)
 	- [html/js/app_config.js](html/js/app_config.js)
-- `scripts/migrate_pickles.py` 提供了将旧 Pickle 数据迁移到 Postgres 的参考脚本（演示迁移策略）。
+- `scripts/migrate_pickles.py` 目前为实验性迁移脚本：用于历史数据探索与 dry-run，对复杂旧数据结构可能不完整，请勿直接用于生产迁移。
+
+`/api/newlegal` 接口说明
+----
+
+- 路径：`POST /api/newlegal`
+- 请求体：`{"question":"..."}`
+- 能力：调用 OpenAI 兼容客户端生成法律问答（当前使用 `model="farui-plus"`）
+- 依赖变量：`AI_API_KEY`、`AI_API_BASE_URL`
+- 失败回退：返回友好错误文案，不暴露敏感信息
 
 开发环境与 Playwright 修复指南
 ----
@@ -167,10 +202,15 @@ cmd /c "mklink /J chromium-1200 chromium-1181"
 ----
 
 - `DB_ONLY`：是否仅使用数据库作为持久化（默认启用）。
+- `USE_CACHE`：是否在启动时加载内存缓存（默认关闭，建议保持关闭）。
+- `AI_API_KEY`：`/api/newlegal` 的 OpenAI 兼容 API Key。
+- `AI_API_BASE_URL`：`/api/newlegal` 的 OpenAI 兼容 Base URL。
 - 消息重试相关变量（可通过环境变量覆盖）：
 	- `MSG_RETRY_FILE`（默认 `数据库/pending_messages.jsonl`）
 	- `MSG_RETRY_INTERVAL`（重试周期，秒）
 	- `MSG_RETRY_MAX_RETRIES`（单条消息最大重试次数）
+
+ 
 
 结语
 ----

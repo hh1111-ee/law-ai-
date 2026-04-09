@@ -440,6 +440,26 @@ if (registerFormEl) {
         const autoLocation = document.getElementById('autoLocation').value;
 
         // 简单验证
+        if(regId>=1000000000 || regId<0){
+            Utils.showMessage('账号ID必须是0到999999999之间的整数', 'warning');
+            isAuthProcessing = false;
+            return;
+        }
+        if(gettype(regId) !== 'number'){
+            Utils.showMessage('账号ID必须是数字', 'warning');
+            isAuthProcessing = false;
+            return;
+        }
+        
+        if(password.length>12 || password.length<6){
+            Utils.showMessage('密码长度必须在6到12个字符之间', 'warning');
+            isAuthProcessing = false;
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            if (loginTab) loginTab.disabled = false;
+            if (registerTab) registerTab.disabled = false;
+            return;
+        }
         if (password !== confirmPassword) {
             Utils.showMessage('两次输入的密码不一致', 'warning');
             console.warn('注册失败：两次密码不一致', { password, confirmPassword });

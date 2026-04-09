@@ -451,7 +451,7 @@
         scrollToBottom();
 
         try {
-            const resp = await fetch((window.API_BASE || '') + '/api/legal', {
+            const resp = await fetch((window.API_BASE || '') + '/api/newlegal', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: msg })

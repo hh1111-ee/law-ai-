@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Pre-commit hook: refuse commits that add sensitive files or known secret patterns.
 
 Install by copying to `.git/hooks/pre-commit` (or run scripts/install_git_hook.*).
@@ -13,6 +13,8 @@ except subprocess.CalledProcessError:
 files = out.decode(errors='ignore').splitlines()
 blocked = []
 for f in files:
+    if f == '.env.example' or f.endswith('/.env.example'):
+        continue
     if re.search(r'(^|/)\.env($|\.)', f):
         blocked.append(f)
     if f.startswith('venv/') or f.startswith('.cloudflared/') or f.startswith('logs/') or f.startswith('__pycache__/'):
