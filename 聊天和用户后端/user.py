@@ -1,6 +1,9 @@
-import pickle
+import threading
+import tempfile
+import os
 class user:
-    def __init__(self, username, identity, password, location, role=None):
+    def __init__(self, id, username, identity, password, location, role=None):
+        self.id=id
         self.username = username
         self.identity = identity  # 身份类型，如业主、物业、律师
         self.password = password
@@ -15,6 +18,7 @@ class user:
             print("Friend already in the list.")
     def get_profile(self):
         return {
+            "id": self.id,
             "username": self.username,
             "identity": self.identity,
             "role": self.role,
@@ -29,6 +33,7 @@ class user:
         self.state=state
     def to_dict(self):
         return {
+            "id": self.id,
             "username": self.username,
             "identity": self.identity,
             "role": self.role,
@@ -39,6 +44,7 @@ class user:
 class userManage:
     def __init__(self):
         self.user_list = []
+        self.lock = threading.Lock()
     def add_user(self, user):
         self.user_list.append(user)
     def remove_user(self, user):
@@ -51,16 +57,36 @@ class userManage:
             if user.username == username:
                 return user
         return None
+    def find_user_by_id(self, user_id):
+        for user in self.user_list:
+            if user.id == user_id:
+                return user
+        return None
     def save_users(self, filename):
-        try:
-            with open(filename, 'wb') as f:
-                pickle.dump(self.user_list, f)
-        except Exception as e:
-            print(f"Error saving users: {e}")
+        with self.lock:
+            fd = None
+            tmp_path = None
+            try:
+                dirn = os.path.dirname(filename) or '.'
+                fd, tmp_path = tempfile.mkstemp(dir=dirn)
+                # 延迟导入 pickle，避免模块导入时立即依赖它（使运行时不依赖本地 pkl）
+                import pickle
+                with os.fdopen(fd, 'wb') as f:
+                    pickle.dump(self.user_list, f)
+                os.replace(tmp_path, filename)
+            except Exception as e:
+                print(f"Error saving users: {e}")
+                try:
+                    if tmp_path and os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+                except Exception:
+                    pass
     def load_users(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                self.user_list = pickle.load(f)
-        except Exception as e:
-            print(f"Error loading users: {e}")  
-        
+        with self.lock:
+            try:
+                # 延迟导入 pickle，避免模块导入时立即依赖它
+                import pickle
+                with open(filename, 'rb') as f:
+                    self.user_list = pickle.load(f)
+            except Exception as e:
+                print(f"Error loading users: {e}")

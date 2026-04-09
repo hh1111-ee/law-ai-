@@ -1,6 +1,7 @@
 import datetime
-import pickle
-
+import threading
+import tempfile
+import os
 
 class Post:
     def __init__(self, id, author, title, content, section, time=None):
@@ -50,7 +51,7 @@ class PostManage:
         self.post_list = []
         self.next_post_id = 1
         self.next_comment_id = 1
-
+        self.thread_lock = threading.Lock()
     def add_post(self, author, title, content, section):
         post = Post(self.next_post_id, author, title, content, section)
         self.post_list.append(post)
@@ -81,20 +82,36 @@ class PostManage:
         return [p.to_dict() for p in self.post_list]
 
     def save_posts(self, filename):
-        try:
-            with open(filename, 'wb') as f:
-                pickle.dump(self.post_list, f)
-        except Exception as e:
-            print(f"Error saving posts: {e}")
+        with self.thread_lock:
+            try:
+                dir_name = os.path.dirname(filename) or '.'
+                fd, tmp_path = tempfile.mkstemp(dir=dir_name)
+                try:
+                    # 延迟导入 pickle，避免模块导入时立即依赖它（使运行时不依赖本地 pkl）
+                    import pickle
+                    with os.fdopen(fd, 'wb') as f:
+                        pickle.dump(self.post_list, f)
+                    os.replace(tmp_path, filename)
+                except Exception:
+                    try:
+                        os.remove(tmp_path)
+                    except Exception:
+                        pass
+                    raise
+            except Exception as e:
+                print(f"Error saving posts: {e}")
 
     def load_posts(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                self.post_list = pickle.load(f)
-                if self.post_list:
-                    self.next_post_id = max(p.id for p in self.post_list) + 1
-                    all_comments = [c for p in self.post_list for c in p.comments]
-                    if all_comments:
-                        self.next_comment_id = max(c.id for c in all_comments) + 1
-        except Exception as e:
-            print(f"Error loading posts: {e}")
+        with self.thread_lock:
+            try:
+                # 延迟导入 pickle，避免模块导入时立即依赖它
+                import pickle
+                with open(filename, 'rb') as f:
+                    self.post_list = pickle.load(f)
+                    if self.post_list:
+                        self.next_post_id = max(p.id for p in self.post_list) + 1
+                        all_comments = [c for p in self.post_list for c in p.comments]
+                        if all_comments:
+                            self.next_comment_id = max(c.id for c in all_comments) + 1
+            except Exception as e:
+                print(f"Error loading posts: {e}")

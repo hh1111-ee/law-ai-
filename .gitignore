@@ -1,0 +1,40 @@
+# Virtual env
+venv/
+
+# Environment files
+.env
+.env.*.local
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Logs and runtime files
+logs/
+*.log
+
+# Database files
+*.sqlite3
+*.db
+dump_*.sql
+
+# Office temp files
+~$*
+
+# VS Code settings (local)
+.vscode/
+
+# Cloudflared / tunnel secrets
+.cloudflared/
+
+# MacOS
+.DS_Store
+.cloudflared/*.json
+# local persistent data files
+数据库/*.pkl
+# local postgres data directory (do NOT commit production DB files)
+postgres_data/
+弃用/

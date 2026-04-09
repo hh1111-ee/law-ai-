@@ -7,6 +7,7 @@
 
     <!-- 先加载全局样式 (bigstyle.css) 保证导航栏等基础样式存在 -->
     <link rel="stylesheet" href="../css/bigstyle.css">
+    <link rel="stylesheet" href="../css/home_modules.css">
     <!-- 为了确保导航栏不受原内联样式干扰，我们移除原内联中所有导航相关选择器，
          同时保留生成器专用样式，并加入少量覆盖保证视觉统一 -->
      
@@ -367,12 +368,12 @@
             </div>
             <ul class="nav-menu">
                 <!-- 按照提供的头部样式栏配置菜单项，并将当前页关联的“诉讼程序法”标记为 active (因为起诉状生成属于诉讼流程) -->
-                <li><a href="../主页.html">首页</a></li>
+                <!-- <li><a href="../主页.html">首页</a></li>
                 <li><a href="../公聊社区.html">论坛群组</a></li>
                 <li><a href="../ai小助手.html">ai咨询</a></li>
                 <li><a href="../法律咨询.html">法律咨询</a></li>
-                <li><a href="../案例分析.html">案例分析</a></li>
-                <li><a href="../诉讼流程.html" class="active">诉讼程序法</a></li>
+                <li><a href="../案例分析.html">案例分析</a></li> -->
+                <li><a href="../诉讼流程.html" class="active">返回</a></li>
             </ul>
             <!-- 用户区域 (完全复用 bigstyle 结构，用于 luoji.js 渲染) -->
             <div class="nav-user" data-user-nav>
@@ -493,7 +494,7 @@
     </main>
 
     <!-- 页脚 (保留原内容，但类名已调整为 page-footer 以便覆盖样式) -->
-    <footer class="page-footer">
+    <footer class="page-footer footer-minimal">
         <div class="container footer-note">
             <p>© 2025 AI法律平台 · 要素式起诉状生成器 (物业服务合同纠纷版) | 不构成法律意见</p>
         </div>

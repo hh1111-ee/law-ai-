@@ -483,7 +483,7 @@ def create_post():
             logger.error(f"创建帖子后保存帖子数据失败：{e}", exc_info=True)
         return return_success(
             data={"post": post.to_dict()},
-            message=f"帖子「{title}」创建成功（ID：{post.post_id}）"
+            message=f"帖子「{title}」创建成功（ID：{post.id}）"
         )
     except Exception as e:
         return return_error(f"创建帖子「{title}」失败：{str(e)}", 500)
@@ -496,7 +496,7 @@ def get_post_detail():
     
     # 校验ID格式
     try:
-        post_id = int(post_id_str)
+        post_id = int(str(post_id_str))
     except ValueError:
         return return_error(f"查询帖子详情失败：帖子ID「{post_id_str}」不是有效的数字")
     
@@ -533,7 +533,7 @@ def add_comment():
     
     # 校验帖子ID格式
     try:
-        post_id = int(post_id_str)
+        post_id = int(str(post_id_str))
     except ValueError:
         return return_error(f"添加评论失败：帖子ID「{post_id_str}」不是有效的数字")
     
@@ -599,12 +599,16 @@ def add_friend():
     if error_msg:
         return return_error(f"添加好友失败：{'; '.join(error_msg)}", 404)
     
+    # 向类型检查器表明 user_obj 和 friend_obj 已存在
+    assert user_obj is not None and friend_obj is not None
+
     # 校验是否已添加
     if friend_obj in user_obj.get_friends():
         return return_error(f"添加好友失败：「{username}」已添加「{friend_name}」为好友", 400)
     
     # 添加好友（双向）
     try:
+        # user_obj 与 friend_obj 已由上方断言，因此可以安全调用方法
         user_obj.add_friend(friend_obj)
         friend_obj.add_friend(user_obj)
         return return_success(message=f"添加好友成功：「{username}」和「{friend_name}」已互加为好友")

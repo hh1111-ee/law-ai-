@@ -7,131 +7,302 @@ from ChatMessage import MessageManage
 from group import groupManage                      # 群管理模块
 import easygui as eg
 import os
-import pickle
-# ------------------- 数据文件路径 -------------------
-# 与交流服务器保持一致的绝对路径
-USER_FILE = r'D:\项目：ai法律平台\数据库\users.pkl'
-GROUP_FILE = r'D:\项目：ai法律平台\数据库\groups.pkl'
-POST_FILE = r'D:\项目：ai法律平台\数据库\posts.pkl'
-PERSONAL_MSG_FILE = r'D:\项目：ai法律平台\数据库\personal_messages.pkl'
-GROUP_MSG_FILE = r'D:\项目：ai法律平台\数据库\group_messages.pkl'
 
-
-# ------------------- 文件准备工具 -------------------
-def ensure_file_exists(filename: str) -> None:
-    """若文件不存在则创建空二进制文件，防止 pickle.load 报错。"""
-    if not os.path.exists(filename):
-        with open(filename, 'wb') as f:
-            pass
+# 管理脚本改为直接使用 Postgres 的同步 session（移除对 pickle 的依赖）
+try:
+    from postgres_data.adapter import _get_sync_session
+    PG_SYNC_AVAILABLE = True
+except Exception:
+    _get_sync_session = None
+    PG_SYNC_AVAILABLE = False
+# 不再使用本地 pkl 文件；所有数据读写通过 Postgres 完成
 
 
 # ------------------- 管理对象（单例） -------------------
+# 管理对象（本地缓存/UI 展示使用同步 DB 查询获得数据）
 user_manager = userManage()
 post_manager = PostManage()
 message_manager = MessageManage()
 group_manager = groupManage()
 
 
-# ------------------- 数据加载 -------------------
-def load_all_data() -> None:
-    """启动时加载所有持久化数据。"""
-    ensure_file_exists(USER_FILE)
-    ensure_file_exists(GROUP_FILE)
-    ensure_file_exists(POST_FILE)
-    ensure_file_exists(PERSONAL_MSG_FILE)
-    ensure_file_exists(GROUP_MSG_FILE)
+# ------------------- 同步 DB 辅助（用于管理界面） -------------------
+def _fetch_all_users_sync() -> list:
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        return []
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import User
+        rows = session.query(User).all()
+        out = []
+        for u in rows:
+            out.append({
+                'id': getattr(u, 'id', None),
+                'username': getattr(u, 'username', None),
+                'identity': getattr(u, 'identity', None),
+                'role': getattr(u, 'role', None),
+                'location': getattr(u, 'location', None),
+                'state': getattr(u, 'state', None),
+                'friends': getattr(u, 'friends', []) or [],
+                'password': getattr(u, 'password', None),
+            })
+        return out
+    except Exception as e:
+        print(f"fetch_all_users_sync failed: {e}")
+        return []
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
 
-    user_manager.load_users(USER_FILE)
-    group_manager.load_groups(GROUP_FILE)
-    post_manager.load_posts(POST_FILE)
-    message_manager.load_personal_messages(PERSONAL_MSG_FILE)
-    message_manager.load_group_messages(GROUP_MSG_FILE)
+
+def _fetch_all_posts_sync() -> list:
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        return []
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import Post, Comment, User
+        posts = session.query(Post).all()
+        out = []
+        for p in posts:
+            comments_q = session.query(Comment).filter(Comment.post_id == p.id).all()
+            comments_list = []
+            for c in comments_q:
+                comments_list.append({
+                    'id': c.id,
+                    'post_id': c.post_id,
+                    'author': c.author_name,
+                    'content': c.content,
+                    'time': str(c.created_at),
+                })
+            author_name = None
+            if getattr(p, 'author_id', None) is not None:
+                u = session.query(User).filter(User.id == p.author_id).first()
+                if u:
+                    author_name = getattr(u, 'username', None)
+            out.append({
+                'id': p.id,
+                'author': author_name,
+                'title': getattr(p, 'title', ''),
+                'content': getattr(p, 'content', ''),
+                'section': getattr(p, 'section', ''),
+                'time': str(getattr(p, 'created_at', None)),
+                'comments': comments_list,
+            })
+        return out
+    except Exception as e:
+        print(f"fetch_all_posts_sync failed: {e}")
+        return []
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
 
 
-# 初始化加载
-load_all_data()
+def _fetch_personal_messages_sync() -> list:
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        return []
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import PersonalMessage
+        msgs = session.query(PersonalMessage).all()
+        out = []
+        for m in msgs:
+            out.append({
+                'sender': getattr(m, 'sender', ''),
+                'receiver': getattr(m, 'receiver', ''),
+                'content': getattr(m, 'content', ''),
+                'time': str(getattr(m, 'created_at', None)),
+            })
+        return out
+    except Exception as e:
+        print(f"fetch_personal_messages_sync failed: {e}")
+        return []
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
+
+
+def _fetch_group_messages_sync() -> list:
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        return []
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import GroupMessage
+        msgs = session.query(GroupMessage).all()
+        out = []
+        for m in msgs:
+            out.append({
+                'sender': getattr(m, 'sender', ''),
+                'group': getattr(m, 'group_name', ''),
+                'content': getattr(m, 'content', ''),
+                'time': str(getattr(m, 'created_at', None)),
+            })
+        return out
+    except Exception as e:
+        print(f"fetch_group_messages_sync failed: {e}")
+        return []
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
 
 
 # ------------------- 功能实现 -------------------
 def addUser() -> None:
-    """在管理员后台添加新用户（兼容 `user` 类的 role 参数）。"""
+    """在管理员后台添加新用户（直接写入 Postgres）。"""
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        eg.msgbox("数据库不可用，无法添加用户。")
+        return
+
+    id_text = eg.enterbox("请输入用户 ID（数字，可留空）")
+    try:
+        user_id = int(id_text) if id_text else None
+    except Exception:
+        eg.msgbox("用户 ID 格式错误")
+        return
+
     identity = eg.choicebox("请选择身份类型", choices=["业主方", "物业方", "律师"])
     name = eg.enterbox("请输入用户名")
     password = eg.enterbox("请输入密码")
     # 位置获取
     location = eg.enterbox("请输入详细地址")
 
-    # 基础校验
     if not all([identity, name, password, location]):
         eg.msgbox("所有字段都必须填写！")
         return
 
-    # 创建并写入
-    new_user = user(name, identity, password, location, role=identity)
-    user_manager.add_user(new_user)
-    user_manager.save_users(USER_FILE)
-    eg.msgbox(f"用户 {name} 添加成功！")
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import User
+        new_user = User(id=user_id if user_id is not None else None,
+                        username=name,
+                        password=password,
+                        identity=identity,
+                        location=location,
+                        role=identity,
+                        friends=[])
+        session.add(new_user)
+        session.commit()
+        eg.msgbox(f"用户 {name} 添加成功！")
+    except Exception as e:
+        try:
+            if session:
+                session.rollback()
+        except Exception:
+            pass
+        eg.msgbox(f"添加用户失败: {e}")
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
 
 def addPost() -> None:
-    """在管理员后台添加新帖子。"""
-    author = eg.enterbox("请输入作者用户名")
+    """在管理员后台添加新帖子（直接写入 Postgres）。"""
+    if not PG_SYNC_AVAILABLE or _get_sync_session is None:
+        eg.msgbox("数据库不可用，无法添加帖子。")
+        return
+
+    author = eg.enterbox("请输入作者用户名（可留空）")
     title = eg.enterbox("请输入帖子标题")
     content = eg.enterbox("请输入帖子内容")
     section = eg.enterbox("请输入板块名称")
 
-    if author and title and content and section:
-        post_manager.add_post(author, title, content, section)
-        post_manager.save_posts(POST_FILE)
+    if not (title and content and section):
+        eg.msgbox("标题、内容与板块不能为空！")
+        return
+
+    session = None
+    try:
+        session = _get_sync_session()
+        from postgres_data.models import Post, User
+        author_id = None
+        if author:
+            u = session.query(User).filter(User.username == author).first()
+            if u:
+                author_id = u.id
+
+        new_post = Post(title=title, content=content, section=section, author_id=author_id)
+        session.add(new_post)
+        session.commit()
         eg.msgbox("帖子添加成功！")
-    else:
-        eg.msgbox("所有字段不能为空！")
+    except Exception as e:
+        try:
+            if session:
+                session.rollback()
+        except Exception:
+            pass
+        eg.msgbox(f"添加帖子失败: {e}")
+    finally:
+        try:
+            if session:
+                session.close()
+        except Exception:
+            pass
 
 
 # ------------------- 查看数据 -------------------
 def showUsers() -> None:
     """展示所有用户的简要信息（使用 easygui.textbox）。"""
-    if not user_manager.user_list:
-        eg.msgbox("暂无用户数据！")
+    rows = _fetch_all_users_sync()
+    if not rows:
+        eg.msgbox("暂无用户数据或数据库不可用！")
         return
 
     lines = []
-    for idx, u in enumerate(user_manager.user_list, 1):
+    for idx, u in enumerate(rows, 1):
         lines.append(
             f"===== 用户 {idx} =====\n"
-            f"用户名：{u.username}\n"
-            f"身份类型：{u.identity}\n"
-            f"好友数量：{len(u.friends)}\n"
-            f"密码：{u.password}\n"
-            f"位置：{u.location}\n"
-            f"状态：{u.state}\n"
+            f"ID：{u.get('id')}\n"
+            f"用户名：{u.get('username')}\n"
+            f"身份类型：{u.get('identity')}\n"
+            f"好友数量：{len(u.get('friends', []))}\n"
+            f"密码：{u.get('password')}\n"
+            f"位置：{u.get('location')}\n"
+            f"状态：{u.get('state')}\n"
         )
-        print(f'用户 {idx}：{u.username}，身份：{u.identity}')
-    eg.textbox("数据表","用户数据列表","\n".join(lines))
+        print(f"用户 {idx}：{u.get('username')}，身份：{u.get('identity')}")
+    eg.textbox("数据表", "用户数据列表（共{}条）".format(len(rows)), "\n".join(lines))
 
 
 def showPosts() -> None:
-    """展示所有帖子的详细信息。"""
-    posts = post_manager.get_posts()
+    """展示所有帖子的详细信息（从 Postgres 同步读取）。"""
+    posts = _fetch_all_posts_sync()
     if not posts:
-        eg.msgbox("暂无帖子数据！")
+        eg.msgbox("暂无帖子数据或数据库不可用！")
         return
 
     lines = []
     for idx, p in enumerate(posts, 1):
-        # 组织评论
         comment_lines = [
-            f"  - 评论{c.id}：{c.author} | {c.content}（{c.time}）"
-            for c in getattr(p, "comments", [])
+            f"  - 评论{c.get('id')}：{c.get('author')} | {c.get('content')}（{c.get('time')}）"
+            for c in p.get('comments', [])
         ]
         comments = "\n".join(comment_lines) if comment_lines else "  无评论"
 
         lines.append(
-            f"===== 帖子 {idx}（ID：{p.id}） =====\n"
-            f"作者：{p.author}\n"
-            f"标题：{p.title}\n"
-            f"板块：{p.section}\n"
-            f"发布时间：{p.time}\n"
-            f"内容：{p.content}\n"
+            f"===== 帖子 {idx}（ID：{p.get('id')}） =====\n"
+            f"作者：{p.get('author')}\n"
+            f"标题：{p.get('title')}\n"
+            f"板块：{p.get('section')}\n"
+            f"发布时间：{p.get('time')}\n"
+            f"内容：{p.get('content')}\n"
             f"评论：\n{comments}\n"
         )
     eg.textbox("帖子数据列表", "\n".join(lines))
@@ -139,42 +310,38 @@ def showPosts() -> None:
 
 def showPersonalMessages() -> None:
     """展示所有私信（个人消息）。"""
-    if not message_manager.personal_messages:
-        eg.msgbox("暂无私信数据！")
+    msgs = _fetch_personal_messages_sync()
+    if not msgs:
+        eg.msgbox("暂无私信数据或数据库不可用！")
         return
 
     lines = []
-    for idx, msg in enumerate(message_manager.personal_messages, 1):
-        sender = msg.sender.username if hasattr(msg.sender, "username") else str(msg.sender)
-        receiver = msg.receiver.username if hasattr(msg.receiver, "username") else str(msg.receiver)
-
+    for idx, m in enumerate(msgs, 1):
         lines.append(
             f"===== 私信 {idx} =====\n"
-            f"发送者：{sender}\n"
-            f"接收者：{receiver}\n"
-            f"内容：{msg.content}\n"
-            f"发送时间：{msg.timestamp}\n"
+            f"发送者：{m.get('sender')}\n"
+            f"接收者：{m.get('receiver')}\n"
+            f"内容：{m.get('content')}\n"
+            f"发送时间：{m.get('time')}\n"
         )
     eg.textbox("私信数据列表", "\n".join(lines))
 
 
 def showGroupMessages() -> None:
     """展示所有群消息。"""
-    if not message_manager.group_messages:
-        eg.msgbox("暂无群消息数据！")
+    msgs = _fetch_group_messages_sync()
+    if not msgs:
+        eg.msgbox("暂无群消息数据或数据库不可用！")
         return
 
     lines = []
-    for idx, msg in enumerate(message_manager.group_messages, 1):
-        sender = msg.sender.username if hasattr(msg.sender, "username") else str(msg.sender)
-        group = msg.group.name if hasattr(msg.group, "name") else str(msg.group)
-
+    for idx, m in enumerate(msgs, 1):
         lines.append(
             f"===== 群消息 {idx} =====\n"
-            f"发送者：{sender}\n"
-            f"所属群组：{group}\n"
-            f"内容：{msg.content}\n"
-            f"发送时间：{msg.timestamp}\n"
+            f"发送者：{m.get('sender')}\n"
+            f"所属群组：{m.get('group')}\n"
+            f"内容：{m.get('content')}\n"
+            f"发送时间：{m.get('time')}\n"
         )
     eg.textbox("群消息数据列表", "\n".join(lines))
 
@@ -215,13 +382,8 @@ def adminInterface() -> None:
         elif choice == "查看数据":
             showData()
         elif choice == "退出":
-            # 退出前统一保存所有持久化数据
-            user_manager.save_users(USER_FILE)
-            post_manager.save_posts(POST_FILE)
-            message_manager.save_personal_messages(PERSONAL_MSG_FILE)
-            message_manager.save_group_messages(GROUP_MSG_FILE)
-            group_manager.save_groups(GROUP_FILE)
-            eg.msgbox("数据已保存，退出成功！")
+            # 退出时无需写回本地 pkl；所有更改已直接写入 Postgres
+            eg.msgbox("退出：数据已持久化到 Postgres（若可用）。")
             break
 
 

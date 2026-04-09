@@ -4,8 +4,64 @@
 
 const DEFAULT_AVATAR = 'https://gd-hbimg.huaban.com/a0dcd065b11ba0951ae66436130cc6800671632a8bc0-9IxOal_fw236';
 const API_HOST = window.location.hostname || 'localhost';
-// 使用 window.API_BASE（若页面已设置）或回退到默认地址，避免重复声明导致错误
-const API_BASE = window.API_BASE || 'http://localhost:8000';
+// 使用 window.API_BASE（若页面已设置）或回退到相对路径（避免 HTTPS 下的混合内容问题）
+const API_BASE = (window.API_BASE || '').toString().trim();
+// 统一构造后端 URL：优先使用 window.API_BASE，否则回退到 api.<host> 或本地
+function apiUrl(path) {
+    const winBase = (window.API_BASE || '').toString().trim();
+    let base = '';
+    if (winBase) base = winBase;
+    else {
+        try {
+            const proto = location && location.protocol === 'https:' ? 'https:' : 'http:';
+            const host = (location && location.hostname && !location.hostname.startsWith('localhost') && !location.hostname.startsWith('127.')) ? `api.${location.hostname}` : 'localhost:8000';
+            base = `${proto}//${host}`;
+        } catch (e) { base = 'http://localhost:8000'; }
+    }
+    return base.replace(/\/$/, '') + path;
+}
+// 开发便利：在页面卸载时清除客户端缓存（localStorage/sessionStorage/Cache Storage/ServiceWorker/IndexedDB）
+// 仅在本地或当 URL 带有 ?dev_clear_cache=1 时启用，防止在生产环境误删数据
+function clearClientCache() {
+    try {
+        console.log('[dev] 清理客户端缓存...');
+        try { localStorage.clear(); } catch(e) { console.warn('localStorage clear failed', e); }
+        try { sessionStorage.clear(); } catch(e) { console.warn('sessionStorage clear failed', e); }
+
+        if (window.caches && caches.keys) {
+            caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).catch(()=>{});
+        }
+
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+            navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister())).catch(()=>{});
+        }
+
+        // 尝试删除所有 IndexedDB（非所有浏览器支持 indexedDB.databases）
+        try {
+            if (window.indexedDB && indexedDB.databases) {
+                indexedDB.databases().then(dbs => {
+                    dbs.forEach(db => {
+                        try { indexedDB.deleteDatabase(db.name); } catch(e) {}
+                    });
+                }).catch(()=>{});
+            }
+        } catch(e) {}
+    } catch (err) {
+        console.error('[dev] 清理缓存异常', err);
+    }
+}
+
+// 根据环境决定是否自动清理（只在开发时打开）
+try {
+    // 仅在显式传入查询参数 ?dev_clear_cache=1 时启用自动清理，
+    // 避免本地开发（localhost）导航时意外清空 localStorage 导致登录信息丢失
+    const DEV_CLEAR = location.search.indexOf('dev_clear_cache=1') !== -1;
+    if (DEV_CLEAR) {
+        window.addEventListener('beforeunload', clearClientCache);
+        window.addEventListener('pagehide', clearClientCache);
+    }
+} catch(e) {}
+
 const LOGIN_REDIRECT_URL = '主页.html';
 // 注册/登录流程锁，防止在异步过程中切换表单或重复提交
 let isAuthProcessing = false;
@@ -101,7 +157,7 @@ function getLocation() {
 function getIPLocation() {
     // 这里使用免费的IP定位API（例如ip-api.com）
     // 实际部署时可能需要考虑API调用限制
-    fetch('http://ip-api.com/json/')
+    fetch('https://ipapi.co/json/')
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
@@ -133,23 +189,40 @@ function getStoredUser() {
             localStorage.removeItem('currentUser');
             return null;
         }
-        // 补充状态同步
-        if (user && user.username) {
-            fetch(`${API_BASE}/user_state_search`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: user.username })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.users && data.users.length > 0) {
-                        user.state = data.users[0].state;
-                        localStorage.setItem('currentUser', JSON.stringify(user));
-                        console.log('getStoredUser: 用户状态已同步', user);
-                        renderNavUser();
-                    }
+        // 若后端只返回 id 而未返回 username，使用 id 填充 username 以保证前端显示逻辑正常
+        try {
+            if (user && !user.username && (user.id || user.id === 0)) {
+                user.username = String(user.id);
+                console.log('getStoredUser: 用 id 填充 username，value=', user.username);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+        } catch (e) {
+            console.warn('getStoredUser: 填充 username 失败', e);
+        }
+        // 补充状态同步：仅在明确拥有 username 或 id 时才发起请求，避免发送空 JSON 导致服务器返回 400/404
+        try {
+            const payload = { username: user?.username || null, id: (user && (user.id || user.id === 0)) ? user.id : null };
+            if (payload.username || payload.id !== null) {
+                fetch(apiUrl('/user_state_search'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 })
-                .catch((err) => { console.error('getStoredUser: 用户状态同步失败', err); });
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.users && data.users.length > 0) {
+                            user.state = data.users[0].state;
+                            localStorage.setItem('currentUser', JSON.stringify(user));
+                            console.log('getStoredUser: 用户状态已同步', user);
+                            renderNavUser();
+                        }
+                    })
+                    .catch((err) => { console.error('getStoredUser: 用户状态同步失败', err); });
+            } else {
+                console.warn('getStoredUser: 未提供 username 或 id，跳过状态同步', payload);
+            }
+        } catch (e) {
+            console.warn('getStoredUser: 状态同步流程异常', e);
         }
         return user;
     } catch (error) {
@@ -186,7 +259,7 @@ function renderNavUser() {
         const roleEls = container.querySelectorAll('.user-role, .user-dropdown-role');
         const stateEls = container.querySelectorAll('.user-state');
 
-        if (!authLink || !chip || !dropdown || avatars.length === 0) {
+        if (!authLink || !chip || !dropdown) {
             console.warn('renderNavUser: 必要元素未找到，跳过该容器');
             return;
         }
@@ -207,10 +280,12 @@ function renderNavUser() {
             chip.style.display = 'flex';
             chip.hidden = false;
             dropdown.hidden = true;
-            avatars.forEach(avatar => {
-                avatar.src = DEFAULT_AVATAR;
-                avatar.alt = `${displayName}头像`;
-            });
+            if (avatars && avatars.length > 0) {
+                avatars.forEach(avatar => {
+                    avatar.src = DEFAULT_AVATAR;
+                    avatar.alt = `${displayName}头像`;
+                });
+            }
             nameEls.forEach(el => {
                 el.textContent = displayName;
             });
@@ -264,16 +339,28 @@ function setupNavUserEvents() {
             return;
         }
         const user = getStoredUser();
-        if (user && user.username) {
-            fetch(`${API_BASE}/user_logout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: user.username })
-            }).then(() => {
+        try {
+            const payload = { username: user?.username || null, id: (user && (user.id || user.id === 0)) ? user.id : null };
+            if (payload.username || payload.id !== null) {
+                fetch(apiUrl('/user_logout'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    localStorage.removeItem('currentUser');
+                    renderNavUser();
+                }).catch(err => {
+                    console.error('logout: 请求异常', err);
+                    localStorage.removeItem('currentUser');
+                    renderNavUser();
+                });
+            } else {
+                console.warn('logout: 无有效用户信息，直接清理 localStorage', payload);
                 localStorage.removeItem('currentUser');
                 renderNavUser();
-            });
-        } else {
+            }
+        } catch (e) {
+            console.error('logout: 处理失败', e);
             localStorage.removeItem('currentUser');
             renderNavUser();
         }
@@ -291,14 +378,14 @@ const loginFormEl = document.getElementById('loginForm');
 if (loginFormEl) {
     loginFormEl.addEventListener('submit', function (e) {
         e.preventDefault();
-        // 处理登录逻辑
-        const username = document.getElementById('loginUsername').value;
+        // 处理登录逻辑（使用账号 ID 登录）
+        const id = document.getElementById('loginId').value;
         const password = document.getElementById('loginPassword').value;
 
-        fetch(`${API_BASE}/user_login`, {
+        fetch(apiUrl('/user_login'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ id, password })
         })
             .then(res => res.json())
             .then(data => {
@@ -346,12 +433,33 @@ if (registerFormEl) {
         // 处理注册逻辑
         const identity = document.getElementById('regIdentity').value;
         const username = document.getElementById('regUsername').value;
+        const regId = document.getElementById('regId').value;
         const password = document.getElementById('regPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         const manualLocation = document.getElementById('manualLocation').value;
         const autoLocation = document.getElementById('autoLocation').value;
 
         // 简单验证
+        if(regId>=1000000000 || regId<0){
+            Utils.showMessage('账号ID必须是0到999999999之间的整数', 'warning');
+            isAuthProcessing = false;
+            return;
+        }
+        if(gettype(regId) !== 'number'){
+            Utils.showMessage('账号ID必须是数字', 'warning');
+            isAuthProcessing = false;
+            return;
+        }
+        
+        if(password.length>12 || password.length<6){
+            Utils.showMessage('密码长度必须在6到12个字符之间', 'warning');
+            isAuthProcessing = false;
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            if (loginTab) loginTab.disabled = false;
+            if (registerTab) registerTab.disabled = false;
+            return;
+        }
         if (password !== confirmPassword) {
             Utils.showMessage('两次输入的密码不一致', 'warning');
             console.warn('注册失败：两次密码不一致', { password, confirmPassword });
@@ -376,10 +484,11 @@ if (registerFormEl) {
 
         const finalLocation = manualLocation || autoLocation;
 
-        fetch(`${API_BASE}/user_register`, {
+        fetch(apiUrl('/user_register'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                id: regId,
                 identity,
                 username,
                 password,
@@ -403,12 +512,12 @@ if (registerFormEl) {
                     if (registerTab) registerTab.disabled = false;
                     return Promise.reject('register failed');
                 }
-                // 注册成功后自动登录
-                console.log('register: 开始自动登录', { username, password });
-                return fetch(`${API_BASE}/user_login`, {
+                // 注册成功后自动登录（使用账号 ID 登录）
+                console.log('register: 开始自动登录', { id: regId, password });
+                return fetch(apiUrl('/user_login'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ id: regId, password })
                 });
             })
             .then(res => {
@@ -797,6 +906,7 @@ class IndictmentGenerator {
         }
 
         this.saveStepData(3);
+                    if (user.id) chip.dataset.userId = user.id;
         const formData = this.collectFormData();
         const indictmentContent = this.generateContent(formData);
         this.showResult(indictmentContent);

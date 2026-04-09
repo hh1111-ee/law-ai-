@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI+物业管理论坛 | AI法律平台</title>
-    <link rel="stylesheet" href="css\bigstyle.css">
+    <link rel="stylesheet" href="css/bigstyle.css">
+    <link rel="stylesheet" href="css/home_modules.css">
     <style>
         /* 覆盖原有样式，使用AI法律平台主题 */
         :root {
@@ -431,13 +432,15 @@
     <header class="community-header">
         <nav class="navbar">
             <div class="nav-brand">
-                <h2>AI法律平台</h2>
+                <h2 class="logo-title">维律</h2>
             </div>
             <ul class="nav-menu">
                 <li><a href="主页.html">首页</a></li>
-                <li><a href="法律咨询.html">法律咨询</a></li>
-                <li><a href="ai小助手.html">AI咨询</a></li>
-                <li><a href="公聊社区.html" class="active">社区</a></li>
+                <li><a href="公聊社区.html">论坛群组互助</a></li>
+                <li><a href="ai小助手.html">智能法律助手</a></li>
+                <li><a href="法律咨询.html">法律条例推荐</a></li>
+                <li><a href="案例分析.html">个性案例分析</a></li>
+                <li><a href="诉讼流程.html">诉讼流程详解</a></li>
                 <li><a href="私聊界面.html">私聊</a></li>
             </ul>
             <div class="nav-user" data-user-nav>
@@ -485,100 +488,74 @@
                 <div class="community-section">
                     <h2 class="section-title">社区论坛板块</h2>
                     
-                    <div class="forum-grid">
-                        <!-- 普法功能 -->
-                        <div class="forum-card" data-section="law">
+                    <div class="forum-grid" id="community-root">
+                        <!-- 物业专题：合同违约 -->
+                        <div class="forum-card" id="topic-contract" data-section="contract">
                             <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-balance-scale"></i>
-                                </div>
+                                <div class="card-icon">🏢</div>
                                 <div>
-                                    <h3 class="card-title">普法功能</h3>
-                                    <p class="card-desc">法律法规查询与解读，针对性推荐省市法规</p>
+                                    <h3 class="card-title">物业合同违约纠纷</h3>
+                                    <p class="card-desc">物业未履约、擅自增收或服务不到位——如何搜集证据、依据合同条款运用调解、仲裁或诉讼路径。</p>
                                 </div>
                             </div>
                             <div class="latest-post">
-                                <strong>最新：</strong>《物业管理条例》2024年最新修订要点解读
+                                <strong>最新：</strong>示例：小区绿化维护不到位的索赔案例
                             </div>
                         </div>
-                        
-                        <!-- 类案检索 -->
-                        <div class="forum-card" data-section="case">
+
+                        <!-- 业主大会/业委会纠纷 -->
+                        <div class="forum-card" id="topic-owners" data-section="owners">
                             <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-search"></i>
-                                </div>
+                                <div class="card-icon">👥</div>
                                 <div>
-                                    <h3 class="card-title">类案检索</h3>
-                                    <p class="card-desc">相似案例查询，裁判文书分析，诉讼策略参考</p>
+                                    <h3 class="card-title">业主大会及业委会纠纷</h3>
+                                    <p class="card-desc">决议程序、选举争议、执行异议：提供决议范本、程序校验清单和法律意见参考。</p>
                                 </div>
                             </div>
                             <div class="latest-post">
-                                <strong>最新：</strong>物业费纠纷类案裁判规律大数据分析
+                                <strong>最新：</strong>样例：关于停车位分配决议的法律挑战
                             </div>
                         </div>
-                        
-                        <!-- 诉讼流程 -->
-                        <div class="forum-card" data-section="process">
+
+                        <!-- 公共区域使用纠纷 -->
+                        <div class="forum-card" id="topic-public-use" data-section="public_use">
                             <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-gavel"></i>
-                                </div>
+                                <div class="card-icon">🚧</div>
                                 <div>
-                                    <h3 class="card-title">诉讼流程指导</h3>
-                                    <p class="card-desc">调解程序注意事项，诉讼流程图解，AI小助手答疑</p>
+                                    <h3 class="card-title">公共区域使用纠纷</h3>
+                                    <p class="card-desc">车位、绿地、儿童活动区等使用冲突的权利界定与调解建议，包含常见裁判思路与证据清单。</p>
                                 </div>
                             </div>
                             <div class="latest-post">
-                                <strong>最新：</strong>物业诉讼调解程序全流程详解（附流程图）
+                                <strong>最新：</strong>实务：共享停车位导致的邻里纠纷处理要点
                             </div>
                         </div>
-                        
-                        <!-- AI小助手 -->
-                        <div class="forum-card" data-section="ai">
+
+                        <!-- 小区安保纠纷 -->
+                        <div class="forum-card" id="topic-security" data-section="security">
                             <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-robot"></i>
-                                </div>
+                                <div class="card-icon">🔒</div>
                                 <div>
-                                    <h3 class="card-title">AI小助手</h3>
-                                    <p class="card-desc">情感化沟通技巧，热点事件解读，律师与AI协同解答</p>
+                                    <h3 class="card-title">小区安保引起的纠纷</h3>
+                                    <p class="card-desc">安保执勤过当、私闯住户或监控调取问题：教您如何保存证据、依法追责与提出赔偿请求。</p>
                                 </div>
                             </div>
                             <div class="latest-post">
-                                <strong>最新：</strong>AI解读：小区公共收益分配的法律依据
+                                <strong>最新：</strong>指南：监控、物证保全与取证流程
                             </div>
                         </div>
-                        
-                        <!-- 论坛互助 -->
-                        <div class="forum-card" data-section="help">
+
+                        <!-- 其他物业争议（通用） -->
+                        <div class="forum-card" id="topic-other" data-section="other">
                             <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-hands-helping"></i>
-                                </div>
+                                <div class="card-icon">📣</div>
                                 <div>
-                                    <h3 class="card-title">论坛互助</h3>
-                                    <p class="card-desc">提出问题，类案推荐，现身说法，案例释法+互动问答</p>
+                                    <h3 class="card-title">其他物业争议</h3>
+                                    <p class="card-desc">装修管理、噪音、垃圾堆放等日常纠纷的实操建议与业主互助经验汇总。</p>
                                 </div>
                             </div>
                             <div class="latest-post">
-                                <strong>最新：</strong>业主互助：如何有效收集物业违规证据？
-                            </div>
-                        </div>
-                        
-                        <!-- 诉讼功能 -->
-                        <div class="forum-card" data-section="lawsuit">
-                            <div class="card-header">
-                                <div class="card-icon">
-                                    <i class="fas fa-file-contract"></i>
-                                </div>
-                                <div>
-                                    <h3 class="card-title">诉讼功能</h3>
-                                    <p class="card-desc">规范撰写法律文书，合同起草与审查，应诉策略指导</p>
-                                </div>
-                            </div>
-                            <div class="latest-post">
-                                <strong>最新：</strong>AI辅助起草：物业服务合同审查要点
+                                <strong>最新：</strong>讨论：装修垃圾堆放的调解样式与证明方式
                             </div>
                         </div>
                     </div>
@@ -627,14 +604,13 @@
                     
                     <div class="form-group">
                         <label class="form-label" for="postSection">选择板块</label>
-                        <select class="form-select" id="postSection">
+                            <select class="form-select" id="postSection">
                             <option value="">请选择板块</option>
-                            <option value="law">普法功能</option>
-                            <option value="case">类案检索</option>
-                            <option value="process">诉讼流程指导</option>
-                            <option value="ai">AI小助手</option>
-                            <option value="help">论坛互助</option>
-                            <option value="lawsuit">诉讼功能</option>
+                            <option value="contract">物业合同违约纠纷</option>
+                            <option value="owners">业主大会及业委会纠纷</option>
+                            <option value="public_use">公共区域使用纠纷</option>
+                            <option value="security">小区安保纠纷</option>
+                            <option value="other">其他物业争议</option>
                         </select>
                     </div>
                     
@@ -653,8 +629,8 @@
     </div>
 
     <!-- 使用与主页一致的页脚 -->
-    <footer>
-        <p>&copy; 2026 AI法律平台. 版权所有</p>
+    <footer class="footer-minimal">
+        <p>&copy; 2026 AI法律平台-维律. 版权所有</p>
         <div class="footer-links">
             <a href="#">隐私政策</a>
             <a href="#">使用条款</a>
@@ -664,11 +640,12 @@
     </footer>
 
     <!-- 保持原有JavaScript功能 -->
+    <script src="js/app_config.js"></script>
     <script src="js/luoji.js"></script>
     <script>
     // 页面专用命名空间，避免与逻辑.js冲突
     (function () {
-        const PAGE_API_BASE = window.API_BASE || 'http://localhost:8000';
+        const PAGE_API_BASE = window.API_BASE || '';
         // DOM元素
         const postButton = document.getElementById('postButton');
         const postModal = document.getElementById('postModal');
@@ -718,7 +695,7 @@
             if (sections.length === 0) return;
 
             const promises = sections.map(section =>
-                fetch(`${PAGE_API_BASE}/get_posts?section=${encodeURIComponent(section)}`)
+                fetch(apiUrl('/get_posts') + `?section=${encodeURIComponent(section)}`)
                     .then(res => res.json().then(body => ({ ok: res.ok, body })))
                     .then(({ ok, body }) => {
                         if (!ok || !body || body.code !== 200) return [];
@@ -737,6 +714,27 @@
         postButton && postButton.addEventListener('click', () => {
             postModal.classList.add('active');
         });
+
+        // 如果 URL 带有 openPost=true 则自动打开发帖框并预选板块
+        try {
+            const _params = new URLSearchParams(window.location.search);
+            const _open = _params.get('openPost');
+            const _sec = _params.get('section');
+            if (_open && _open.toLowerCase() === 'true') {
+                if (_sec) {
+                    const sel = document.getElementById('postSection');
+                    if (sel) sel.value = _sec;
+                }
+                // 小延迟以保证 DOM 已准备好
+                setTimeout(() => {
+                    postModal.classList.add('active');
+                    const t = document.getElementById('postTitle');
+                    if (t) t.focus();
+                }, 150);
+            }
+        } catch (e) {
+            // ignore
+        }
 
         // 关闭发帖模态框
         closeModal && closeModal.addEventListener('click', () => {
@@ -785,7 +783,7 @@
             }
             const author = currentUser.username;
 
-            fetch(`${PAGE_API_BASE}/create_post`, {
+            fetch(apiUrl('/create_post'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ author, title, content, section })
@@ -820,7 +818,7 @@
             if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
                 if (!query) return;
-                fetch(`${PAGE_API_BASE}/search_posts`, {
+                fetch(apiUrl('/search_posts'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ keyword: query })
@@ -887,7 +885,7 @@
             const container = document.querySelector('.topics-list');
             if (container) container.setAttribute('data-loading', 'true');
             // 优先请求后端推荐接口；若后端不可用则回退到内置演示数据
-            fetch(`${PAGE_API_BASE}/get_hot_posts?limit=8`)
+            fetch(apiUrl('/get_hot_posts') + '?limit=8')
                 .then(res => res.json().then(body => ({ ok: res.ok, body })))
                 .then(({ ok, body }) => {
                     if (!ok || !body) {
@@ -912,11 +910,16 @@
                 });
         }
 
-        // 点击论坛卡片
+        // 点击论坛卡片：跳转到通用帖子页面并带上 section 参数
         forumCards.forEach(card => {
             card.addEventListener('click', () => {
-                const title = card.querySelector('.card-title').textContent;
-                alert(`进入板块: ${title}\n（实际开发中这里会跳转到板块详情页）`);
+                const section = card.dataset.section || '';
+                // 跳转到帖子通用界面并展示该板块
+                if (section) {
+                    location.href = `社区通用界面.html?section=${encodeURIComponent(section)}`;
+                } else {
+                    location.href = '社区通用界面.html';
+                }
             });
         });
 

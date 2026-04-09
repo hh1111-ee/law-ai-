@@ -1,0 +1,55 @@
+常用 Git 指令速查（中文说明与示例）
+
+工作区 / 提交
+- `git status`：查看当前工作区状态
+- `git add <file>`：将变更加入暂存区
+- `git add -A`：把所有变化加入暂存区
+- `git commit -m "说明"`：提交暂存区内容
+- `git commit --amend --no-edit`：修改上一次提交（常用于补文件）
+
+分支与切换
+- `git branch`：列出分支
+- `git branch -v`：查看分支最近提交
+- `git checkout -b feature/描述`：新建并切换到分支
+- `git checkout main`：切回主分支
+
+推送与拉取
+- `git push origin feature/描述`：把分支推到远程
+- `git push -u origin feature/描述`：首次推送并设置上游
+- `git pull`：拉取并合并远程当前分支
+- `git fetch`：只拉取远程更新，不合并
+
+查看与历史
+- `git log --oneline -n 10`：查看最近 10 次提交简短历史
+- `git diff`：查看工作区与暂存区差异
+- `git show <commit>`：查看单个提交详情
+
+回退与修复
+- `git reset --soft HEAD^`：回退到上一次提交，但保留改动为暂存
+- `git reset --hard <commit>`：强制回退到指定提交（危险，会丢失工作区改动）
+- `git revert <commit>`：创建新提交，撤销指定提交（安全，可保留历史）
+
+标签 & 发布
+- `git tag -a v0.1.0 -m "发布说明"`：打带注释的 tag
+- `git push origin --tags`：推送 tag 到远程
+
+远程与上游
+- `git remote -v`：查看远程仓库地址
+- `git branch -vv`：查看每个本地分支的上游和状态（是否有未推送/未拉取）
+- `git rev-parse --abbrev-ref --symbolic-full-name @{u}`：查看当前分支上游（若无上游会报错）
+
+临时保存与协作
+- `git stash`：保存当前未提交的改动到栈上
+- `git stash pop`：恢复并从栈中移除
+
+其他有用命令
+- `git grep "关键词"`：在版本库中搜索文本
+- `git blame <file>`：查看每行最后一次修改的提交
+- `git clean -n`：显示将删除的未跟踪文件（危险命令，实际删除使用 `git clean -f`）
+
+推送当前分支到远程的最小步骤示例：
+1. 确认已提交：`git status`（应显示工作区干净）
+2. 创建远程分支并推送：`git push -u origin feature/后端接口`
+3. 在 GitHub 上打开 Pull Request 并合并到 `main`
+
+注意：在执行 `git reset --hard`、`git push --force` 等会重写历史的命令前，请确保你理解其后果并备份必要内容。

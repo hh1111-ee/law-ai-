@@ -232,19 +232,22 @@
         }
     </style>
     <link rel="stylesheet" href="css/bigstyle.css">
+        <link rel="stylesheet" href="css/home_modules.css">
     <script src="js/app_config.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar">
            <div class="nav-brand">
-                <h2>AI 法律助手</h2>
+                <h2 class="logo-title">维律</h2>
             </div>
             <ul class="nav-menu">
-                <li><a href="主页.html">返回首页</a></li>
-                <li><a href="法律咨询.html">法律咨询</a></li>
-                <li><a href="案例分析.html">案例分析</a></li>
-                <li><a href="法律文书.html">法律文书</a></li>
+                    <li><a href="主页.html">首页</a></li>
+                    <li><a href="公聊社区.html">论坛群组互助</a></li>
+                    <li><a href="ai小助手.html">智能法律助手</a></li>
+                    <li><a href="法律咨询.html">法律条例推荐</a></li>
+                    <li><a href="案例分析.html">个性案例分析</a></li>
+                    <li><a href="诉讼流程.html">诉讼流程详解</a></li>
             </ul>
             <div class="nav-user" data-user-nav>
                 <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
@@ -320,6 +323,38 @@
             t.classList.remove('show');
             setTimeout(() => document.body.removeChild(t), 300);
         }, duration);
+    }
+
+    // ---------- 调试覆盖层（在移动端微信内查看） ----------
+    function ensureDebugPane(){
+        if(document.getElementById('debugPane')) return;
+        const d = document.createElement('div');
+        d.id = 'debugPane';
+        d.style.position = 'fixed';
+        d.style.right = '8px';
+        d.style.bottom = '110px';
+        d.style.zIndex = 99999;
+        d.style.maxWidth = '46%';
+        d.style.maxHeight = '40%';
+        d.style.overflow = 'auto';
+        d.style.background = 'rgba(0,0,0,0.7)';
+        d.style.color = '#fff';
+        d.style.fontSize = '12px';
+        d.style.padding = '8px';
+        d.style.borderRadius = '8px';
+        d.style.whiteSpace = 'pre-wrap';
+        d.style.display = 'none';
+        document.body.appendChild(d);
+    }
+
+    function showDebug(msg){
+        try{
+            ensureDebugPane();
+            const d = document.getElementById('debugPane');
+            d.style.display = 'block';
+            const now = new Date().toLocaleTimeString();
+            d.textContent = `${now}  ${msg}\n` + d.textContent;
+        }catch(e){console.warn('debug pane error', e)}
     }
 
     // ---------- 添加聊天气泡 ----------
@@ -416,7 +451,7 @@
         scrollToBottom();
 
         try {
-            const resp = await fetch((window.API_BASE || '') + '/api/legal', {
+            const resp = await fetch((window.API_BASE || '') + '/api/newlegal', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: msg })
@@ -571,7 +606,7 @@
 </script>
 
 <script src="js/luoji.js"></script>
-
+<script src="js/app_config.js"></script>
 
 </body>
 </html>

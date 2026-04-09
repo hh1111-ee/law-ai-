@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子通用界面 - AI法律平台</title>
+    <link rel="stylesheet" href="css/bigstyle.css">
+    <link rel="stylesheet" href="css/home_modules.css">
+    <!-- 引用Google Fonts和FontAwesome美化搜索栏 -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 本页局部布局：确保 footer 固定在视口底部，仅影响本页面 */
+        html, body { height: 100%; }
+        body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+        main {
+            flex: 1 0 auto;
+            width: 100%;
+            margin: 0 auto;
+            padding: clamp(0.75rem, 1.6vw, 2rem); /* 响应式内边距 */
+        }
+
+        /* 帖子内容样式 */
+        .post-container {
+            box-sizing: border-box;
+            max-width: 1600px;
+            width: min(1600px, 96vw); /* 在窄屏上自动收缩，在大屏上不超过 1600 */
+            margin: 1.2rem auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(74,111,165,0.10);
+            padding: clamp(1rem, 2.5vw, 3rem); /* 响应式上下左右内边距 */
+            transition: padding 0.2s, max-width 0.2s;
+        }
+
+        /* 小屏额外优化：减少圆角与阴影占用空间 */
+        @media (max-width: 480px) {
+            .post-container { border-radius: 10px; box-shadow: 0 2px 8px rgba(74,111,165,0.06); }
+        }
+        .post-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #4A6FA5;
+            margin-bottom: 0.5rem;
+        }
+        .post-meta {
+            color: #888;
+            font-size: 0.98rem;
+            margin-bottom: 1.2rem;
+        }
+        .post-body {
+            font-size: 1.13rem;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+        /* 评论区样式 */
+        .comments-section {
+            margin-top: 2.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(138,79,255,0.06);
+        }
+        .comments-section h3 {
+            color: #8A4FFF;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .comment {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 1.1rem;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 1px 4px rgba(74,111,165,0.07);
+            border-left: 4px solid #8A4FFF;
+        }
+        .comment-meta {
+            color: #666;
+            font-size: 0.93rem;
+            margin-bottom: 0.4rem;
+        }
+        .comment-body {
+            color: #222;
+            font-size: 1.08rem;
+            line-height: 1.6;
+        }
+        .no-comments {
+            color: #aaa;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+    .post-search {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 2rem 0 1.5rem 0;
+    }
+    .search-box {
+        position: relative;
+        width: 1000px;
+        max-width: 90vw;
+        background: #fff;
+        border-radius: 30px;
+        box-shadow: 0 2px 12px rgba(74,111,165,0.10), 0 1.5px 6px rgba(138,79,255,0.08);
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1.2rem;
+        transition: box-shadow 0.3s;
+    }
+    .search-box:focus-within {
+        box-shadow: 0 4px 18px rgba(74,111,165,0.18), 0 2px 8px rgba(138,79,255,0.13);
+    }
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8A4FFF;
+        font-size: 1.2rem;
+        pointer-events: none;
+    }
+    .search-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1.08rem;
+        padding: 0.7rem 0.7rem 0.7rem 2.2rem;
+        font-family: 'Roboto', '微软雅黑', Arial, sans-serif;
+        color: #333;
+        border-radius: 30px;
+        transition: background 0.2s;
+    }
+    .search-input::placeholder {
+        color: #b3b3b3;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+    }
+    @media (max-width: 600px) {
+        .search-box { width: 98vw; min-width: 0; }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2>AI法律平台</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="主页.html">首页</a></li>
+                <li><a href="法律咨询.html">法律咨询</a></li>
+                <li><a href="ai小助手.html">AI咨询</a></li>
+                <li><a href="公聊社区.html">社区</a></li>
+                <li><a href="私聊界面.html">私聊功能</a></li>
+            </ul>
+            <div class="nav-user" data-user-nav>
+                <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
+                <button class="user-chip" type="button" aria-haspopup="true" aria-expanded="false" hidden>
+                    <img class="user-avatar" src="" alt="用户头像">
+                    <span class="user-meta">
+                        <span class="user-name">用户</span>
+                        <span class="user-role">普通用户</span>
+                    </span>
+                </button>
+                <div class="user-dropdown" hidden>
+                    <div class="user-dropdown-header">
+                        <img class="user-avatar" src="" alt="用户头像">
+                        <div>
+                            <div class="user-dropdown-name">用户</div>
+                            <div class="user-dropdown-role">普通用户</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-actions">
+                        <a class="user-action" href="#">用户设置</a>
+                        <button class="user-action logout-btn" type="button">退出账号</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+<!--帖子搜索栏-->
+<div class="post-search">
+    <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="搜索帖子...">
+    </div>
+</div>
+    <main>
+        <div class="post-container">
+            <div class="post-content" id="postContent">
+                <!-- 帖子内容将由JS动态加载 -->
+            </div>
+            <div class="comments-section" id="commentsSection">
+                <h3>评论区</h3>
+                <div class="comment-form" style="margin-bottom:1rem;">
+                    <textarea id="commentInput" placeholder="写下你的评论..." rows="3" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e5e7eb;resize:vertical;font-size:1rem;"></textarea>
+                    <div style="text-align:right;margin-top:8px;">
+                        <button id="submitCommentBtn" style="background:#8A4FFF;color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;">提交评论</button>
+                    </div>
+                </div>
+                <div id="commentsList">
+                    <!-- 评论内容由JS动态加载 -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer-minimal">
+        <p>&copy; 2024 AI法律平台. 保留所有权利。</p>
+    </footer>
+
+    <script>
+    // 将 API 基址放到 window 上，避免与全局脚本重复声明冲突
+    window.API_BASE = window.API_BASE || '';
+    // 从URL参数获取post_id，例如: 帖子通用界面.html?post_id=1
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('post_id') || 1;
+
+    // 加载帖子和评论
+    function loadPostAndComments(postId) {
+        // 使用 window.API_BASE（由页面或全局脚本提供）
+        fetch(`${window.API_BASE}/get_post_detail?post_id=${postId}`)
+            .then(res => res.json())
+            .then(resp => {
+                if (!resp || resp.code !== 200 || !resp.data || !resp.data.post) {
+                    throw new Error((resp && resp.error) || '未找到帖子');
+                }
+                const post = resp.data.post;
+                renderPost(post);
+                renderComments(post.comments || []);
+            })
+            .catch(() => {
+                document.getElementById('postContent').innerHTML = '<p style="color:red">加载失败</p>';
+            });
+    }
+
+    // 渲染帖子内容
+    function renderPost(post) {
+        const html = `
+            <h2 class="post-title">${post.title}</h2>
+            <p class="post-meta">作者: ${post.author} | 发布时间: ${post.time}</p>
+            <div class="post-body">${post.content}</div>
+        `;
+        document.getElementById('postContent').innerHTML = html;
+    }
+
+    // 渲染评论
+    function renderComments(comments) {
+        const list = document.getElementById('commentsList');
+        if (!comments.length) {
+            list.innerHTML = '<div class="no-comments">暂无评论</div>';
+            return;
+        }
+        list.innerHTML = comments.map(c => `
+            <div class="comment">
+                <p class="comment-meta">评论者: ${c.author} | 评论时间: ${c.time}</p>
+                <p class="comment-body">${c.content}</p>
+            </div>
+        `).join('');
+    }
+
+    // 提交评论
+    async function submitComment() {
+        const input = document.getElementById('commentInput');
+        const content = (input.value || '').trim();
+        if (!content) {
+            if (window.Utils && window.Utils.showMessage) {
+                window.Utils.showMessage('评论内容不能为空', 'warning');
+            } else {
+                alert('评论内容不能为空');
+            }
+            return;
+        }
+
+        const raw = localStorage.getItem('currentUser');
+        let user = null;
+        try { user = raw ? JSON.parse(raw) : null; } catch (e) { user = null; }
+        if (!user || !user.username) {
+            if (window.Utils && window.Utils.showMessage) {
+                window.Utils.showMessage('请先登录后再发表评论', 'info');
+            } else {
+                alert('请先登录后再发表评论');
+            }
+            window.location.href = '登录注册.html';
+            return;
+        }
+
+        const payload = { post_id: postId, author: user.username, content };
+        try {
+            const resp = await fetch(`${window.API_BASE}/add_comment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const body = await resp.json();
+            if (!body || body.code !== 200) {
+                const err = (body && body.error) || '评论提交失败';
+                if (window.Utils && window.Utils.showMessage) window.Utils.showMessage(err, 'error');
+                else alert(err);
+                return;
+            }
+            const comment = body.data.comment;
+            // 将新评论追加到评论列表（末尾）
+            const list = document.getElementById('commentsList');
+            const html = `\n            <div class="comment">\n                <p class="comment-meta">评论者: ${comment.author} | 评论时间: ${comment.time}</p>\n                <p class="comment-body">${comment.content}</p>\n            </div>`;
+            if (list.querySelector('.no-comments')) list.innerHTML = html; else list.insertAdjacentHTML('beforeend', html);
+            input.value = '';
+            if (window.Utils && window.Utils.showMessage) window.Utils.showMessage('评论已发布', 'success');
+        } catch (err) {
+            console.error('提交评论异常', err);
+            if (window.Utils && window.Utils.showMessage) window.Utils.showMessage('网络错误，提交失败', 'error');
+            else alert('网络错误，提交失败');
+        }
+    }
+
+    // 绑定提交按钮
+    window.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('submitCommentBtn');
+        if (btn) btn.addEventListener('click', submitComment);
+    });
+
+    // 页面加载时自动获取帖子和评论
+    window.addEventListener('DOMContentLoaded', () => {
+        loadPostAndComments(postId);
+    });
+    </script>
+    <script src="js/luoji.js"></script>
+</body>
+</html>

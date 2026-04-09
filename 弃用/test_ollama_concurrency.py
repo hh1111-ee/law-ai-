@@ -16,7 +16,7 @@ except ImportError:
 
 concurrency = int(sys.argv[1]) if len(sys.argv) > 1 else 2
 total = int(sys.argv[2]) if len(sys.argv) > 2 else concurrency
-url = 'http://localhost:8000/api/legal'
+url = '  http://localhost:8000/api/legal'
 payload = {'question': '并发测试：请返回一句短答。'}
 
 def worker(i):

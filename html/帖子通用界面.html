@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>帖子通用界面 - AI法律平台</title>
     <link rel="stylesheet" href="css/bigstyle.css">
+    <link rel="stylesheet" href="css/home_modules.css">
     <!-- 引用Google Fonts和FontAwesome美化搜索栏 -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,7 +24,7 @@
         .post-container {
             box-sizing: border-box;
             max-width: 1600px;
-            width: min(1600px, 96vw); /* 在窄屏上自动收缩，在大屏上不超过 1600 */
+            width: min(1600px, 80vw); /* 在窄屏上自动收缩，在大屏上不超过 1600 */
             margin: 1.2rem auto;
             background: #fff;
             border-radius: 14px;
@@ -139,20 +140,41 @@
     @media (max-width: 600px) {
         .search-box { width: 98vw; min-width: 0; }
     }
+
+    /* 美化返回上一页按钮 */
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 6px 18px rgba(102,126,234,0.18);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .back-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(118,75,162,0.2);
+    }
+    .back-link:active { transform: translateY(-1px); }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-brand">
-                <h2>AI法律平台</h2>
+                <h2 class="logo-title">维律</h2>
             </div>
             <ul class="nav-menu">
                 <li><a href="主页.html">首页</a></li>
-                <li><a href="法律咨询.html">法律咨询</a></li>
-                <li><a href="ai小助手.html">AI咨询</a></li>
-                <li><a href="公聊社区.html">社区</a></li>
-                <li><a href="私聊界面.html">私聊功能</a></li>
+                <li><a href="公聊社区.html">论坛群组互助</a></li>
+                <li><a href="ai小助手.html">智能法律助手</a></li>
+                <li><a href="法律咨询.html">法律条例推荐</a></li>
+                <li><a href="案例分析.html">个性案例分析</a></li>
+                <li><a href="诉讼流程.html">诉讼流程详解</a></li>
             </ul>
             <div class="nav-user" data-user-nav>
                 <a class="nav-auth-link" href="登录注册.html">登录/注册</a>
@@ -187,6 +209,9 @@
     </div>
 </div>
     <main>
+        <div style="margin-bottom:12px;">
+            <a href="javascript:history.back()" class="back-link">← 返回上一页</a>
+        </div>
         <div class="post-container">
             <div class="post-content" id="postContent">
                 <!-- 帖子内容将由JS动态加载 -->
@@ -205,21 +230,23 @@
             </div>
         </div>
     </main>
-    <footer>
-        <p>&copy; 2024 AI法律平台. 保留所有权利。</p>
+    <footer class="footer-minimal">
+        <p>&copy; 2024 AI法律平台-维律. 保留所有权利。</p>
     </footer>
+    <script src="js/app_config.js"></script>
+    <script src="js/luoji.js"></script>
 
     <script>
     // 将 API 基址放到 window 上，避免与全局脚本重复声明冲突
-    window.API_BASE = 'http://localhost:8000';
+    window.API_BASE = window.API_BASE || '';
     // 从URL参数获取post_id，例如: 帖子通用界面.html?post_id=1
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('post_id') || 1;
 
     // 加载帖子和评论
     function loadPostAndComments(postId) {
-        // 使用 window.API_BASE（由页面或全局脚本提供）
-        fetch(`${window.API_BASE}/get_post_detail?post_id=${postId}`)
+        // 使用 apiUrl() 统一构造后端地址
+        fetch(apiUrl(`/get_post_detail?post_id=${postId}`))
             .then(res => res.json())
             .then(resp => {
                 if (!resp || resp.code !== 200 || !resp.data || !resp.data.post) {
@@ -287,7 +314,7 @@
 
         const payload = { post_id: postId, author: user.username, content };
         try {
-            const resp = await fetch(`${window.API_BASE}/add_comment`, {
+            const resp = await fetch(apiUrl('/add_comment'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -324,6 +351,5 @@
         loadPostAndComments(postId);
     });
     </script>
-    <script src="js/luoji.js"></script>
 </body>
 </html>
