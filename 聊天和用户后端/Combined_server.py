@@ -144,6 +144,19 @@ async def lifespan(app: FastAPI):
     """
     # make clear we will mutate module-level message_save_task
     global message_save_task
+    if _PG_ADAPTER_AVAILABLE and pg_adapter is not None:
+        try:
+            # 导入 Base 元数据和引擎
+            from postgres_data import models
+            from postgres_data.db_session import engine
+            
+            # 异步创建所有表
+            async with engine.begin() as conn:
+                await conn.run_sync(models.Base.metadata.create_all)
+            logger.info("数据库表结构创建/检查完成")
+        except Exception as e:
+            logger.exception("创建数据库表失败: %s", e)
+            raise RuntimeError("无法创建数据库表，停止启动")
 
     try:
         # 启动时强制使用 Postgres 作为唯一持久化层；若不可用则停止启动。
